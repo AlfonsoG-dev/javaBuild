@@ -97,10 +97,14 @@ public class OperationUtils {
         String command = "";
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
-        for(File f: extractionFile.listFiles()) {
-             directory += " -C " +f.getPath() + "\\ .";
+        if(extractionFile.exists() && extractionFile.listFiles().length > 0) {
+            for(File f: extractionFile.listFiles()) {
+                directory += " -C " +f.getPath() + "\\ .";
+            }
+            command = "jar -cfm test.jar Manifesto.txt -C .\\bin\\ ." + directory;
+        } else {
+            command = "jar -cfm test.jar Manifesto.txt -C .\\bin\\ .";
         }
-        command = "jar -cfm test.jar Manifesto.txt -C .\\bin\\ ." + directory;
         return command;
     }
 }
