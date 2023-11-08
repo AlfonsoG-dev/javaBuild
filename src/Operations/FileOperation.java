@@ -53,14 +53,14 @@ public class FileOperation {
     public void DeleteDirectories(String filePath) {
         try {
             File localFile = new File(localPath);
-            String cFile = fileUtils.GetCleanPath(filePath);
+            String cFile = filePath;
             File miFile = new File(localFile.getCanonicalPath() + "\\" + cFile);
+            System.out.println(miFile.getPath());
             if(miFile.isFile()) {
                 if(miFile.delete() == true) {
                     System.out.println("se elimino el archivo: " + miFile.getName());
                 }
-            }
-            if(miFile.isDirectory() && miFile.listFiles().length >0) {
+            } else if(miFile.isDirectory() && miFile.listFiles().length >0) {
                 boolean b = false;
                 File[] files = miFile.listFiles();
                 for(File f: files) {
@@ -75,26 +75,6 @@ public class FileOperation {
             } else if(miFile.listFiles().length == 0) {
                 if(miFile.delete() == true) {
                     System.out.println("se elimino el directorio: " + miFile);
-                }
-            }
-        } catch(Exception e) {
-            System.err.println(e);
-        }
-    }
-    public void DeleteFiles(String filePath, String extension) {
-        try {
-            File miFile = new File(filePath);
-            if(miFile.isFile() && miFile.getName().contains(extension)) {
-                miFile.delete();
-            } else {
-                for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(extension)) {
-                        f.delete();
-                    } else {
-                        for(File fl: f.listFiles()) {
-                            this.DeleteFiles(fl.getCanonicalPath(), extension);
-                        }
-                    }
                 }
             }
         } catch(Exception e) {
