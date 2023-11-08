@@ -1,6 +1,7 @@
 package Operations;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
@@ -30,23 +31,24 @@ public class FileOperation {
         }
         return names;
     }
-    public String listSRCDirectories() {
-        String names = ".\\src\\" + "\n";
-        try {
-            File localFile = new File(localPath);
-            for(File f: localFile.listFiles()) {
-                if(f.getName().equals("src")) {
-                    for(File mf: f.listFiles()) {
-                        if(mf.isDirectory()) {
-                            names += mf.getPath() + "\\\n";
-                        }
+    public String listSRCDirectories(String path) throws IOException {
+        String cPath = fileUtils.GetCleanPath(path);
+        File localFile = new File(localPath + "\\" + cPath);
+        String names = "";
+        for(File f: localFile.listFiles()) {
+            if(f.isDirectory()) {
+                names += f.getPath() + "\\" + "\n";
+            } 
+            if(f.isDirectory() && f.listFiles().length > 0) {
+                for(File ml: f.listFiles()) {
+                    if(ml.isDirectory()) {
+                        names += listSRCDirectories(ml.getPath()) + "\n";
                     }
                 }
             }
-        } catch(Exception e) {
-            System.err.println(e);
         }
-        return names;
+        String cNames = fileUtils.GetCleanPath(names);
+        return cNames;
     }
     public void DeleteDirectories(String filePath) {
         try {
