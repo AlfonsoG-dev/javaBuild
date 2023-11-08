@@ -12,14 +12,13 @@ public class Operation {
     }
     public void CreateProyectOperation() {
         String[] names = {"bin", "lib", "src", "docs", "extractionFiles"};
-        // TODO: adicionar la creación del main file
         for(String n: names) {
             File miFile = new File(localPath + "\\" + n);
             if(miFile.exists() == false) {
                 miFile.mkdir();
             }
         }
-
+        operationUtils.CreateProyectFiles();
     }
     public void CompileProyectOperation() {
         try {

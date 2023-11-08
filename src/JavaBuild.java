@@ -1,8 +1,6 @@
 import Operations.Operation;
 class JavaBuild {
     public static void main(String[] args) {
-        //Operation mio = new Operation(".\\");
-        //mio.CreateJarOperation();
         for(int i=0; i<args.length; ++i) {
             Operation mia = new Operation(".\\");
             switch(args[i]) {
