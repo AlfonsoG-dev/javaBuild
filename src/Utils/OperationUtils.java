@@ -95,15 +95,22 @@ public class OperationUtils {
     }
     public String CreateJarFileCommand() {
         String command = "";
+        File srcFile = new File(localPath + "\\src");
+        String mainName = "";
+        for(File f: srcFile.listFiles()) {
+            if(f.isFile() && f.getName().contains(".java")) {
+                mainName = f.getName().split(".java")[0] + ".jar";
+            }
+        }
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles().length > 0) {
             for(File f: extractionFile.listFiles()) {
                 directory += " -C " +f.getPath() + "\\ .";
             }
-            command = "jar -cfm test.jar Manifesto.txt -C .\\bin\\ ." + directory;
+            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
         } else {
-            command = "jar -cfm test.jar Manifesto.txt -C .\\bin\\ .";
+            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
         }
         return command;
     }
