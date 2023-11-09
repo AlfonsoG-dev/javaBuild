@@ -22,13 +22,13 @@
 >- now to create the proyect jar file
 >>- `java -jar javaBuild.jar -cj`
 
-
 >- all can be done with only 1 command
 >>- `java -jar javaBuild --build`
 >>>- it combines the 3 commands in one command
 
-## TODO's
-- [ ] make the Manifesto.txt and Main class of the proyect
+>- creates the proyect structure
+>>- `java -jar javaBuild -b`
+>>>- adds the manifesto file and the main class with the proyect folde name
 
 
 ## Disclaimer
