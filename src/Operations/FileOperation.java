@@ -20,7 +20,18 @@ public class FileOperation {
         try {
             File localFile = new File(localPath);
             File miFile = new File(localPath + "\\src");
-            if(fileName.equals("Manifesto.txt")) {
+            if(fileName.equals(".gitignore")) {
+                FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
+                miFileWriter.write(
+                        "**bin\\\n" +
+                        "**lib\\\n" +
+                        "**extractionFiles\\\n" +
+                        "**Manifesto.txt\\\n" + 
+                        "**.jar\\\n" + 
+                        "**.exe\\\n"
+                );
+                miFileWriter.close();
+            } else if(fileName.equals("Manifesto.txt")) {
                FileWriter mio = new FileWriter(localFile.getPath() + "\\" + fileName);
                mio.write("Main-Class: " + mainClass);
                mio.close();

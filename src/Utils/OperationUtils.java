@@ -31,6 +31,7 @@ public class OperationUtils {
         try {
             String[] names = localFile.getCanonicalPath().split("\\\\");
             String mainClass = names[names.length-1];
+            fileOperation.CreateFiles(".gitignore", "");
             fileOperation.CreateFiles("Manifesto.txt", mainClass);
             fileOperation.CreateFiles(mainClass + ".java", mainClass);
         } catch(Exception e) {
