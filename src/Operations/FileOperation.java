@@ -15,37 +15,25 @@ public class FileOperation {
     public FileOperation(String nLocalPath) {
         fileUtils = new FileUtils();
         localPath = nLocalPath;
-    }
+    } 
     public void CreateFiles(String fileName, String mainClass) {
-        FileWriter miFileWriter = null;
         try {
-            File localFile = new File(localPath + "\\src");
-            if(localFile.exists() && localFile.listFiles().length == 0) {
-                File miFile = new File(localPath + "\\src\\" + fileName);
-                if(miFile.exists()) {
-                    throw new Exception("the file alreday exists");
-                }
-                miFileWriter = new FileWriter(localFile + "\\src\\" + fileName);
-                if(fileName.equals("Manifesto.txt")) {
-                    miFileWriter.write("Main-Class: " + mainClass);
-                } else if(fileName.equals(mainClass + ".java")) {
-                    miFileWriter.write("class " + mainClass + "{\n" +
-                            "  public static void main(String[] args) {\n" + 
-                            "  }\n" + 
-                            "}");
-                }
+            File localFile = new File(localPath);
+            File miFile = new File(localPath + "\\src");
+            if(fileName.equals("Manifesto.txt")) {
+               FileWriter mio = new FileWriter(localFile.getPath() + "\\" + fileName);
+               mio.write("Main-Class: " + mainClass);
+               mio.close();
+            } else if(fileName.equals(mainClass + ".java")) {
+                FileWriter miFileWriter = new FileWriter(miFile.getPath() + "\\" + fileName);
+                miFileWriter.write("class " + mainClass + "{\n" +
+                    "  public static void main(String[] args) {\n" + 
+                    "  }\n" + 
+                    "}");
+                miFileWriter.close();
             }
         } catch(Exception e) {
             System.err.println(e);
-        } finally {
-            if(miFileWriter != null) {
-                try {
-                    miFileWriter.close();
-                } catch(Exception e) {
-                    System.err.println(e);
-                }
-                miFileWriter = null;
-            }
         }
     }
     public String listLibFiles() {

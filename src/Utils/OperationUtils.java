@@ -26,18 +26,18 @@ public class OperationUtils {
             System.err.println(e);
         }
     }
-    public void CreateProyectFiles() {
+    public void CreateProyectFiles()  {
         File localFile = new File(localPath);
-        String mainClass = "";
-        for(File f: localFile.listFiles()) {
-            mainClass = localFile.getName();
-            if(f.isFile() && f.getName().equals("Manifesto.txt") == false) {
-                fileOperation.CreateFiles("Manifesto.txt", mainClass);
+        try {
+            String[] names = localFile.getCanonicalPath().split("\\\\");
+            String mainClass = names[names.length-1];
+            for(File f: localFile.listFiles()) {
+                if(f.isFile() && f.getName().equals("Manifesto.txt") == false) {
+                    fileOperation.CreateFiles("Manifesto.txt", mainClass);
+                }
             }
-        }
-        File miFile = new File(localPath + "\\src");
-        if(miFile.listFiles().length == 0) {
             fileOperation.CreateFiles(mainClass + ".java", mainClass);
+        } catch(Exception e) {
         }
     }
     public String srcClases() {
