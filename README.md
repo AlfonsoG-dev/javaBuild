@@ -11,25 +11,29 @@
 
 ## Usage
 >- to compile the proyect
->>- `java -jar javaBuild.jar -c`
+>>- `javaBuild.exe -c`
 >>>- it compiles the .java clases into bin
 
 >- to create a jar file is neccesary to include or verify dependencies or libs in the proyect
 >>- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`
 >>- use the *extractionFiles* to include in the proyect jar file the depdendencies
->>>- `java -jar javaBuild.jar -ex`
+>>>- `javaBuild.exe -ex`
 
 >- now to create the proyect jar file
->>- `java -jar javaBuild.jar -cj`
+>>- `javaBuild.exe -cj`
 
 >- all can be done with only 1 command
->>- `java -jar javaBuild --build`
+>>- `javaBuild.exe --build`
 >>>- it combines the 3 commands in one command
 
 >- creates the proyect structure
->>- `java -jar javaBuild -b`
+>>- `javaBuild.exe -b`
 >>>- adds the manifesto file and the main class with the proyect folde name
 
+## Aditional info
+>- this app uses powershell to execute the commands
+>- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
+>- only in path the aplication can be use
 
 ## Disclaimer
 >- this proyect is for educational purposes
