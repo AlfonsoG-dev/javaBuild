@@ -18,7 +18,17 @@ public class Operation {
                 miFile.mkdir();
             }
         }
-        operationUtils.CreateProyectFiles();
+    }
+    public void CreateFilesOperation() {
+        File localFile = new File(localPath);
+        for(File f: localFile.listFiles()) {
+            if(f.getName().equals("Manifesto.txt") == false && f.getName().equals("src")) {
+                File srcMainFile = new File(localPath + "\\src");
+                if(srcMainFile.listFiles().length == 0) {
+                    operationUtils.CreateProyectFiles();
+                }
+            }
+        }
     }
     public void CompileProyectOperation() {
         try {

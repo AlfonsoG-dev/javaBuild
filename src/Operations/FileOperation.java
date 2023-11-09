@@ -26,9 +26,9 @@ public class FileOperation {
                mio.close();
             } else if(fileName.equals(mainClass + ".java")) {
                 FileWriter miFileWriter = new FileWriter(miFile.getPath() + "\\" + fileName);
-                miFileWriter.write("class " + mainClass + "{\n" +
-                    "  public static void main(String[] args) {\n" + 
-                    "  }\n" + 
+                miFileWriter.write("class " + mainClass + " {\n" +
+                    "    public static void main(String[] args) {\n" + 
+                    "    }\n" + 
                     "}");
                 miFileWriter.close();
             }

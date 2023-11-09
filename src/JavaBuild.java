@@ -1,29 +1,26 @@
-import java.io.IOException;
-
 import Operations.Operation;
-import Utils.OperationUtils;
 class JavaBuild {
     public static void main(String[] args) {
-        OperationUtils mios = new OperationUtils(".\\");
         for(int i=0; i<args.length; ++i) {
-            Operation mia = new Operation(".\\");
+            Operation miOperation = new Operation(".\\");
             switch(args[i]) {
                 case "-b":
-                    mia.CreateProyectOperation();
+                    miOperation.CreateProyectOperation();
+                    miOperation.CreateFilesOperation();
                     break;
                 case "-cm":
-                    mia.CompileProyectOperation();
+                    miOperation.CompileProyectOperation();
                     break;
                 case "-ex":
-                    mia.ExtractJarDependencies();
+                    miOperation.ExtractJarDependencies();
                     break;
                 case "-cj":
-                    mia.CreateJarOperation();
+                    miOperation.CreateJarOperation();
                     break;
                 case "--build":
-                    mia.CompileProyectOperation();
-                    mia.ExtractJarDependencies();
-                    mia.CreateJarOperation();
+                    miOperation.CompileProyectOperation();
+                    miOperation.ExtractJarDependencies();
+                    miOperation.CreateJarOperation();
                     break;
                 case "--h":
                     System.out.println("use -cm to compile the proyect");

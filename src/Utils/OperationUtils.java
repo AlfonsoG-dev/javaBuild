@@ -31,11 +31,7 @@ public class OperationUtils {
         try {
             String[] names = localFile.getCanonicalPath().split("\\\\");
             String mainClass = names[names.length-1];
-            for(File f: localFile.listFiles()) {
-                if(f.isFile() && f.getName().equals("Manifesto.txt") == false) {
-                    fileOperation.CreateFiles("Manifesto.txt", mainClass);
-                }
-            }
+            fileOperation.CreateFiles("Manifesto.txt", mainClass);
             fileOperation.CreateFiles(mainClass + ".java", mainClass);
         } catch(Exception e) {
         }
