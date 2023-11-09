@@ -38,7 +38,7 @@ public class OperationUtils {
         }
     }
     public String srcClases() {
-        String names = "";
+        String names = "", cNames = "";
         try {
             String[] srcdirs = fileOperation.listSRCDirectories("src").split("\n");
             for(String s: srcdirs) {
@@ -46,10 +46,14 @@ public class OperationUtils {
                     names += "." + s + "*.java ";
                 }
             }
+            if(srcdirs.length > 1) {
+                cNames = ".\\src\\*.java " + names.substring(0, names.length()-1);
+            } else {
+                cNames = ".\\src\\*java";
+            }
         } catch(Exception e) {
             System.err.println(e);
         }
-        String cNames = ".\\src\\*.java " + names.substring(0, names.length()-1);
         return cNames;
     }
 
