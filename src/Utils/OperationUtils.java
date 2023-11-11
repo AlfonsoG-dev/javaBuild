@@ -129,4 +129,23 @@ public class OperationUtils {
         }
         return command;
     }
+    public String CreateRunCommand() {
+        String command = "";
+        File localFile = new File(localPath);
+        File srcFile = new File(localFile.getAbsoluteFile() + "\\src");
+        String mainName = "";
+        for(File f: srcFile.listFiles()) {
+            if(f.isFile() && f.getName().contains(".java")) {
+                mainName = f.getName().split(".java")[0] + ".jar";
+            }
+        }
+        if(localFile.listFiles().length > 0) {
+            for(File f: localFile.listFiles()) {
+                if(f.getName().equals(mainName)) {
+                    command = "java -jar " + mainName;
+                }
+            }
+        }
+        return command;
+    }
 }

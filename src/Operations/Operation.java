@@ -60,4 +60,12 @@ public class Operation {
             System.err.println(e);
         }
     }
+    public void CreateRunOperation() {
+        try {
+            String command = operationUtils.CreateRunCommand();
+            Runtime.getRuntime().exec("pwsh -Commnad " + command);
+        } catch(Exception e) {
+            System.err.println(e.getLocalizedMessage());
+        }
+    }
 }
