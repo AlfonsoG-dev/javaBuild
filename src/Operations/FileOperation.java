@@ -79,7 +79,10 @@ public class FileOperation {
             if(f.isDirectory() && f.listFiles().length > 0) {
                 for(File ml: f.listFiles()) {
                     if(ml.isDirectory()) {
-                        names += listSRCDirectories(ml.getPath()) + "\n";
+                        names += ml.getPath() + "\\" + "\n";
+                    } 
+                    if(ml.listFiles() != null && ml.listFiles().length > 0) {
+                        this.listSRCDirectories(ml.getPath());
                     }
                 }
             }
