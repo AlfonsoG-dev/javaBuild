@@ -42,6 +42,11 @@ public class FileOperation {
                     "    }\n" + 
                     "}");
                 miFileWriter.close();
+            } else if(fileName.equals("java-exe.ps1")) {
+                FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
+                miFileWriter.write("$runCommand = " + "\"java -jar " +
+                        mainClass + "\"" + "\n" + "Invoke-Expression $runCommand");
+                miFileWriter.close();
             }
         } catch(Exception e) {
             System.err.println(e);

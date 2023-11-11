@@ -18,7 +18,7 @@ public class OperationUtils {
     public void CMDOutput(InputStream miInputStream) {
         try {
             BufferedReader mio = new BufferedReader(new InputStreamReader(miInputStream));
-            while(mio.read() != -1) {
+            while(mio.ready()) {
                 System.out.println(mio.readLine());
             }
             mio.close();
@@ -129,7 +129,7 @@ public class OperationUtils {
         }
         return command;
     }
-    public String CreateRunCommand() {
+    public String CreateRunComman() {
         String command = "";
         File localFile = new File(localPath);
         File srcFile = new File(localFile.getAbsoluteFile() + "\\src");
@@ -139,13 +139,8 @@ public class OperationUtils {
                 mainName = f.getName().split(".java")[0] + ".jar";
             }
         }
-        if(localFile.listFiles().length > 0) {
-            for(File f: localFile.listFiles()) {
-                if(f.getName().equals(mainName)) {
-                    command = "java -jar " + mainName;
-                }
-            }
-        }
+        fileOperation.CreateFiles("java-exe.ps1", mainName);
+        command = "java-exe.ps1";
         return command;
     }
 }
