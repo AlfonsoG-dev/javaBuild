@@ -15,7 +15,8 @@ public class Operation {
         for(String n: names) {
             File miFile = new File(localPath + "\\" + n);
             if(miFile.exists() == false) {
-                miFile.mkdir();
+                String u = miFile.mkdir() == true ? miFile.getPath():"error";
+                System.out.println(u);
             }
         }
     }
@@ -35,7 +36,10 @@ public class Operation {
             String srcClases = operationUtils.srcClases();
             String libJars = operationUtils.libJars();
             String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
-            Runtime.getRuntime().exec("cmd /k "  + compileCommand);
+            Process compileProcess = Runtime.getRuntime().exec("cmd /k "  + compileCommand);
+            if(compileProcess.getErrorStream() != null) {
+                operationUtils.CMDOutput(compileProcess.getErrorStream());
+            }
         } catch(Exception e) {
             System.err.println(e);
         }
@@ -46,7 +50,10 @@ public class Operation {
             operationUtils.CreateExtractionFiles(jars);
             String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
             for(String e: extractions) {
-                Runtime.getRuntime().exec("pwsh -Command " + e);
+                Process extracProcess = Runtime.getRuntime().exec("pwsh -Command " + e);
+                if(extracProcess.getErrorStream() != null) {
+                    operationUtils.CMDOutput(extracProcess.getErrorStream());
+                }
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -55,7 +62,10 @@ public class Operation {
     public void CreateJarOperation() {
         try {
             String command = operationUtils.CreateJarFileCommand();
-            Runtime.getRuntime().exec("pwsh -Command " + command);
+            Process createJarProcess = Runtime.getRuntime().exec("pwsh -Command " + command);
+            if(createJarProcess.getErrorStream() != null) {
+                operationUtils.CMDOutput(createJarProcess.getErrorStream());
+            }
         } catch(Exception e) {
             System.err.println(e);
         }
@@ -64,7 +74,10 @@ public class Operation {
     public void CreateRunOperation() {
         try {
             String command = operationUtils.CreateRunComman();
-            Runtime.getRuntime().exec("pwsh -Command " + command);
+            Process runProcess = Runtime.getRuntime().exec("pwsh -Command " + command);
+            if(runProcess.getErrorStream() != null) {
+                operationUtils.CMDOutput(runProcess.getErrorStream());
+            }
         } catch(Exception e) {
             System.err.println(e.getLocalizedMessage());
         }

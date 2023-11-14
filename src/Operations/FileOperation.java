@@ -18,6 +18,7 @@ public class FileOperation {
     } 
     public void CreateFiles(String fileName, String mainClass) {
         try {
+            System.out.println(String.format("File: %s \t will be created", fileName));
             File localFile = new File(localPath);
             File miFile = new File(localPath + "\\src");
             if(fileName.equals(".gitignore")) {
