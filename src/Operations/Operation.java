@@ -82,6 +82,9 @@ public class Operation {
             if(runProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(runProcess.getErrorStream());
             }
+            if(runProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(runProcess.getInputStream());
+            }
         } catch(Exception e) {
             System.err.println(e.getLocalizedMessage());
         }
