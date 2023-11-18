@@ -140,7 +140,7 @@ public class OperationUtils {
             }
         }
         fileOperation.CreateFiles("java-exe.ps1", mainName);
-        command = "java-exe.ps1";
+        command = ".\\java-exe.ps1";
         return command;
     }
 }
