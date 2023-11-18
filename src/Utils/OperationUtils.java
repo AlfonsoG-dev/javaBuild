@@ -18,7 +18,7 @@ public class OperationUtils {
     public void CMDOutput(InputStream miInputStream) {
         try {
             BufferedReader mio = new BufferedReader(new InputStreamReader(miInputStream));
-            while(mio.ready()) {
+            while(mio.read() != -1) {
                 System.out.println(mio.readLine());
             }
             mio.close();
