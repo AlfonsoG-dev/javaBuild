@@ -79,6 +79,7 @@ public class Operation {
         try {
             String command = operationUtils.CreateRunComman();
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
+            System.out.print("RUN IN PROCESS...");
             if(runProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(runProcess.getErrorStream());
             }

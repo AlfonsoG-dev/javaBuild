@@ -16,15 +16,17 @@ public class OperationUtils {
         localPath = nLocalPath;
     }
     public void CMDOutput(InputStream miInputStream) {
+        String data = "";
         try {
             BufferedReader mio = new BufferedReader(new InputStreamReader(miInputStream));
             while(mio.read() != -1) {
-                System.out.println(mio.readLine());
+                data += mio.readLine() + "\n";
             }
             mio.close();
         } catch(Exception e) {
             System.err.println(e);
         }
+        System.out.println(data);
     }
     public void CreateProyectFiles()  {
         File localFile = new File(localPath);
