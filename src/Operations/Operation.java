@@ -36,9 +36,12 @@ public class Operation {
             String srcClases = operationUtils.srcClases();
             String libJars = operationUtils.libJars();
             String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
-            Process compileProcess = Runtime.getRuntime().exec("cmd /k "  + compileCommand);
+            Process compileProcess = Runtime.getRuntime().exec("pwsh -Command "  + compileCommand);
             if(compileProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(compileProcess.getErrorStream());
+            }
+            if(compileProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(compileProcess.getInputStream());
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -54,6 +57,9 @@ public class Operation {
                 if(extracProcess.getErrorStream() != null) {
                     operationUtils.CMDOutput(extracProcess.getErrorStream());
                 }
+                if(extracProcess.getInputStream() != null) {
+                    operationUtils.CMDOutput(extracProcess.getInputStream());
+                }
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -65,6 +71,9 @@ public class Operation {
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -Command " + command);
             if(createJarProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(createJarProcess.getErrorStream());
+            }
+            if(createJarProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(createJarProcess.getInputStream());
             }
         } catch(Exception e) {
             System.err.println(e);
