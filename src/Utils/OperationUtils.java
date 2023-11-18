@@ -40,13 +40,13 @@ public class OperationUtils {
     public String srcClases() {
         String names = "", cNames = "";
         try {
-            String[] srcdirs = fileOperation.listSRCDirectories("src").split("\n");
+            String[] srcdirs = fileOperation.listSRCDirectories(".\\src").split("\n");
             for(String s: srcdirs) {
                 if(s.isEmpty() == false) {
                     names += "." + s + "*.java ";
                 }
             }
-            if(srcdirs.length > 1) {
+            if(srcdirs.length > 0) {
                 cNames = ".\\src\\*.java " + names.substring(0, names.length()-1);
             } else {
                 cNames = ".\\src\\*java";

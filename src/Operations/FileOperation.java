@@ -77,12 +77,12 @@ public class FileOperation {
             if(f.isDirectory()) {
                 names += f.getPath() + "\\" + "\n";
             } 
-            if(f.isDirectory() && f.listFiles().length > 0) {
+            else if(f.isDirectory() && f.listFiles() != null) {
                 for(File ml: f.listFiles()) {
                     if(ml.isDirectory()) {
                         names += ml.getPath() + "\\" + "\n";
                     } 
-                    if(ml.listFiles() != null && ml.listFiles().length > 0) {
+                    if(ml.listFiles() != null && ml.listFiles() != null) {
                         this.listSRCDirectories(ml.getPath());
                     }
                 }
