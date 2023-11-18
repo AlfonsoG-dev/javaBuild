@@ -36,7 +36,7 @@ public class Operation {
             String srcClases = operationUtils.srcClases();
             String libJars = operationUtils.libJars();
             String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
-            Process compileProcess = Runtime.getRuntime().exec("pwsh -Command "  + compileCommand);
+            Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             if(compileProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(compileProcess.getErrorStream());
             }
@@ -53,12 +53,16 @@ public class Operation {
             operationUtils.CreateExtractionFiles(jars);
             String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
             for(String e: extractions) {
-                Process extracProcess = Runtime.getRuntime().exec("pwsh -Command " + e);
-                if(extracProcess.getErrorStream() != null) {
-                    operationUtils.CMDOutput(extracProcess.getErrorStream());
-                }
-                if(extracProcess.getInputStream() != null) {
-                    operationUtils.CMDOutput(extracProcess.getInputStream());
+                if(!e.isEmpty()) {
+                    Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
+                    if(extracProcess.getErrorStream() != null) {
+                        operationUtils.CMDOutput(extracProcess.getErrorStream());
+                    }
+                    if(extracProcess.getInputStream() != null) {
+                        operationUtils.CMDOutput(extracProcess.getInputStream());
+                    }
+                } else {
+                    System.out.println("NO EXTRACTION FILES");
                 }
             }
         } catch(Exception e) {
@@ -68,7 +72,7 @@ public class Operation {
     public void CreateJarOperation() {
         try {
             String command = operationUtils.CreateJarFileCommand();
-            Process createJarProcess = Runtime.getRuntime().exec("pwsh -Command " + command);
+            Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             if(createJarProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(createJarProcess.getErrorStream());
             }
@@ -83,7 +87,7 @@ public class Operation {
     public void CreateRunOperation() {
         try {
             String command = operationUtils.CreateRunComman();
-            Process runProcess = Runtime.getRuntime().exec("pwsh -Command " + command);
+            Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             if(runProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(runProcess.getErrorStream());
             }
