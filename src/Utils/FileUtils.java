@@ -1,6 +1,8 @@
 package Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 public class FileUtils {
     public String GetCleanPath(String filePath) {
         String build = filePath.replace(".", "").replace("/", "\\").replace("\\\\", "\\");
@@ -72,5 +74,42 @@ public class FileUtils {
         } catch(Exception e) {
             System.err.println(e);
         }
+    }
+    /**
+     * main class of the proyect
+     * @param localpath: local path
+     * @return main class file name
+     */
+    public static String GetMainClass(String localpath) {
+        File miFile = new File(localpath + "\\src");
+        BufferedReader miBufferedReader = null;
+        String mainName = "";
+        try {
+            if(miFile.listFiles() != null) {
+                for(File f: miFile.listFiles()) {
+                    if(f.isFile() && f.getName().contains(".java")) {
+                        miBufferedReader = new BufferedReader(new FileReader(f));
+                        while(miBufferedReader.read() != -1) {
+                            if(miBufferedReader.readLine().contains("static void main(String[] args)")) {
+                                mainName = f.getName().split(".java")[0];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            if(miBufferedReader != null) {
+                try {
+                    miBufferedReader.close();
+                } catch(Exception e) {
+                    System.err.println(e);
+                }
+                miBufferedReader = null;
+            }
+        }
+        return mainName;
     }
 }

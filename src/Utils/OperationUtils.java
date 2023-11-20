@@ -29,14 +29,13 @@ public class OperationUtils {
         System.out.println(data);
     }
     public void CreateProyectFiles()  {
-        File localFile = new File(localPath);
         try {
-            String[] names = localFile.getCanonicalPath().split("\\\\");
-            String mainClass = names[names.length-1];
+            String mainClass = FileUtils.GetMainClass(localPath);
             fileOperation.CreateFiles(".gitignore", "");
             fileOperation.CreateFiles("Manifesto.txt", mainClass);
             fileOperation.CreateFiles(mainClass + ".java", mainClass);
         } catch(Exception e) {
+            System.err.println(e);
         }
     }
     public String srcClases() {
@@ -112,13 +111,7 @@ public class OperationUtils {
     }
     public String CreateJarFileCommand() {
         String command = "";
-        File srcFile = new File(localPath + "\\src");
-        String mainName = "";
-        for(File f: srcFile.listFiles()) {
-            if(f.isFile() && f.getName().contains(".java")) {
-                mainName = f.getName().split(".java")[0] + ".jar";
-            }
-        }
+        String mainName = FileUtils.GetMainClass(localPath) + ".jar";
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles().length > 0) {
@@ -133,14 +126,7 @@ public class OperationUtils {
     }
     public String CreateRunComman() {
         String command = "";
-        File localFile = new File(localPath);
-        File srcFile = new File(localFile.getAbsoluteFile() + "\\src");
-        String mainName = "";
-        for(File f: srcFile.listFiles()) {
-            if(f.isFile() && f.getName().contains(".java")) {
-                mainName = f.getName().split(".java")[0] + ".jar";
-            }
-        }
+        String mainName = FileUtils.GetMainClass(localPath) + ".jar";
         fileOperation.CreateFiles("java-exe.ps1", mainName);
         command = ".\\java-exe.ps1";
         return command;
