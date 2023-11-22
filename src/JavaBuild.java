@@ -19,7 +19,7 @@ class JavaBuild {
                     break;
                 case "--build":
                     miOperation.CompileProyectOperation();
-                    // extraction of jar files need to be execute independent of build
+                    miOperation.ExtractJarDependencies();
                     miOperation.CreateJarOperation();
                     break;
                 case "-r":

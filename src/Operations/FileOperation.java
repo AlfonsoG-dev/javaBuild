@@ -91,6 +91,22 @@ public class FileOperation {
         String cNames = fileUtils.GetCleanPath(names);
         return cNames;
     }
+    public boolean ExtractionDirContainsPath(String libJars) throws IOException {
+        boolean containsPath = false;
+        File extractionFile = new File(localPath + "\\extractionFiles");
+        File miFile = new File(libJars);
+        String[] jarLibParent = miFile.getParent().split("\\\\");
+        String jarNameParent = jarLibParent[jarLibParent.length-1];
+        if(extractionFile.listFiles() != null) {
+            for(File f: extractionFile.listFiles()) {
+                String extractionDirName = new File(f.getCanonicalPath()).getName();
+                if(extractionDirName.equals(jarNameParent)) {
+                    containsPath = true;
+                }
+            }
+        }
+        return containsPath;
+    }
     public void DeleteDirectories(String filePath) {
         try {
             File localFile = new File(localPath);

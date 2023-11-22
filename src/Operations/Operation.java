@@ -3,11 +3,14 @@ package Operations;
 import java.io.File;
 
 import Utils.OperationUtils;
+import Operations.FileOperation;
 public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
+    private FileOperation fileOperation;
     public Operation(String nLocalPath){
         operationUtils = new OperationUtils(nLocalPath);
+        fileOperation = new FileOperation(nLocalPath);
         localPath = nLocalPath;
     }
     public void CreateProyectOperation() {
@@ -50,17 +53,25 @@ public class Operation {
     public void ExtractJarDependencies() {
         try {
             String[] jars = operationUtils.libJars().split("\n");
-            operationUtils.CreateExtractionFiles(jars);
-            String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
-            for(String e: extractions) {
-                System.out.println("extracting jar dependencies ...");
-                if(!e.isEmpty()) {
-                    Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
-                    if(extracProcess.getErrorStream() != null) {
-                        operationUtils.CMDOutput(extracProcess.getErrorStream());
+            if(jars.length > 0) {
+                for(String j: jars) {
+                    if(new FileOperation(localPath).ExtractionDirContainsPath(j) == false) {
+                        operationUtils.CreateExtractionFiles(jars);
+                        String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
+                        for(String e: extractions) {
+                            System.out.println("extracting jar dependencies ...");
+                            if(!e.isEmpty()) {
+                                Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
+                                if(extracProcess.getErrorStream() != null) {
+                                    operationUtils.CMDOutput(extracProcess.getErrorStream());
+                                }
+                            } else {
+                                System.out.println("NO EXTRACTION FILES");
+                            }
+                        }
+                    } else {
+                        System.out.println("NO NEW EXTRACTION DENEPENDENCY FOUND");
                     }
-                } else {
-                    System.out.println("NO EXTRACTION FILES");
                 }
             }
         } catch(Exception e) {

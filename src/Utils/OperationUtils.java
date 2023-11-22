@@ -136,16 +136,18 @@ public class OperationUtils {
         File libFile = new File(localPath + "\\lib\\" + targetFileName);
         if(libFile.exists() == false) {
             libFile.mkdir();
-        }
-        if(libFiles.length > 0) {
-            for(String l: libFiles) {
-                String libFileName = new File(l).getName();
-                if(libFileName.equals(externalJarName) == false) {
-                    command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+            if(libFiles.length > 0) {
+                for(String l: libFiles) {
+                    String libFileName = new File(l).getName();
+                    if(libFileName.equals(externalJarName) == false) {
+                        command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+                    }
                 }
+            } else {
+                command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
             }
         } else {
-            command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+            System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");
         }
         return command;
     }
