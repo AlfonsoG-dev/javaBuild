@@ -18,6 +18,7 @@ public class Operation {
                 String u = miFile.mkdir() == true ? miFile.getPath():"error";
                 System.out.println(u);
             }
+            System.out.println("Creating the proyect structure ...");
         }
     }
     public void CreateFilesOperation() {
@@ -29,6 +30,7 @@ public class Operation {
                     operationUtils.CreateProyectFiles();
                 }
             }
+            System.out.println("creating the util files ...");
         }
     }
     public void CompileProyectOperation() {
@@ -37,6 +39,7 @@ public class Operation {
             String libJars = operationUtils.libJars();
             String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
+            System.out.println("compile ...");
             if(compileProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(compileProcess.getErrorStream());
             }
@@ -50,6 +53,7 @@ public class Operation {
             operationUtils.CreateExtractionFiles(jars);
             String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
             for(String e: extractions) {
+                System.out.println("extracting jar dependencies ...");
                 if(!e.isEmpty()) {
                     Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
                     if(extracProcess.getErrorStream() != null) {
@@ -67,6 +71,7 @@ public class Operation {
         try {
             String command = operationUtils.CreateJarFileCommand();
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
+            System.out.println("creating jar file ...");
             if(createJarProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(createJarProcess.getErrorStream());
             }
@@ -79,6 +84,7 @@ public class Operation {
             String command = operationUtils.CreateAddJarFileCommand(jarFilePath);
             if(command != "") {
                 Process addExternarJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
+                System.out.println("adding dependency in process ...");
                 if(addExternarJarProcess.getErrorStream() != null) {
                     operationUtils.CMDOutput(addExternarJarProcess.getErrorStream());
                 }
