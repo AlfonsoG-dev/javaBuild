@@ -110,14 +110,16 @@ public class OperationUtils {
         }
         return command;
     }
-    public String CreateJarFileCommand() {
+    public String CreateJarFileCommand() throws IOException {
         String command = "";
         String mainName = FileUtils.GetMainClass(localPath) + ".jar";
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles().length > 0) {
-            for(File f: extractionFile.listFiles()) {
-                directory += " -C " +f.getPath() + "\\ .";
+            String[] exFiles = new FileOperation(localPath).listSRCDirectories(extractionFile.getPath()).split("\n");
+            for(String ex: exFiles) {
+                String exParentName = new File(ex).getParent() + "\\";
+                directory += " -C " + exParentName + "\\ .";
             }
             command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
         } else {

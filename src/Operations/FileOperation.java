@@ -76,20 +76,16 @@ public class FileOperation {
         for(File f: localFile.listFiles()) {
             if(f.isDirectory()) {
                 names += f.getPath() + "\\" + "\n";
-            } 
-            else if(f.isDirectory() && f.listFiles() != null) {
-                for(File ml: f.listFiles()) {
-                    if(ml.isDirectory()) {
-                        names += ml.getPath() + "\\" + "\n";
-                    } 
-                    if(ml.listFiles() != null && ml.listFiles() != null) {
-                        this.listSRCDirectories(ml.getPath());
+                if(f.listFiles() != null) {
+                    for(File mf: f.listFiles()) {
+                        if(mf.isDirectory()) {
+                            names += mf.getPath() + "\\" + "\n";
+                        }
                     }
                 }
-            }
+            } 
         }
-        String cNames = fileUtils.GetCleanPath(names);
-        return cNames;
+        return names;
     }
     public boolean ExtractionDirContainsPath(String libJars) throws IOException {
         boolean containsPath = false;
@@ -114,7 +110,6 @@ public class FileOperation {
             File localFile = new File(localPath);
             String cFile = filePath;
             File miFile = new File(localFile.getCanonicalPath() + "\\" + cFile);
-            System.out.println(miFile.getPath());
             if(miFile.isFile()) {
                 if(miFile.delete() == true) {
                     System.out.println("se elimino el archivo: " + miFile.getName());
