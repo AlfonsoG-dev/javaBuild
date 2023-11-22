@@ -74,6 +74,13 @@ public class Operation {
             System.err.println(e);
         }
     }
+    public void CreateAddJarFileOperation() {
+        try {
+            throw new Exception("not implemented yet");
+        } catch(Exception e) {
+            System.err.println(e);
+        }
+    }
 
     public void CreateRunOperation() {
         try {

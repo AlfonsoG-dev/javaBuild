@@ -124,6 +124,13 @@ public class OperationUtils {
         }
         return command;
     }
+    public String CreateAddJarFileCommand(String jarFilePath) {
+        String command = "";
+        // TODO: the add command recives a jar file and copies it in the lib folder
+        // TODO: create the command to do it
+        // TODO: cannot include a file that already is in lib; verify the existence of it
+        return command;
+    }
     public String CreateRunComman() {
         String command = "";
         String mainName = FileUtils.GetMainClass(localPath) + ".jar";
