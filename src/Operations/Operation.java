@@ -39,7 +39,6 @@ public class Operation {
             String srcClases = operationUtils.srcClases();
             String libJars = operationUtils.libJars();
             String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
-            System.out.println(compileCommand + "==??");
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
             if(compileProcess.getErrorStream() != null) {
