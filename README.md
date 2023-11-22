@@ -14,9 +14,22 @@
 ------
 
 ## Usage
+>- use the executable
+```console
+javabuild.exe --h
+```
+>- use the jar file
+```console
+java -jar JavaBuild.jar --h
+```
+
+### Compile
+
 >- to compile the proyect
->>- `javaBuild.exe -c`
+>>- `javaBuild.exe -cm`
 >>>- it compiles the .java clases into bin
+
+### Create a jar file of the proyect
 
 >- to create a jar file is neccesary to include or verify dependencies or libs in the proyect
 >>- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`
@@ -26,13 +39,19 @@
 >- now to create the proyect jar file
 >>- `javaBuild.exe -cj`
 
+### Build the proyect
+
 >- all can be done with only 1 command
 >>- `javaBuild.exe --build`
 >>>- it combines the 3 commands in one command
 
+### Create the proyect structure
+
 >- creates the proyect structure
 >>- `javaBuild.exe -b`
 >>>- adds the manifesto file and the main class with the proyect folde name
+
+### Add an external jar dependency
 
 >- add an external dependency 
 >>- `javabuild.exe --add dependency.jar`
