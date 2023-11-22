@@ -95,13 +95,15 @@ public class FileOperation {
         boolean containsPath = false;
         File extractionFile = new File(localPath + "\\extractionFiles");
         File miFile = new File(libJars);
-        String[] jarLibParent = miFile.getParent().split("\\\\");
-        String jarNameParent = jarLibParent[jarLibParent.length-1];
-        if(extractionFile.listFiles() != null) {
-            for(File f: extractionFile.listFiles()) {
-                String extractionDirName = new File(f.getCanonicalPath()).getName();
-                if(extractionDirName.equals(jarNameParent)) {
-                    containsPath = true;
+        if(miFile.getParent() != null) {
+            String[] jarLibParent = miFile.getParent().split("\\\\");
+            String jarNameParent = jarLibParent[jarLibParent.length-1];
+            if(extractionFile.listFiles() != null) {
+                for(File f: extractionFile.listFiles()) {
+                    String extractionDirName = new File(f.getCanonicalPath()).getName();
+                    if(extractionDirName.equals(jarNameParent)) {
+                        containsPath = true;
+                    }
                 }
             }
         }

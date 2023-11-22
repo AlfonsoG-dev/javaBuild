@@ -7,10 +7,8 @@ import Operations.FileOperation;
 public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
-    private FileOperation fileOperation;
     public Operation(String nLocalPath){
         operationUtils = new OperationUtils(nLocalPath);
-        fileOperation = new FileOperation(nLocalPath);
         localPath = nLocalPath;
     }
     public void CreateProyectOperation() {
@@ -41,6 +39,7 @@ public class Operation {
             String srcClases = operationUtils.srcClases();
             String libJars = operationUtils.libJars();
             String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
+            System.out.println(compileCommand + "==??");
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
             if(compileProcess.getErrorStream() != null) {
