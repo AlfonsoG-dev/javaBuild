@@ -44,7 +44,7 @@ public class OperationUtils {
             String[] srcdirs = fileOperation.listSRCDirectories(".\\src").split("\n");
             for(String s: srcdirs) {
                 if(s.isEmpty() == false) {
-                    names += "." + s + "*.java ";
+                    names += s + "*.java ";
                 }
             }
             if(srcdirs.length > 0) {
@@ -134,20 +134,18 @@ public class OperationUtils {
         }
         String[] libFiles = new FileOperation(localPath).listLibFiles().split("\n");
         String externalJarName = new File(jarFilePath).getName();
-        String[] externarJarParentName = new File(jarFilePath).getParent().split("\\\\");
-        String targetFileName = externarJarParentName[externarJarParentName.length-1];
+        String targetFileName = new File(jarFilePath).getName();
         File libFile = new File(localPath + "\\lib\\" + targetFileName);
         if(libFile.exists() == false) {
-            libFile.mkdir();
             if(libFiles.length > 0) {
                 for(String l: libFiles) {
                     String libFileName = new File(l).getName();
                     if(libFileName.equals(externalJarName) == false) {
-                        command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+                        command = "filem -cp " + new File(jarFilePath).getPath() + " to " + new File(localPath + "\\lib");
                     }
                 }
             } else {
-                command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+                command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getCanonicalPath();
             }
         } else {
             System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");

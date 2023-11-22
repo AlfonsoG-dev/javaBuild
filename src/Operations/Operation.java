@@ -63,6 +63,9 @@ public class Operation {
                                 if(extracProcess.getErrorStream() != null) {
                                     operationUtils.CMDOutput(extracProcess.getErrorStream());
                                 }
+                                if(extracProcess.exitValue() == 0) {
+                                    System.out.println("extracting jar dependencies terminated");
+                                }
                             } else {
                                 System.out.println("NO EXTRACTION FILES");
                             }

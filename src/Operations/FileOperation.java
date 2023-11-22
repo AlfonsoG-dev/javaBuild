@@ -76,14 +76,14 @@ public class FileOperation {
         for(File f: localFile.listFiles()) {
             if(f.isDirectory()) {
                 names += f.getPath() + "\\" + "\n";
-                if(f.listFiles() != null) {
-                    for(File mf: f.listFiles()) {
-                        if(mf.isDirectory()) {
-                            names += mf.getPath() + "\\" + "\n";
-                        }
+            } 
+            if(f.listFiles() != null) {
+                for(File mf: f.listFiles()) {
+                    if(mf.isDirectory()) {
+                        names += listSRCDirectories(mf.getPath());
                     }
                 }
-            } 
+            }
         }
         return names;
     }
