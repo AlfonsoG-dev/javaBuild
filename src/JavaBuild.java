@@ -26,7 +26,11 @@ class JavaBuild {
                     miOperation.CreateRunOperation();
                     break;
                 case "--add":
-                    miOperation.CreateAddJarFileOperation();
+                    if((i+1) < args.length) {
+                        miOperation.CreateAddJarFileOperation(args[i+1]);
+                    } else {
+                        System.out.println("the path to the jar file is needed");
+                    }
                     break;
                 case "--h":
                     System.out.println("use -b to create the proyect folder structure");

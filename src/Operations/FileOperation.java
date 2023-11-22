@@ -60,7 +60,7 @@ public class FileOperation {
             for(File f: localFile.listFiles()) {
                 if(f.getName().equals("lib")) {
                     for(File mf: f.listFiles()) {
-                        names += fileUtils.listFilesFromPath(mf.getPath());
+                        names += fileUtils.listFilesFromPath(mf.getPath()) + "\n";
                     }
                 }
             }

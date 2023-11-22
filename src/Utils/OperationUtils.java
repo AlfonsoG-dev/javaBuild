@@ -124,11 +124,29 @@ public class OperationUtils {
         }
         return command;
     }
-    public String CreateAddJarFileCommand(String jarFilePath) {
+    public String CreateAddJarFileCommand(String jarFilePath) throws Exception {
         String command = "";
-        // TODO: the add command recives a jar file and copies it in the lib folder
-        // TODO: create the command to do it
-        // TODO: cannot include a file that already is in lib; verify the existence of it
+        if(new File(jarFilePath).exists() == false) {
+            throw new Exception("jar file not found");
+        }
+        String[] libFiles = new FileOperation(localPath).listLibFiles().split("\n");
+        String externalJarName = new File(jarFilePath).getName();
+        String[] externarJarParentName = new File(jarFilePath).getParent().split("\\\\");
+        String targetFileName = externarJarParentName[externarJarParentName.length-1];
+        File libFile = new File(localPath + "\\lib\\" + targetFileName);
+        if(libFile.exists() == false) {
+            libFile.mkdir();
+        }
+        if(libFiles.length > 0) {
+            for(String l: libFiles) {
+                String libFileName = new File(l).getName();
+                if(libFileName.equals(externalJarName) == false) {
+                    command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+                }
+            }
+        } else {
+            command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getPath();
+        }
         return command;
     }
     public String CreateRunComman() {

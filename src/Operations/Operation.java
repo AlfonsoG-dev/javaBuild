@@ -74,9 +74,18 @@ public class Operation {
             System.err.println(e);
         }
     }
-    public void CreateAddJarFileOperation() {
+    public void CreateAddJarFileOperation(String jarFilePath) {
         try {
-            throw new Exception("not implemented yet");
+            String command = operationUtils.CreateAddJarFileCommand(jarFilePath);
+            if(command != "") {
+                Process addExternarJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
+                if(addExternarJarProcess.getErrorStream() != null) {
+                    operationUtils.CMDOutput(addExternarJarProcess.getErrorStream());
+                }
+                System.out.println("external dependency has been added to lib folder");
+            } else {
+                System.out.println("external dependency it already in lib folder");
+            }
         } catch(Exception e) {
             System.err.println(e);
         }

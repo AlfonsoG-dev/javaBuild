@@ -34,17 +34,16 @@
 >>- `javaBuild.exe -b`
 >>>- adds the manifesto file and the main class with the proyect folde name
 
+>- add an external dependency 
+>>- `javabuild.exe --add dependency.jar`
+>>>- add an external jar file to the lib folder of the proyect
+
 ------
 
 ## Aditional info
 >- this app uses powershell to execute the commands
 >- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
 >- only in path the aplication can be use
-
-------
-
-## TODO's
-- [ ] create command `--add` to include a external jar file in the proyect
 
 ------
 
