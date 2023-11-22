@@ -19,7 +19,7 @@ public class FileUtils {
                     if(f.isFile()) {
                         fileNames += f.getPath() + "\n";
                     } else {
-                        this.listFilesFromPath(f.getPath());
+                        fileNames += listFilesFromPath(f.getPath()) + "\n";
                     }
                 }
             }

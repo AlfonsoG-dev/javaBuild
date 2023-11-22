@@ -62,7 +62,7 @@ public class OperationUtils {
         String names = "";
         String[] libfiles = fileOperation.listLibFiles().split("\n");
         for(String l: libfiles) {
-            if(l.contains(".jar")) {
+            if(new File(l).getName().contains(".jar")) {
                 names += l + "\n";
             }
         }
@@ -100,11 +100,12 @@ public class OperationUtils {
     public String CreateExtractionCommand() throws IOException {
         String command = "";
         File extractionFile = new File(localPath + "\\extractionFiles");
-        for(File f: extractionFile.listFiles()) {
-            if(f.isDirectory()) {
-                for(File mf: f.listFiles()) {
-                    command += "cd " + mf.getParent() + " && " + "jar -xf " + mf.getName() + " && " + "rm -r " + mf.getName() + "\n";
-                }
+        String[] listFiles = new FileUtils().listFilesFromPath(extractionFile.getPath()).split("\n");
+        for(String l: listFiles) {
+            String jarFileName = new File(l).getName();
+            if(jarFileName.contains(".jar")) {
+                String jarParent = new File(l).getParent();
+                command += "cd " + jarParent + " && " + "jar -xf " + jarFileName + " && " + "rm -r " + jarFileName + "\n";
             }
         }
         return command;
