@@ -43,7 +43,8 @@ java -jar JavaBuild.jar --h
 
 >- all can be done with only 1 command
 >>- `javaBuild.exe --build`
->>>- it combines the 3 commands in one command
+>>>- it combines the the commands: *"compile and createJar"* to build
+>>>- the extraction of the jar dependency need to be execute manually with: `-ex` and only one time per jar dependency
 
 ### Create the proyect structure
 
@@ -62,7 +63,6 @@ java -jar JavaBuild.jar --h
 ## Aditional info
 >- this app uses powershell to execute the commands
 >- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
->- only in path the aplication can be use
 
 ------
 
