@@ -97,7 +97,9 @@ public class Operation {
                 if(addExternarJarProcess.getErrorStream() != null) {
                     operationUtils.CMDOutput(addExternarJarProcess.getErrorStream());
                 }
-                System.out.println("external dependency has been added to lib folder");
+                if(addExternarJarProcess.exitValue() == 0) {
+                    System.out.println("external dependency has been added to lib folder");
+                }
             } else {
                 System.out.println("external dependency it already in lib folder");
             }
