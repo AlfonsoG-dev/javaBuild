@@ -34,11 +34,11 @@ public class Operation {
             }
         }
     }
-    public void CompileProyectOperation() {
+    public String CompileProyectOperation() {
+        String srcClases = operationUtils.srcClases();
+        String libJars = operationUtils.libJars();
+        String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
         try {
-            String srcClases = operationUtils.srcClases();
-            String libJars = operationUtils.libJars();
-            String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
             if(compileProcess.getErrorStream() != null) {
@@ -47,8 +47,10 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
+        return compileCommand;
     }
-    public void ExtractJarDependencies() {
+    public String ExtractJarDependencies() {
+        String extractionCommand = "";
         try {
             String[] jars = operationUtils.libJars().split("\n");
             if(jars.length > 0) {
@@ -59,6 +61,7 @@ public class Operation {
                         for(String e: extractions) {
                             System.out.println("extracting jar dependencies ...");
                             if(!e.isEmpty()) {
+                                extractionCommand += e + "\n";
                                 Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
                                 if(extracProcess.getErrorStream() != null) {
                                     operationUtils.CMDOutput(extracProcess.getErrorStream());
@@ -78,10 +81,12 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
+        return extractionCommand;
     }
-    public void CreateJarOperation() {
+    public String CreateJarOperation() {
+        String command = "";
         try {
-            String command = operationUtils.CreateJarFileCommand();
+            command = operationUtils.CreateJarFileCommand();
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("creating jar file ...");
             if(createJarProcess.getErrorStream() != null) {
@@ -90,10 +95,12 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
+        return command;
     }
-    public void CreateAddJarFileOperation(String jarFilePath) {
+    public String CreateAddJarFileOperation(String jarFilePath) {
+        String command = "";
         try {
-            String command = operationUtils.CreateAddJarFileCommand(jarFilePath);
+            command = operationUtils.CreateAddJarFileCommand(jarFilePath);
             if(command != "") {
                 Process addExternarJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
                 System.out.println("adding dependency in process ...");
@@ -109,13 +116,14 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
+        return command;
     }
 
     public void CreateRunOperation() {
         try {
             String command = operationUtils.CreateRunComman();
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
-            System.out.print("RUN IN PROCESS...");
+            System.out.print("Adding run script ...");
             if(runProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(runProcess.getErrorStream());
             }

@@ -45,8 +45,14 @@ public class FileOperation {
                 miFileWriter.close();
             } else if(fileName.equals("java-exe.ps1")) {
                 FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
-                miFileWriter.write("$runCommand = " + "\"java -jar " +
-                        mainClass + "\"" + "\n" + "Invoke-Expression $runCommand");
+                String compileCommand = new Operation(localPath).CompileProyectOperation();
+                String createJarCommand = new Operation(localPath).CreateJarOperation();
+                miFileWriter.write("$compile = " + "\"" + compileCommand + "\"" + "\n" + 
+                        "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
+                        "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
+                        "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
+                        "\"$javaCommand\"" + "\n" + 
+                        "Invoke-Expression $runCommand");
                 miFileWriter.close();
             }
         } catch(Exception e) {
