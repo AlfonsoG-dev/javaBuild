@@ -43,13 +43,13 @@ public class OperationUtils {
         String names = "", cNames = "";
         try {
             String[] srcdirs = fileOperation.listSRCDirectories(".\\src").split("\n");
-            for(String s: srcdirs) {
-                if(s.isEmpty() == false) {
-                    names += s + "*.java ";
-                }
-            }
             if(srcdirs.length > 0) {
-                cNames = ".\\src\\*.java " + names.substring(0, names.length()-1);
+                for(String s: srcdirs) {
+                    if(s.isEmpty() == false) {
+                        names += s + "*.java ";
+                    }
+                }
+                cNames = ".\\src\\*.java " + names;
             } else {
                 cNames = ".\\src\\*java";
             }
