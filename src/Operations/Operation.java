@@ -13,17 +13,18 @@ public class Operation {
     }
     public void CreateProyectOperation() {
         String[] names = {"bin", "lib", "src", "docs", "extractionFiles"};
+        System.out.println("Creating the proyect structure ...");
         for(String n: names) {
             File miFile = new File(localPath + "\\" + n);
             if(miFile.exists() == false) {
                 String u = miFile.mkdir() == true ? miFile.getPath():"error";
                 System.out.println(u);
             }
-            System.out.println("Creating the proyect structure ...");
         }
     }
     public void CreateFilesOperation() {
         File localFile = new File(localPath);
+        System.out.println("creating the util files ...");
         for(File f: localFile.listFiles()) {
             if(f.getName().equals("Manifesto.txt") == false && f.getName().equals("src")) {
                 File srcMainFile = new File(localPath + "\\src");
@@ -31,7 +32,6 @@ public class Operation {
                     operationUtils.CreateProyectFiles();
                 }
             }
-            System.out.println("creating the util files ...");
         }
     }
     public void CompileProyectOperation() {

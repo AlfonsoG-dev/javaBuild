@@ -30,7 +30,8 @@ public class OperationUtils {
     }
     public void CreateProyectFiles()  {
         try {
-            String mainClass = FileUtils.GetMainClass(localPath);
+            String mainDirName = new File(localPath).getCanonicalPath();
+            String mainClass = new File(mainDirName).getName();
             fileOperation.CreateFiles(".gitignore", "");
             fileOperation.CreateFiles("Manifesto.txt", mainClass);
             fileOperation.CreateFiles(mainClass + ".java", mainClass);
