@@ -82,10 +82,13 @@ public class FileOperation {
         for(File f: localFile.listFiles()) {
             if(f.isDirectory()) {
                 names += f.getPath() + "\\" + "\n";
-            } 
-            if(f.listFiles() != null) {
+            }
+            if(f.isDirectory() && f.listFiles() != null) {
                 for(File mf: f.listFiles()) {
                     if(mf.isDirectory()) {
+                        names += mf.getPath() + "\\" + "\n";
+                    }
+                    if(mf.isDirectory() && mf.listFiles() != null) {
                         names += listSRCDirectories(mf.getPath());
                     }
                 }
