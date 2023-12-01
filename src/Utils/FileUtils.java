@@ -86,13 +86,13 @@ public class FileUtils {
         String mainName = "";
         try {
             if(miFile.listFiles() != null) {
-                for(File f: miFile.listFiles()) {
+            outter: for(File f: miFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
                             if(miBufferedReader.readLine().contains("static void main(String[] args)")) {
                                 mainName = f.getName().split(".java")[0];
-                                break;
+                                break outter;
                             }
                         }
                     }

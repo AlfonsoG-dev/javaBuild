@@ -132,7 +132,10 @@ public class OperationUtils {
     }
     public String CreateJarFileCommand() throws IOException {
         String command = "";
-        String mainName = FileUtils.GetMainClass(localPath) + ".jar";
+        String mainName = "";
+        if(FileUtils.GetMainClass(localPath) != "") {
+            mainName = FileUtils.GetMainClass(localPath) + ".jar";
+        }
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles().length > 0) {
@@ -141,9 +144,19 @@ public class OperationUtils {
                 String exParentName = new File(ex).getParent() + "\\";
                 directory += " -C " + exParentName + "\\ .";
             }
-            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
+            if(mainName != "") {
+                command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
+            } else {
+                String mainDir = new File(localPath).getCanonicalPath();
+                command = "jar -cf " + new File(mainDir).getName() + " -C .\\bin\\ ." + directory;
+            }
         } else {
-            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
+            if(mainName != "") {
+                command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
+            } else {
+                String mainDir = new File(localPath).getCanonicalPath();
+                command = "jar -cfm " + new File(mainDir).getName() + " Manifesto.txt -C .\\bin\\ .";
+            }
         }
         return command;
     }
