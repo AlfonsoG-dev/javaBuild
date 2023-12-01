@@ -11,6 +11,16 @@
 - [x] build the proyect, combine the 3 previusly mention
 - [x] creae the folder structure of the proyect
 
+## Issues to fix
+- [ ] compile command compile the .java into .class have the current error:
+>>- `error: Invalid filename: .\\src\\*.java`.
+>>- ocurred when there is no .java file inside src or no main class present in src.
+- [ ] create jar file have the current error:
+>>- `java.lang.NullPointerException: Cannot read the array length because "<local5>" is null`.
+>>- ocurred when the compile command file.
+- [ ] MAIN ERROR: execute build command when there's no main class present in the proyect.
+>>- fails because compile and create jar are not executing properly
+
 ------
 
 ## Usage
