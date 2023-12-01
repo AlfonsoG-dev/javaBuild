@@ -83,8 +83,6 @@ public class OperationUtils {
                     names += l + "\n";
                 }
             }
-        } else {
-            System.out.println("LIB jar is a --module-path");
         }
         return names;
     }
@@ -138,25 +136,22 @@ public class OperationUtils {
         }
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
-        if(extractionFile.exists() && extractionFile.listFiles().length > 0) {
+        if(extractionFile.exists() && extractionFile.listFiles() != null) {
             String[] exFiles = new FileOperation(localPath).listSRCDirectories(extractionFile.getPath()).split("\n");
             for(String ex: exFiles) {
-                String exParentName = new File(ex).getParent() + "\\";
-                directory += " -C " + exParentName + "\\ .";
+                if(ex != null && ex != "") {
+                    String exParentName = new File(ex).getParent() + "\\";
+                    directory += " -C " + exParentName + "\\ .";
+                }
             }
-            if(mainName != "") {
-                command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
-            } else {
-                String mainDir = new File(localPath).getCanonicalPath();
-                command = "jar -cf " + new File(mainDir).getName() + " -C .\\bin\\ ." + directory;
-            }
-        } else {
-            if(mainName != "") {
-                command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
-            } else {
-                String mainDir = new File(localPath).getCanonicalPath();
-                command = "jar -cfm " + new File(mainDir).getName() + " Manifesto.txt -C .\\bin\\ .";
-            }
+        } 
+        if(mainName != "" && directory != "") {
+            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
+        } else if(mainName != "" && directory == "") {
+            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
+        } else if(mainName == "" && directory == "") {
+            String mainDir = new File(localPath).getCanonicalPath();
+            command = "jar -cf " + new File(mainDir).getName() + " -C .\\bin\\ .";
         }
         return command;
     }
