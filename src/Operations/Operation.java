@@ -87,7 +87,9 @@ public class Operation {
         String command = "";
         try {
             command = operationUtils.CreateJarFileCommand();
-            System.out.println(command + "==");
+            if(command.equals("")) {
+                throw new Exception("error while trying to create ther jar file");
+            }
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("creating jar file ...");
             if(createJarProcess.getErrorStream() != null) {

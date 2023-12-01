@@ -79,17 +79,19 @@ public class FileOperation {
         String cPath = fileUtils.GetCleanPath(path);
         File localFile = new File(localPath + "\\" + cPath);
         String names = "";
-        for(File f: localFile.listFiles()) {
-            if(f.isDirectory()) {
-                names += f.getPath() + "\\" + "\n";
-            }
-            if(f.isDirectory() && f.listFiles() != null) {
-                for(File mf: f.listFiles()) {
-                    if(mf.isDirectory()) {
-                        names += mf.getPath() + "\\" + "\n";
-                    }
-                    if(mf.isDirectory() && mf.listFiles() != null) {
-                        names += listSRCDirectories(mf.getPath());
+        if(localFile.listFiles() != null) {
+            for(File f: localFile.listFiles()) {
+                if(f.isDirectory()) {
+                    names += f.getPath() + "\\" + "\n";
+                }
+                if(f.isDirectory() && f.listFiles() != null) {
+                    for(File mf: f.listFiles()) {
+                        if(mf.isDirectory()) {
+                            names += mf.getPath() + "\\" + "\n";
+                        }
+                        if(mf.isDirectory() && mf.listFiles() != null) {
+                            names += listSRCDirectories(mf.getPath());
+                        }
                     }
                 }
             }

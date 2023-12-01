@@ -149,9 +149,13 @@ public class OperationUtils {
             command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
         } else if(mainName != "" && directory == "") {
             command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
+        }
+        if(mainName == "" && directory != "") {
+            String mainDir = new File(localPath).getCanonicalPath();
+            command = "jar -cf " + new File(mainDir).getName() + ".jar -C .\\bin\\ ." + directory;
         } else if(mainName == "" && directory == "") {
             String mainDir = new File(localPath).getCanonicalPath();
-            command = "jar -cf " + new File(mainDir).getName() + " -C .\\bin\\ .";
+            command = "jar -cf " + new File(mainDir).getName() + ".jar -C .\\bin\\ .";
         }
         return command;
     }
