@@ -71,10 +71,20 @@ public class OperationUtils {
     public String libJars() {
         String names = "";
         String[] libfiles = fileOperation.listLibFiles().split("\n");
+        int count = 0;
         for(String l: libfiles) {
             if(new File(l).getName().contains(".jar")) {
-                names += l + "\n";
+                ++count;
             }
+        }
+        if(count == 1) {
+            for(String l: libfiles) {
+                if(new File(l).getName().contains(".jar")) {
+                    names += l + "\n";
+                }
+            }
+        } else {
+            System.out.println("LIB jar is a --module-path");
         }
         return names;
     }
