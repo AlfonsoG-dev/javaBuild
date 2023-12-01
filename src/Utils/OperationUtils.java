@@ -40,23 +40,32 @@ public class OperationUtils {
         }
     }
     public String srcClases() {
-        String names = "", cNames = "";
+        String names = "";
         try {
-            String[] srcdirs = fileOperation.listSRCDirectories(".\\src").split("\n");
-            if(srcdirs.length > 0) {
-                for(String s: srcdirs) {
-                    if(s.isEmpty() == false) {
-                        names += s + "*.java ";
+            File srcFile = new File(localPath + "\\src");
+            if(srcFile.exists()) {
+                if(srcFile.listFiles().length > 0) {
+                    for(File f: srcFile.listFiles()) {
+                        if(f.isFile() && f.getName().contains(".java")) {
+                            names += ".\\src\\*.java ";
+                        }
                     }
                 }
-                cNames = ".\\src\\*.java " + names;
+                String[] srcdirs = fileOperation.listSRCDirectories(".\\src").split("\n");
+                if(srcdirs.length > 0) {
+                    for(String s: srcdirs) {
+                        if(s.isEmpty() == false) {
+                            names += s + "*.java ";
+                        }
+                    }
+                }
             } else {
-                cNames = ".\\src\\*java";
+                System.out.println("error in: " + localPath + "\\SRC\\ folder not found");
             }
         } catch(Exception e) {
             System.err.println(e);
         }
-        return cNames;
+        return names;
     }
 
     public String libJars() {
