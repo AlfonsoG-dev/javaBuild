@@ -10,10 +10,7 @@
 - [x] create the proyect jar file
 - [x] build the proyect, combine the 3 previusly mention
 - [x] creae the folder structure of the proyect
-
-## Issues to fix
-- [ ] now the creation of the jar file includes the parent file of the extraction file of the lib dependency
-
+- [x] create the run powershell script and executes the proyect
 
 ------
 
@@ -56,11 +53,18 @@ java -jar JavaBuild.jar --h
 >>- `javaBuild.exe -b`
 >>>- adds the manifesto file and the main class with the proyect folde name
 
+### Run or excute the proyect
+
+>>- `javaBuild.exe -r`
+>>>- creates the powershell script whit all the command to build the proyect, excep the extraction operation
+>>>- executes the proyect
+
 ### Add an external jar dependency
 
 >- add an external dependency 
 >>- `javabuild.exe --add dependency.jar`
 >>>- add an external jar file to the lib folder of the proyect
+>>>- this command depends on [filesManager](https://github.com/AlfonsoG-dev/filesManager)
 
 ------
 
