@@ -14,7 +14,7 @@ public class FileUtils {
             File miFile = new File(filePath);
             if(miFile.exists() && miFile.isFile()) {
                 fileNames += miFile.getPath() + "\n";
-            } else if(miFile.isDirectory()) {
+            } else if(miFile.isDirectory() && miFile.listFiles() != null) {
                 for(File f: miFile.listFiles()) {
                     if(f.isFile()) {
                         fileNames += f.getPath() + "\n";

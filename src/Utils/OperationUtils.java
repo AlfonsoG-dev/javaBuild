@@ -137,12 +137,8 @@ public class OperationUtils {
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles() != null) {
-            String[] exFiles = new FileOperation(localPath).listSRCDirectories(extractionFile.getPath()).split("\n");
-            for(String ex: exFiles) {
-                if(ex != null && ex != "") {
-                    String exParentName = new File(ex).getParent() + "\\";
-                    directory += " -C " + exParentName + "\\ .";
-                }
+            for(File extractionDir: extractionFile.listFiles()) {
+                directory += " -C " + extractionDir.getPath() + "\\ .";
             }
         } 
         if(mainName != "" && directory != "") {
