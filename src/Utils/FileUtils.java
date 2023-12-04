@@ -34,7 +34,7 @@ public class FileUtils {
             File miFile = new File(filePath);
             if(miFile.exists() && miFile.isFile()) {
                 fileNames += miFile.getCanonicalPath() + "\n";
-            } else {
+            } else if(miFile.listFiles() != null) {
                 fileNames += getDirectoryFiles(miFile.listFiles());
             }
         } catch(Exception e) {
