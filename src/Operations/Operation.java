@@ -102,17 +102,17 @@ public class Operation {
     }
     public String CreateAddJarFileOperation(String jarFilePath) {
         String command = "";
+        Process addExternarJarProcess = null;
         try {
             command = operationUtils.CreateAddJarFileCommand(jarFilePath);
             if(command != "") {
-                Process addExternarJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
+                addExternarJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
                 System.out.println("adding dependency in process ...");
                 if(addExternarJarProcess.getErrorStream() != null) {
                     operationUtils.CMDOutput(addExternarJarProcess.getErrorStream());
                 }
-                if(addExternarJarProcess.getInputStream() != null) {
-                    operationUtils.CMDOutput(addExternarJarProcess.getInputStream());
-                }
+                addExternarJarProcess.waitFor();
+                System.out.println("jar dependency has been added to lib folder");
             }
         } catch(Exception e) {
             System.err.println(e);
