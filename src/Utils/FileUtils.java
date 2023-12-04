@@ -13,20 +13,29 @@ public class FileUtils {
         }
         return build;
     }
+    public String getDirectoryFiles(File[] miFiles) {
+        String fileNames = "";
+        try {
+            for(File f: miFiles) {
+                if(f.exists() && f.isFile()) {
+                    fileNames += f.getCanonicalPath() + "\n";
+                } else if(f.isDirectory()) {
+                    fileNames += this.getDirectoryFiles(f.listFiles());
+                }
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        }
+        return fileNames;
+    }
     public String listFilesFromPath(String filePath) {
         String fileNames = "";
         try {
             File miFile = new File(filePath);
             if(miFile.exists() && miFile.isFile()) {
-                fileNames += miFile.getPath() + "\n";
-            } else if(miFile.isDirectory() && miFile.listFiles() != null) {
-                for(File f: miFile.listFiles()) {
-                    if(f.isFile()) {
-                        fileNames += f.getPath() + "\n";
-                    } else {
-                        fileNames += listFilesFromPath(f.getPath()) + "\n";
-                    }
-                }
+                fileNames += miFile.getCanonicalPath() + "\n";
+            } else {
+                fileNames += getDirectoryFiles(miFile.listFiles());
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -54,12 +63,9 @@ public class FileUtils {
             miFile.mkdir();
         }
     }
-    public String CreateTargetFromParentPath(String parentFile) {
-        String[] parentName = parentFile.split("\\\\");
-        String targetNames = "";
-        for(int i=8; i<parentName.length; ++i) {
-            targetNames += parentName[i] + "\\";
-        }
+    public String CreateTargetFromParentPath(String parentFile, String dirs) {
+        String parentName = new File(parentFile).getParent();
+        String targetNames = dirs.replace(parentName, "");
         return targetNames;
     }
     public void CreateParentFile(String targetFilePath, String parentFileNames) {

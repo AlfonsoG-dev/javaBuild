@@ -151,15 +151,21 @@ public class FileOperation {
             String[] fileNames = fileUtils.listFilesFromPath(sourceFilePath).split("\n");
             for(String fn: fileNames) {
                 File sourceFile = new File(fn);
-                String cTargetNames = fileUtils.CreateTargetFromParentPath(sourceFile.getCanonicalPath()) + ";";
-                String[] names = cTargetNames.split(";");
-                for(String n: names) {
-                    File targetFile = new File(targetFilePath + "\\" + n);
-                    if(targetFile.exists() == false) {
-                        fileUtils.CreateParentFile(targetFilePath, targetFile.getParent());
-                        Path sourcePath = sourceFile.toPath();
-                        Path targetPath = targetFile.toPath();
-                        System.out.println( Files.copy(sourcePath, targetPath, StandardCopyOption.COPY_ATTRIBUTES));
+                if(new File(sourceFilePath).isFile()) {
+                    Path fileSource = sourceFile.toPath();
+                    Path target = new File(targetFilePath).toPath();
+                    System.out.println( Files.copy(fileSource, target.resolve(fileSource.getFileName()), StandardCopyOption.COPY_ATTRIBUTES));
+                } else if(new File(sourceFilePath).isDirectory()) {
+                    String cTargetNames = fileUtils.CreateTargetFromParentPath(sourceFilePath, sourceFile.getCanonicalPath()) + ";";
+                    String[] names = cTargetNames.split(";");
+                    for(String n: names) {
+                        if(n.contains(".git") == false) {
+                            File targetFile = new File(targetFilePath + "\\" + n);
+                            fileUtils.CreateParentFile(targetFilePath, targetFile.getParent());
+                            Path sourcePath = sourceFile.toPath();
+                            Path targetPath = targetFile.toPath();
+                            System.out.println(Files.copy(sourcePath, targetPath, StandardCopyOption.COPY_ATTRIBUTES));
+                        }
                     }
                 }
             }

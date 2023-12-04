@@ -155,24 +155,27 @@ public class OperationUtils {
         }
         return command;
     }
-    public String CreateAddJarFileCommand(String jarFilePath) throws Exception {
-        String command = "", sourceFilePath = "";
+    public boolean CreateAddJarFileCommand(String jarFilePath) throws Exception {
+        System.out.println("adding jar dependency in process ...");
+        String sourceFilePath = "";
+        boolean addJar = false;
         if(new File(jarFilePath).exists() == false) {
             throw new Exception("jar file not found");
         }
         if(new File(jarFilePath).isFile()) {
             sourceFilePath = new File(jarFilePath).getParent();
         } else {
-            sourceFilePath = jarFilePath;
+            sourceFilePath = new File(jarFilePath).getPath();
         }
         String externalJarName = new File(sourceFilePath).getName();
         File libFile = new File(localPath + "\\lib\\" + externalJarName);
         if(libFile.exists() == false) {
-            command = "filem -cp " + sourceFilePath + " to " + new File(localPath + "\\lib").getPath();
+            new FileOperation(localPath).CopyFilesfromSourceToTarget(sourceFilePath, new File(localPath + "\\lib").getPath());
+            addJar = true;
         } else {
             System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");
         }
-        return command;
+        return addJar;
     }
     public String CreateRunComman() {
         String command = "";

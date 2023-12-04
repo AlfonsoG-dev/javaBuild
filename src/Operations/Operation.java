@@ -100,24 +100,15 @@ public class Operation {
         }
         return command;
     }
-    public String CreateAddJarFileOperation(String jarFilePath) {
-        String command = "";
-        Process addExternarJarProcess = null;
+    public void CreateAddJarFileOperation(String jarFilePath) {
         try {
-            command = operationUtils.CreateAddJarFileCommand(jarFilePath);
-            if(command != "") {
-                addExternarJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
-                System.out.println("adding dependency in process ...");
-                if(addExternarJarProcess.getErrorStream() != null) {
-                    operationUtils.CMDOutput(addExternarJarProcess.getErrorStream());
-                }
-                addExternarJarProcess.waitFor();
+            boolean command = operationUtils.CreateAddJarFileCommand(jarFilePath);
+            if(command == true) {
                 System.out.println("jar dependency has been added to lib folder");
             }
         } catch(Exception e) {
             System.err.println(e);
         }
-        return command;
     }
 
     public void CreateRunOperation() {
