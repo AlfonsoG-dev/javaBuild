@@ -5,7 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 public class FileUtils {
     public String GetCleanPath(String filePath) {
-        String build = filePath.replace(".", "").replace("/", "\\").replace("\\\\", "\\");
+        String build = "";
+        if(filePath.startsWith("\\.")) {
+            build = filePath.replace(".", "").replace("/", "\\").replace("\\\\", "\\");
+        } else {
+            build = filePath.replace("/", "\\").replace("\\\\", "\\");
+        }
         return build;
     }
     public String listFilesFromPath(String filePath) {

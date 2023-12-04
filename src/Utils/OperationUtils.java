@@ -156,25 +156,19 @@ public class OperationUtils {
         return command;
     }
     public String CreateAddJarFileCommand(String jarFilePath) throws Exception {
-        String command = "";
+        String command = "", sourceFilePath = "";
         if(new File(jarFilePath).exists() == false) {
             throw new Exception("jar file not found");
         }
-        String[] libFiles = new FileOperation(localPath).listLibFiles().split("\n");
-        String externalJarName = new File(jarFilePath).getName();
-        String targetFileName = new File(jarFilePath).getName();
-        File libFile = new File(localPath + "\\lib\\" + targetFileName);
+        if(new File(jarFilePath).isFile()) {
+            sourceFilePath = new File(jarFilePath).getParent();
+        } else {
+            sourceFilePath = jarFilePath;
+        }
+        String externalJarName = new File(sourceFilePath).getName();
+        File libFile = new File(localPath + "\\lib\\" + externalJarName);
         if(libFile.exists() == false) {
-            if(libFiles.length > 0) {
-                for(String l: libFiles) {
-                    String libFileName = new File(l).getName();
-                    if(libFileName.equals(externalJarName) == false) {
-                        command = "filem -cp " + new File(jarFilePath).getPath() + " to " + new File(localPath + "\\lib");
-                    }
-                }
-            } else {
-                command = "filem -cp " + new File(jarFilePath).getPath() + " to " + libFile.getCanonicalPath();
-            }
+            command = "filem -cp " + sourceFilePath + " to " + new File(localPath + "\\lib").getPath();
         } else {
             System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");
         }

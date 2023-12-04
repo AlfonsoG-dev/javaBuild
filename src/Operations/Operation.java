@@ -110,11 +110,9 @@ public class Operation {
                 if(addExternarJarProcess.getErrorStream() != null) {
                     operationUtils.CMDOutput(addExternarJarProcess.getErrorStream());
                 }
-                if(addExternarJarProcess.exitValue() == 0) {
-                    System.out.println("external dependency has been added to lib folder");
+                if(addExternarJarProcess.getInputStream() != null) {
+                    operationUtils.CMDOutput(addExternarJarProcess.getInputStream());
                 }
-            } else {
-                System.out.println("external dependency it already in lib folder");
             }
         } catch(Exception e) {
             System.err.println(e);
