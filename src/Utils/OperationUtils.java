@@ -48,13 +48,14 @@ public class OperationUtils {
                     for(File f: srcFile.listFiles()) {
                         if(f.isFile() && f.getName().contains(".java")) {
                             names += ".\\src\\*.java ";
+                            break;
                         }
                     }
                 }
-                String[] srcdirs = fileOperation.listSRCDirectories(".\\src").split("\n");
+                String[] srcdirs = fileOperation.listSRCDirectories("src").split("\n");
                 if(srcdirs.length > 0) {
                     for(String s: srcdirs) {
-                        if(s.isEmpty() == false) {
+                        if(s.isEmpty() == false && new FileUtils().countFilesInDirectory(new File(s)) != -1) {
                             names += s + "*.java ";
                         }
                     }

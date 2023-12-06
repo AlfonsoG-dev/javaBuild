@@ -90,7 +90,7 @@ public class FileOperation {
                             names += mf.getPath() + "\\" + "\n";
                         }
                         if(mf.isDirectory() && mf.listFiles() != null) {
-                            names += listSRCDirectories(mf.getPath());
+                            names += listSRCDirectories(mf.getCanonicalPath());
                         }
                     }
                 }

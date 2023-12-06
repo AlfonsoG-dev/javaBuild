@@ -13,6 +13,21 @@ public class FileUtils {
         }
         return build;
     }
+    public int countFilesInDirectory(File myDirectory) {
+        int count = -1;
+        try {
+            if(myDirectory.listFiles() != null) {
+                for(File f: myDirectory.listFiles()) {
+                    if(f.isFile()) {
+                        ++count;
+                    }
+                }
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        }
+        return count;
+    }
     public String getDirectoryFiles(File[] miFiles) {
         String fileNames = "";
         try {
