@@ -62,11 +62,11 @@ public class FileOperation {
     public String listLibFiles() {
         String names = "";
         try {
-            File localFile = new File(localPath);
-            for(File f: localFile.listFiles()) {
-                if(f.getName().equals("lib")) {
+            File libFile = new File(localPath + "\\lib");
+            if(libFile.exists() && libFile.listFiles() != null) {
+                for(File f: libFile.listFiles()) {
                     for(File mf: f.listFiles()) {
-                        names += fileUtils.listFilesFromPath(mf.getPath()) + "\n";
+                        names += mf.getPath() + "\n";
                     }
                 }
             }

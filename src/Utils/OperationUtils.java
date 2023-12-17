@@ -75,7 +75,7 @@ public class OperationUtils {
         for(String l: libfiles) {
             File libFile = new File(l);
             if(libFile.exists() && libFile.isFile() && libFile.getName().contains(".jar")) {
-                names += l + "\n";
+                names += libFile.getPath() + "\n";
             }
         }
         return names;
