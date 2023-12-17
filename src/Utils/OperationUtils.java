@@ -69,6 +69,9 @@ public class OperationUtils {
         return names;
     }
 
+    /**
+     * list all the jar files whitin lib folder
+     */
     public String libJars() {
         String names = "";
         String[] libfiles = fileOperation.listLibFiles().split("\n");

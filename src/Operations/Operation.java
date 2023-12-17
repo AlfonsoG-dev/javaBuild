@@ -74,7 +74,7 @@ public class Operation {
                             }
                         }
                     } else {
-                        System.out.println("NO NEW EXTRACTION DENEPENDENCY FOUND");
+                        System.out.println("THERE IS NO DEPENDENCIES TO EXTRACT");
                     }
                 }
             }

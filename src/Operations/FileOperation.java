@@ -103,8 +103,8 @@ public class FileOperation {
         File extractionFile = new File(localPath + "\\extractionFiles");
         File miFile = new File(libJars);
         if(miFile.getParent() != null) {
-            String[] jarLibParent = miFile.getParent().split("\\\\");
-            String jarNameParent = jarLibParent[jarLibParent.length-1];
+            String jarLibParent = miFile.getParent();
+            String jarNameParent = new File(jarLibParent).getName();
             if(extractionFile.listFiles() != null) {
                 for(File f: extractionFile.listFiles()) {
                     String extractionDirName = new File(f.getCanonicalPath()).getName();
@@ -148,14 +148,17 @@ public class FileOperation {
     }
     public void CopyFilesfromSourceToTarget(String sourceFilePath, String targetFilePath) {
         try {
-            String[] fileNames = fileUtils.listFilesFromPath(sourceFilePath).split("\n");
-            for(String fn: fileNames) {
-                File sourceFile = new File(fn);
-                if(new File(sourceFilePath).isFile()) {
-                    Path fileSource = sourceFile.toPath();
-                    Path target = new File(targetFilePath).toPath();
-                    System.out.println( Files.copy(fileSource, target.resolve(fileSource.getFileName()), StandardCopyOption.COPY_ATTRIBUTES));
-                } else if(new File(sourceFilePath).isDirectory()) {
+            if(new File(sourceFilePath).isFile()) {
+                String sourceFileName = new File(sourceFilePath).getName();
+                String sourceParent = new File(sourceFilePath).getParent();
+                String sourceParentName = new File(sourceParent).getName();
+                File targetFile = new File(targetFilePath + "\\" + sourceParentName + "\\" + sourceFileName);
+                fileUtils.CreateParentFile(targetFile.getPath(), targetFile.getParent());
+                System.out.println(Files.copy(new File(sourceFilePath).toPath(), targetFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES));
+            } else if(new File(sourceFilePath).isDirectory()) {
+                String[] fileNames = fileUtils.listFilesFromPath(sourceFilePath).split("\n");
+                for(String fn: fileNames) {
+                    File sourceFile = new File(fn);
                     String cTargetNames = fileUtils.CreateTargetFromParentPath(sourceFilePath, sourceFile.getCanonicalPath()) + ";";
                     String[] names = cTargetNames.split(";");
                     for(String n: names) {
