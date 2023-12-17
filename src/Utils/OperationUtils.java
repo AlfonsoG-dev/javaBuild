@@ -72,17 +72,10 @@ public class OperationUtils {
     public String libJars() {
         String names = "";
         String[] libfiles = fileOperation.listLibFiles().split("\n");
-        int count = 0;
         for(String l: libfiles) {
-            if(new File(l).getName().contains(".jar")) {
-                ++count;
-            }
-        }
-        if(count == 1) {
-            for(String l: libfiles) {
-                if(new File(l).getName().contains(".jar")) {
-                    names += l + "\n";
-                }
+            File libFile = new File(l);
+            if(libFile.exists() && libFile.isFile() && libFile.getName().contains(".jar")) {
+                names += l + "\n";
             }
         }
         return names;
