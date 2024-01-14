@@ -24,12 +24,12 @@ public class FileOperation {
             if(fileName.equals(".gitignore")) {
                 FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
                 miFileWriter.write(
-                        "**bin\\\n" +
-                        "**lib\\\n" +
-                        "**extractionFiles\\\n" +
-                        "**Manifesto.txt\\\n" + 
-                        "**.jar\\\n" + 
-                        "**.exe\\\n"
+                        "**bin\\n" +
+                        "**lib\\n" +
+                        "**extractionFiles\\n" +
+                        "**Manifesto.txt\\n" + 
+                        "**.jar\\n" + 
+                        "**.exe\\n"
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
