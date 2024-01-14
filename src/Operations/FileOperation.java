@@ -28,6 +28,7 @@ public class FileOperation {
                         "**lib\\n" +
                         "**extractionFiles\\n" +
                         "**Manifesto.txt\\n" + 
+                        "**Session.vim\\n" +
                         "**.jar\\n" + 
                         "**.exe\\n"
                 );
