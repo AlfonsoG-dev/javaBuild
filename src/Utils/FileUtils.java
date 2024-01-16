@@ -121,8 +121,6 @@ public class FileUtils {
                                 break outter;
                             }
                         }
-                    } else if (f.isFile() == false && f.isDirectory() == true){
-                        mainName = "";
                     }
                 }
             }

@@ -18,19 +18,18 @@ public class FileOperation {
     } 
     public void CreateFiles(String fileName, String mainClass) {
         try {
-            System.out.println(String.format("File: %s \t will be created", fileName));
             File localFile = new File(localPath);
             File miFile = new File(localPath + "\\src");
             if(fileName.equals(".gitignore")) {
                 FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
                 miFileWriter.write(
-                        "**bin\\n" +
-                        "**lib\\n" +
-                        "**extractionFiles\\n" +
-                        "**Manifesto.txt\\n" + 
-                        "**Session.vim\\n" +
-                        "**.jar\\n" + 
-                        "**.exe\\n"
+                        "**bin" + "\n" +
+                        "**lib" + "\n" +
+                        "**extractionFiles" + "\n" +
+                        "**Manifesto.txt" + "\n" +
+                        "**Session.vim" + "\n" +
+                        "**.jar" + "\n" +
+                        "**.exe"
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {

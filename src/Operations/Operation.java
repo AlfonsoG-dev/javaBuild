@@ -2,6 +2,7 @@ package Operations;
 
 import java.io.File;
 
+import Utils.FileUtils;
 import Utils.OperationUtils;
 import Operations.FileOperation;
 public class Operation {
@@ -26,9 +27,13 @@ public class Operation {
         File localFile = new File(localPath);
         System.out.println("creating the util files ...");
         for(File f: localFile.listFiles()) {
-            if(f.getName().equals("Manifesto.txt") == false && f.getName().equals("src")) {
+            if(f.getName().equals("src")) {
                 File srcMainFile = new File(localPath + "\\src");
                 if(srcMainFile.listFiles().length == 0) {
+                    operationUtils.CreateProyectFiles();
+                }
+            } else if(!f.getName().equals("Manifesto.txt") || !f.getName().equals(".gitignore")) {
+                if(FileUtils.GetMainClass(localPath) != "") {
                     operationUtils.CreateProyectFiles();
                 }
             }
