@@ -12,6 +12,10 @@
 - [x] create the folder structure of the project
 - [x] create the run powershell script and executes the project
 
+## TODO's 
+- [ ] using *"-b"* create the files that are not present in the project folder
+>- if the project folder has: "bin, lib" but doesn't have "Manifesto.txt, .gitignore" they will be created
+
 ------
 
 ## Usage
