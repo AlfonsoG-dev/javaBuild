@@ -13,8 +13,8 @@
 - [x] create the run powershell script and executes the project
 
 ## TODO's 
-- [ ] using *"-b"* create the files that are not present in the project folder
->- if the project folder has: "bin, lib" but doesn't have "Manifesto.txt, .gitignore" they will be created
+- [ ] add to the *--add* CLI command the aggregation of modules like the ones of `javaFX`
+- [ ] implement the module aggregation for compile, run, create-jar, execution script
 
 ------
 
@@ -82,3 +82,4 @@ java -jar JavaBuild.jar --h
 >- this project is for educational purposes
 >- it is not intended to create a full program
 >- security issues are not taken into account
+>- only works when the lib file do not contain modules
