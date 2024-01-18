@@ -1,0 +1,12 @@
+{
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar"
+        ],
+        "exclude": [
+            "lib/java-mysql-eje/java-mysql-eje.jar",
+            "lib/junit-4.13.2/junit-4.13.2.jar",
+            "lib/java-mysql-eje/lib/mysql-connector-j-8.1.0/mysql-connector-j-8.1.0.jar"
+        ]
+    }
+}

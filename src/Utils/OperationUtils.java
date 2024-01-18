@@ -84,7 +84,7 @@ public class OperationUtils {
         return names;
     }
     public String CreateCompileClases(String libJars, String srcClases) {
-        String forCommand = "\"";
+        String forCommand = "'";
         String[] libs = libJars.split("\n");
         String b = "";
         for(String l: libs) {
@@ -97,7 +97,7 @@ public class OperationUtils {
              compileCommand = "javac -d .\\bin\\ " + srcClases;
         } else {
             String cb = b.substring(0, b.length()-1);
-            forCommand += cb + "\" " + srcClases;
+            forCommand += cb + "' " + srcClases;
             compileCommand = "javac -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;

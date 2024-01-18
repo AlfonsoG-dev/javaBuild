@@ -1,8 +1,9 @@
 import Operations.Operation;
 class JavaBuild {
     public static void main(String[] args) {
+        Operation miOperation = new Operation(".\\");
+        miOperation.CompileProyectOperation();
         for(int i=0; i<args.length; ++i) {
-            Operation miOperation = new Operation(".\\");
             switch(args[i]) {
                 case "-b":
                     miOperation.CreateProyectOperation();
