@@ -103,15 +103,6 @@ public class Operation {
     }
 
     public void CreateRunOperation() {
-        try {
-            String command = operationUtils.CreateRunComman();
-            Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
-            System.out.print("Adding run script ...");
-            if(runProcess.getErrorStream() != null) {
-                operationUtils.CMDOutput(runProcess.getErrorStream());
-            }
-        } catch(Exception e) {
-            System.err.println(e.getLocalizedMessage());
-        }
+        operationUtils.CreateRunComman();
     }
 }

@@ -58,14 +58,23 @@ public class FileOperation {
                 String libJars = utils.libJars();
                 String compileCommand = utils.CreateCompileClases(libJars, srcClases);
                 String createJarCommand = utils.CreateJarFileCommand();
-                miFileWriter.write(
-                        "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
-                        "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
-                        "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
-                        "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
-                        "\"$javaCommand\"" + "\n" + 
-                        "Invoke-Expression $runCommand"
-                );
+                String os = System.getProperty("os.name").toLowerCase();
+                if(os.contains("windows")) {
+                    miFileWriter.write(
+                            "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
+                            "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
+                            "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
+                            "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
+                            "\"$javaCommand\"" + "\n" + 
+                            "Invoke-Expression $runCommand"
+                    );
+                } else if(os.contains("linux")) {
+                    // TODO: create support for linux
+                    miFileWriter.close();
+                    throw new Exception("Not implemented yet");
+                } else {
+                    System.out.println("! OS NOT SUPPORTED ¡");
+                }
                 miFileWriter.close();
             }
         } catch(Exception e) {

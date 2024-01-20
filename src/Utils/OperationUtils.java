@@ -174,11 +174,9 @@ public class OperationUtils {
         }
         return addJar;
     }
-    public String CreateRunComman() {
-        String command = "";
+    public void CreateRunComman() {
         String mainName = FileUtils.GetMainClass(localPath) + ".jar";
         fileOperation.CreateFiles("java-exe.ps1", mainName);
-        command = ".\\java-exe.ps1";
-        return command;
+        System.out.println("Adding build script ...");
     }
 }
