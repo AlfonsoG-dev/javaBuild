@@ -17,14 +17,14 @@ public class Operation {
         for(String n: names) {
             File miFile = new File(localPath + "\\" + n);
             if(miFile.exists() == false) {
-                String u = miFile.mkdir() == true ? miFile.getPath():"error";
+                String u = miFile.mkdir() == true ? miFile.getPath() : "error";
                 System.out.println(u);
             }
         }
     }
     public void CreateFilesOperation() {
         File localFile = new File(localPath);
-        System.out.println("creating the util files ...");
+        System.out.println("creating files ...");
         for(File f: localFile.listFiles()) {
             if(f.getName().equals("src")) {
                 File srcMainFile = new File(localPath + "\\src");
@@ -34,7 +34,7 @@ public class Operation {
             }
         }
     }
-    public String CompileProyectOperation() {
+    public void CompileProyectOperation() {
         String srcClases = operationUtils.srcClases();
         String libJars = operationUtils.libJars();
         String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
@@ -47,10 +47,8 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
-        return compileCommand;
     }
-    public String ExtractJarDependencies() {
-        String extractionCommand = "";
+    public void ExtractJarDependencies() {
         try {
             String[] jars = operationUtils.libJars().split("\n");
             if(jars.length > 0) {
@@ -61,13 +59,9 @@ public class Operation {
                         for(String e: extractions) {
                             System.out.println("extracting jar dependencies ...");
                             if(!e.isEmpty()) {
-                                extractionCommand += e + "\n";
                                 Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
                                 if(extracProcess.getErrorStream() != null) {
                                     operationUtils.CMDOutput(extracProcess.getErrorStream());
-                                }
-                                if(extracProcess.exitValue() == 0) {
-                                    System.out.println("extracting jar dependencies terminated");
                                 }
                             } else {
                                 System.out.println("NO EXTRACTION FILES");
@@ -81,12 +75,10 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
-        return extractionCommand;
     }
-    public String CreateJarOperation() {
-        String command = "";
+    public void CreateJarOperation() {
         try {
-            command = operationUtils.CreateJarFileCommand();
+            String command = operationUtils.CreateJarFileCommand();
             if(command.equals("")) {
                 throw new Exception("error while trying to create ther jar file");
             }
@@ -98,7 +90,6 @@ public class Operation {
         } catch(Exception e) {
             System.err.println(e);
         }
-        return command;
     }
     public void CreateAddJarFileOperation(String jarFilePath) {
         try {
@@ -118,9 +109,6 @@ public class Operation {
             System.out.print("Adding run script ...");
             if(runProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(runProcess.getErrorStream());
-            }
-            if(runProcess.getInputStream() != null) {
-                operationUtils.CMDOutput(runProcess.getInputStream());
             }
         } catch(Exception e) {
             System.err.println(e.getLocalizedMessage());

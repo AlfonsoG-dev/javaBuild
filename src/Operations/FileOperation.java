@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
 
 import Utils.FileUtils;
+import Utils.OperationUtils;
 public class FileOperation {
 
     private FileUtils fileUtils;
@@ -33,26 +34,38 @@ public class FileOperation {
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
-               FileWriter mio = new FileWriter(localFile.getPath() + "\\" + fileName);
-               mio.write("Main-Class: " + mainClass);
-               mio.close();
+                FileWriter mio = new FileWriter(localFile.getPath() + "\\" + fileName);
+                mio.write(
+                        "Manifesto-Version: 1.0" + "\n" + 
+                        "Created-By: Alfonso-Gomajoa" + "\n" + 
+                        "Main-Class: " + mainClass
+                );
+                mio.close();
             } else if(fileName.equals(mainClass + ".java")) {
                 FileWriter miFileWriter = new FileWriter(miFile.getPath() + "\\" + fileName);
-                miFileWriter.write("class " + mainClass + " {\n" +
-                    "    public static void main(String[] args) {\n" + 
-                    "    }\n" + 
-                    "}");
+                miFileWriter.write(
+                        "class " + mainClass + " {\n" +
+                        "    public static void main(String[] args) {\n" + 
+                        "        System.out.println(Hello from " + mainClass + ");" + "\n" +
+                        "    }\n" + 
+                        "}"
+                );
                 miFileWriter.close();
             } else if(fileName.equals("java-exe.ps1")) {
                 FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
-                String compileCommand = new Operation(localPath).CompileProyectOperation();
-                String createJarCommand = new Operation(localPath).CreateJarOperation();
-                miFileWriter.write("$compile = " + "\"" + compileCommand + "\"" + "\n" + 
+                OperationUtils utils = new OperationUtils(localPath);
+                String srcClases = utils.srcClases();
+                String libJars = utils.libJars();
+                String compileCommand = utils.CreateCompileClases(libJars, srcClases);
+                String createJarCommand = utils.CreateJarFileCommand();
+                miFileWriter.write(
+                        "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
                         "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
                         "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
                         "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
                         "\"$javaCommand\"" + "\n" + 
-                        "Invoke-Expression $runCommand");
+                        "Invoke-Expression $runCommand"
+                );
                 miFileWriter.close();
             }
         } catch(Exception e) {

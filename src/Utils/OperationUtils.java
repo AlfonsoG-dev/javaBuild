@@ -86,17 +86,17 @@ public class OperationUtils {
     public String CreateCompileClases(String libJars, String srcClases) {
         String forCommand = "'";
         String[] libs = libJars.split("\n");
-        String b = "";
+        String jarFiles = "";
         for(String l: libs) {
             if(l.isEmpty() == false) {
-                b += l + ";";
+                jarFiles += l + ";";
             }
         }
         String compileCommand = "";
-        if(b.isEmpty() == true) {
+        if(jarFiles.isEmpty() == true) {
              compileCommand = "javac -d .\\bin\\ " + srcClases;
         } else {
-            String cb = b.substring(0, b.length()-1);
+            String cb = jarFiles.substring(0, jarFiles.length()-1);
             forCommand += cb + "' " + srcClases;
             compileCommand = "javac -d .\\bin\\ -cp " + forCommand;
         }
