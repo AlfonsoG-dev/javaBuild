@@ -7,7 +7,7 @@ import java.io.FileReader;
 public class FileUtils {
     public String GetCleanPath(String filePath) {
         String build = "";
-        if(filePath.contains(".")) {
+        if(filePath.contains(".\\")) {
             build = new File(filePath).toPath().normalize().toString();
         } else {
             build = filePath;
@@ -90,7 +90,7 @@ public class FileUtils {
             for(String pn: parentNames) {
                 String nFileName = pn.replace(targetFilePath.replace("/", "\\"), "");
                 File mio = new File(pn);
-                int fileLenght = nFileName.split("\\").length;
+                int fileLenght = nFileName.split("\\\\").length;
                 if(mio.exists() == false && fileLenght > 1) {
                     mio.mkdirs();
                 } else if(mio.exists() == false && fileLenght <= 1) {

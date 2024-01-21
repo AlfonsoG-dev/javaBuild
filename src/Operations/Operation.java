@@ -98,7 +98,7 @@ public class Operation {
                 System.out.println("jar dependency has been added to lib folder");
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 

@@ -184,7 +184,7 @@ public class FileOperation {
                     String cTargetNames = fileUtils.CreateTargetFromParentPath(sourceFilePath, sourceFile.getCanonicalPath()) + ";";
                     String[] names = cTargetNames.split(";");
                     for(String n: names) {
-                        if(n.contains(".git") == false) {
+                        if(n.contains("git") == false) {
                             File targetFile = new File(targetFilePath + "\\" + n);
                             fileUtils.CreateParentFile(targetFilePath, targetFile.getParent());
                             Path sourcePath = sourceFile.toPath();
