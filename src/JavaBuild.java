@@ -8,29 +8,29 @@ class JavaBuild {
                 Operation miOperation = new Operation(".\\");
                 switch(args[i]) {
                     case "-b":
-                        miOperation.CreateProyectOperation();
-                        miOperation.CreateFilesOperation();
+                        miOperation.createProyectOperation();
+                        miOperation.createFilesOperation();
                         break;
                     case "-cm":
-                        miOperation.CompileProyectOperation();
+                        miOperation.compileProyectOperation();
                         break;
                     case "-ex":
-                        miOperation.ExtractJarDependencies();
+                        miOperation.extractJarDependencies();
                         break;
                     case "-cj":
-                        miOperation.CreateJarOperation();
+                        miOperation.createJarOperation();
                         break;
                     case "--build":
-                        miOperation.CompileProyectOperation();
-                        miOperation.ExtractJarDependencies();
-                        miOperation.CreateJarOperation();
+                        miOperation.compileProyectOperation();
+                        miOperation.extractJarDependencies();
+                        miOperation.createJarOperation();
                         break;
                     case "-r":
-                        miOperation.CreateRunOperation();
+                        miOperation.createRunOperation();
                         break;
                     case "--add":
                         if((i+1) < args.length) {
-                            miOperation.CreateAddJarFileOperation(args[i+1]);
+                            miOperation.createAddJarFileOperation(args[i+1]);
                         } else {
                             System.out.println("the path to the jar file is needed");
                         }

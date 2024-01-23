@@ -11,7 +11,7 @@ public class Operation {
         operationUtils = new OperationUtils(nLocalPath);
         localPath = nLocalPath;
     }
-    public void CreateProyectOperation() {
+    public void createProyectOperation() {
         String[] names = {"bin", "lib", "src", "docs", "extractionFiles"};
         System.out.println("Creating the proyect structure ...");
         for(String n: names) {
@@ -22,7 +22,7 @@ public class Operation {
             }
         }
     }
-    public void CreateFilesOperation() {
+    public void createFilesOperation() {
         File localFile = new File(localPath);
         System.out.println("creating files ...");
         for(File f: localFile.listFiles()) {
@@ -34,7 +34,7 @@ public class Operation {
             }
         }
     }
-    public void CompileProyectOperation() {
+    public void compileProyectOperation() {
         String srcClases = operationUtils.srcClases();
         String libJars = operationUtils.libJars();
         String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
@@ -48,12 +48,12 @@ public class Operation {
             System.err.println(e);
         }
     }
-    public void ExtractJarDependencies() {
+    public void extractJarDependencies() {
         try {
             String[] jars = operationUtils.libJars().split("\n");
             if(jars.length > 0) {
                 for(String j: jars) {
-                    if(new FileOperation(localPath).ExtractionDirContainsPath(j) == false) {
+                    if(new FileOperation(localPath).extractionDirContainsPath(j) == false) {
                         operationUtils.CreateExtractionFiles(jars);
                         String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
                         for(String e: extractions) {
@@ -76,7 +76,7 @@ public class Operation {
             System.err.println(e);
         }
     }
-    public void CreateJarOperation() {
+    public void createJarOperation() {
         try {
             String command = operationUtils.CreateJarFileCommand();
             if(command.equals("")) {
@@ -91,7 +91,7 @@ public class Operation {
             System.err.println(e);
         }
     }
-    public void CreateAddJarFileOperation(String jarFilePath) {
+    public void createAddJarFileOperation(String jarFilePath) {
         try {
             boolean command = operationUtils.CreateAddJarFileCommand(jarFilePath);
             if(command == true) {
@@ -102,7 +102,7 @@ public class Operation {
         }
     }
 
-    public void CreateRunOperation() {
+    public void createRunOperation() {
         operationUtils.CreateRunComman();
     }
 }

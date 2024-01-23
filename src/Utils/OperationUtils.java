@@ -28,13 +28,13 @@ public class OperationUtils {
         }
         System.out.println(data);
     }
-    public void CreateProyectFiles()  {
+    public void createProyectFiles()  {
         try {
             String mainDirName = new File(localPath).getCanonicalPath();
             String mainClass = new File(mainDirName).getName();
-            fileOperation.CreateFiles(".gitignore", "");
-            fileOperation.CreateFiles("Manifesto.txt", mainClass);
-            fileOperation.CreateFiles(mainClass + ".java", mainClass);
+            fileOperation.createFiles(".gitignore", "");
+            fileOperation.createFiles("Manifesto.txt", mainClass);
+            fileOperation.createFiles(mainClass + ".java", mainClass);
         } catch(Exception e) {
             System.err.println(e);
         }
@@ -83,7 +83,7 @@ public class OperationUtils {
         }
         return names;
     }
-    public String CreateCompileClases(String libJars, String srcClases) {
+    public String createCompileClases(String libJars, String srcClases) {
         String forCommand = "'";
         String[] libs = libJars.split("\n");
         String jarFiles = "";
@@ -102,17 +102,17 @@ public class OperationUtils {
         }
         return compileCommand;
     }
-    public void CreateExtractionFiles(String[] jars) {
+    public void createExtractionFiles(String[] jars) {
         File extraction = new File(localPath + "\\extractionFiles");
         if(extraction.exists() == false) {
             extraction.mkdir();
         }
         String[] libNames = jars;
         for(String n: libNames) {
-            fileOperation.CopyFilesfromSourceToTarget(n, extraction.getPath());
+            fileOperation.copyFilesfromSourceToTarget(n, extraction.getPath());
         }
     }
-    public String CreateExtractionCommand() throws IOException {
+    public String createExtractionCommand() throws IOException {
         String command = "";
         File extractionFile = new File(localPath + "\\extractionFiles");
         String[] listFiles = new FileUtils().listFilesFromPath(extractionFile.getPath()).split("\n");
@@ -125,11 +125,11 @@ public class OperationUtils {
         }
         return command;
     }
-    public String CreateJarFileCommand() throws IOException {
+    public String createJarFileCommand() throws IOException {
         String command = "";
         String mainName = "";
-        if(FileUtils.GetMainClass(localPath) != "") {
-            mainName = FileUtils.GetMainClass(localPath) + ".jar";
+        if(FileUtils.getMainClass(localPath) != "") {
+            mainName = FileUtils.getMainClass(localPath) + ".jar";
         }
         File extractionFile = new File(localPath + "\\extractionFiles");
         String directory = "";
@@ -152,7 +152,7 @@ public class OperationUtils {
         }
         return command;
     }
-    public boolean CreateAddJarFileCommand(String jarFilePath) throws Exception {
+    public boolean createAddJarFileCommand(String jarFilePath) throws Exception {
         System.out.println("adding jar dependency in process ...");
         String sourceFilePath = "";
         boolean addJar = false;
@@ -167,7 +167,7 @@ public class OperationUtils {
         String externalJarName = new File(sourceFilePath).getName();
         File libFile = new File(localPath + "\\lib\\" + externalJarName);
         if(libFile.exists() == false) {
-            new FileOperation(localPath).CopyFilesfromSourceToTarget(sourceFilePath, new File(localPath + "\\lib").getPath());
+            new FileOperation(localPath).copyFilesfromSourceToTarget(sourceFilePath, new File(localPath + "\\lib").getPath());
             addJar = true;
         } else {
             System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");
@@ -175,8 +175,8 @@ public class OperationUtils {
         return addJar;
     }
     public void CreateRunComman() {
-        String mainName = FileUtils.GetMainClass(localPath) + ".jar";
-        fileOperation.CreateFiles("java-exe.ps1", mainName);
+        String mainName = FileUtils.getMainClass(localPath) + ".jar";
+        fileOperation.createFiles("java-exe.ps1", mainName);
         System.out.println("Adding build script ...");
     }
 }

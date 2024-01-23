@@ -17,7 +17,7 @@ public class FileOperation {
         fileUtils = new FileUtils();
         localPath = nLocalPath;
     } 
-    public void CreateFiles(String fileName, String mainClass) {
+    public void createFiles(String fileName, String mainClass) {
         try {
             File localFile = new File(localPath);
             File miFile = new File(localPath + "\\src");
@@ -56,8 +56,8 @@ public class FileOperation {
                 OperationUtils utils = new OperationUtils(localPath);
                 String srcClases = utils.srcClases();
                 String libJars = utils.libJars();
-                String compileCommand = utils.CreateCompileClases(libJars, srcClases);
-                String createJarCommand = utils.CreateJarFileCommand();
+                String compileCommand = utils.createCompileClases(libJars, srcClases);
+                String createJarCommand = utils.createJarFileCommand();
                 String os = System.getProperty("os.name").toLowerCase();
                 if(os.contains("windows")) {
                     miFileWriter.write(
@@ -98,7 +98,7 @@ public class FileOperation {
         return names;
     }
     public String listSRCDirectories(String path) throws IOException {
-        String cPath = fileUtils.GetCleanPath(path);
+        String cPath = fileUtils.getCleanPath(path);
         File localFile = new File(localPath + "\\" + cPath);
         String names = "";
         if(localFile.listFiles() != null) {
@@ -120,7 +120,7 @@ public class FileOperation {
         }
         return names;
     }
-    public boolean ExtractionDirContainsPath(String libJars) throws IOException {
+    public boolean extractionDirContainsPath(String libJars) throws IOException {
         boolean containsPath = false;
         File extractionFile = new File(localPath + "\\extractionFiles");
         File miFile = new File(libJars);
@@ -138,7 +138,7 @@ public class FileOperation {
         }
         return containsPath;
     }
-    public void DeleteDirectories(String filePath) {
+    public void deleteDirectories(String filePath) {
         try {
             File localFile = new File(localPath);
             String cFile = filePath;
@@ -168,25 +168,25 @@ public class FileOperation {
             System.err.println(e);
         }
     }
-    public void CopyFilesfromSourceToTarget(String sourceFilePath, String targetFilePath) {
+    public void copyFilesfromSourceToTarget(String sourceFilePath, String targetFilePath) {
         try {
             if(new File(sourceFilePath).isFile()) {
                 String sourceFileName = new File(sourceFilePath).getName();
                 String sourceParent = new File(sourceFilePath).getParent();
                 String sourceParentName = new File(sourceParent).getName();
                 File targetFile = new File(targetFilePath + "\\" + sourceParentName + "\\" + sourceFileName);
-                fileUtils.CreateParentFile(targetFile.getPath(), targetFile.getParent());
+                fileUtils.createParentFile(targetFile.getPath(), targetFile.getParent());
                 System.out.println(Files.copy(new File(sourceFilePath).toPath(), targetFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES));
             } else if(new File(sourceFilePath).isDirectory()) {
                 String[] fileNames = fileUtils.listFilesFromPath(sourceFilePath).split("\n");
                 for(String fn: fileNames) {
                     File sourceFile = new File(fn);
-                    String cTargetNames = fileUtils.CreateTargetFromParentPath(sourceFilePath, sourceFile.getCanonicalPath()) + ";";
+                    String cTargetNames = fileUtils.createTargetFromParentPath(sourceFilePath, sourceFile.getCanonicalPath()) + ";";
                     String[] names = cTargetNames.split(";");
                     for(String n: names) {
                         if(n.contains("git") == false) {
                             File targetFile = new File(targetFilePath + "\\" + n);
-                            fileUtils.CreateParentFile(targetFilePath, targetFile.getParent());
+                            fileUtils.createParentFile(targetFilePath, targetFile.getParent());
                             Path sourcePath = sourceFile.toPath();
                             Path targetPath = targetFile.toPath();
                             System.out.println(Files.copy(sourcePath, targetPath, StandardCopyOption.COPY_ATTRIBUTES));

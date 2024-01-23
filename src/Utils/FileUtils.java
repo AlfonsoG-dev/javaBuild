@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 
 public class FileUtils {
-    public String GetCleanPath(String filePath) {
+    public String getCleanPath(String filePath) {
         String build = "";
         if(filePath.contains(".\\")) {
             build = new File(filePath).toPath().normalize().toString();
@@ -73,18 +73,18 @@ public class FileUtils {
         }
         return fileNames;
     }
-    public void CreateDirectory(String directory) {
+    public void createDirectory(String directory) {
         File miFile = new File(directory);
         if(miFile.exists() == false) {
             miFile.mkdir();
         }
     }
-    public String CreateTargetFromParentPath(String parentFile, String dirs) {
+    public String createTargetFromParentPath(String parentFile, String dirs) {
         String parentName = new File(parentFile).getParent();
         String targetNames = dirs.replace(parentName, "");
         return targetNames;
     }
-    public void CreateParentFile(String targetFilePath, String parentFileNames) {
+    public void createParentFile(String targetFilePath, String parentFileNames) {
         try {
             String[] parentNames = parentFileNames.split("\n");
             for(String pn: parentNames) {
@@ -107,7 +107,7 @@ public class FileUtils {
      * @param localpath: local path
      * @return main class file name
      */
-    public static String GetMainClass(String localpath) {
+    public static String getMainClass(String localpath) {
         File miFile = new File(localpath + "\\src");
         BufferedReader miBufferedReader = null;
         String mainName = "";
