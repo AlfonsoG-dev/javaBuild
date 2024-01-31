@@ -12,7 +12,13 @@ public class Operation {
         localPath = nLocalPath;
     }
     public void createProyectOperation() {
-        String[] names = {"bin", "lib", "src", "docs", "extractionFiles"};
+        String[] names = {
+            "bin",
+            "lib",
+            "src",
+            "docs",
+            "extractionFiles"
+        };
         System.out.println("Creating the proyect structure ...");
         for(String n: names) {
             File miFile = new File(localPath + "\\" + n);
@@ -37,7 +43,10 @@ public class Operation {
     public void compileProyectOperation() {
         String srcClases = operationUtils.srcClases();
         String libJars = operationUtils.libJars();
-        String compileCommand = operationUtils.createCompileClases(libJars, srcClases);
+        String compileCommand = operationUtils.createCompileClases(
+                libJars,
+                srcClases
+        );
         try {
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
@@ -53,13 +62,16 @@ public class Operation {
             String[] jars = operationUtils.libJars().split("\n");
             if(jars.length > 0) {
                 for(String j: jars) {
-                    if(new FileOperation(localPath).extractionDirContainsPath(j) == false) {
+                    boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(j);
+                    if(libAlreadyExists == false) {
                         operationUtils.createExtractionFiles(jars);
                         String[] extractions = operationUtils.createExtractionCommand().split("\n");
                         for(String e: extractions) {
                             System.out.println("extracting jar dependencies ...");
                             if(!e.isEmpty()) {
-                                Process extracProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + e);
+                                Process extracProcess = Runtime.getRuntime().exec(
+                                        "pwsh -NoProfile -Command " + e
+                                );
                                 if(extracProcess.getErrorStream() != null) {
                                     operationUtils.CMDOutput(extracProcess.getErrorStream());
                                 }

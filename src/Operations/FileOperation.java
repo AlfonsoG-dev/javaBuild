@@ -34,25 +34,25 @@ public class FileOperation {
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
-                FileWriter mio = new FileWriter(localFile.getPath() + "\\" + fileName);
-                mio.write(
+                FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
+                writeManifesto.write(
                         "Manifesto-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Main-Class: " + mainClass
                 );
-                mio.close();
+                writeManifesto.close();
             } else if(fileName.equals(mainClass + ".java")) {
-                FileWriter miFileWriter = new FileWriter(miFile.getPath() + "\\" + fileName);
-                miFileWriter.write(
+                FileWriter writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
+                writeMainClass.write(
                         "class " + mainClass + " {\n" +
                         "    public static void main(String[] args) {\n" + 
                         "        System.out.println(Hello from " + mainClass + ");" + "\n" +
                         "    }\n" + 
                         "}"
                 );
-                miFileWriter.close();
+                writeMainClass.close();
             } else if(fileName.equals("java-exe.ps1")) {
-                FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
+                FileWriter writeRunScript = new FileWriter(localFile.getPath() + "\\" + fileName);
                 OperationUtils utils = new OperationUtils(localPath);
                 String srcClases = utils.srcClases();
                 String libJars = utils.libJars();
@@ -60,7 +60,7 @@ public class FileOperation {
                 String createJarCommand = utils.createJarFileCommand();
                 String os = System.getProperty("os.name").toLowerCase();
                 if(os.contains("windows")) {
-                    miFileWriter.write(
+                    writeRunScript.write(
                             "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
                             "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
                             "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
@@ -70,12 +70,12 @@ public class FileOperation {
                     );
                 } else if(os.contains("linux")) {
                     // TODO: create support for linux
-                    miFileWriter.close();
+                    writeRunScript.close();
                     throw new Exception("Not implemented yet");
                 } else {
                     System.out.println("! OS NOT SUPPORTED ¡");
                 }
-                miFileWriter.close();
+                writeRunScript.close();
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -174,14 +174,29 @@ public class FileOperation {
                 String sourceFileName = new File(sourceFilePath).getName();
                 String sourceParent = new File(sourceFilePath).getParent();
                 String sourceParentName = new File(sourceParent).getName();
-                File targetFile = new File(targetFilePath + "\\" + sourceParentName + "\\" + sourceFileName);
-                fileUtils.createParentFile(targetFile.getPath(), targetFile.getParent());
-                System.out.println(Files.copy(new File(sourceFilePath).toPath(), targetFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES));
+                File targetFile = new File(
+                        targetFilePath + "\\" +
+                        sourceParentName + "\\" +
+                        sourceFileName
+                );
+                fileUtils.createParentFile(
+                        targetFile.getPath(),
+                        targetFile.getParent()
+                );
+                System.out.println(
+                        Files.copy(
+                            new File(sourceFilePath).toPath(),
+                            targetFile.toPath(),
+                            StandardCopyOption.COPY_ATTRIBUTES
+                        )
+                );
             } else if(new File(sourceFilePath).isDirectory()) {
                 String[] fileNames = fileUtils.listFilesFromPath(sourceFilePath).split("\n");
                 for(String fn: fileNames) {
                     File sourceFile = new File(fn);
-                    String cTargetNames = fileUtils.createTargetFromParentPath(sourceFilePath, sourceFile.getCanonicalPath()) + ";";
+                    String cTargetNames = fileUtils.createTargetFromParentPath(
+                            sourceFilePath,
+                            sourceFile.getCanonicalPath()) + ";";
                     String[] names = cTargetNames.split(";");
                     for(String n: names) {
                         if(n.contains("git") == false) {
@@ -189,7 +204,13 @@ public class FileOperation {
                             fileUtils.createParentFile(targetFilePath, targetFile.getParent());
                             Path sourcePath = sourceFile.toPath();
                             Path targetPath = targetFile.toPath();
-                            System.out.println(Files.copy(sourcePath, targetPath, StandardCopyOption.COPY_ATTRIBUTES));
+                            System.out.println(
+                                    Files.copy(
+                                        sourcePath,
+                                        targetPath,
+                                        StandardCopyOption.COPY_ATTRIBUTES
+                                    )
+                            );
                         }
                     }
                 }

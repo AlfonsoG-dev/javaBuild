@@ -55,7 +55,8 @@ public class OperationUtils {
                 String[] srcdirs = fileOperation.listSRCDirectories("src").split("\n");
                 if(srcdirs.length > 0) {
                     for(String s: srcdirs) {
-                        if(s.isEmpty() == false && new FileUtils().countFilesInDirectory(new File(s)) != -1) {
+                        int countFiles = new FileUtils().countFilesInDirectory(new File(s));
+                        if(s.isEmpty() == false && countFiles != -1) {
                             names += s + "*.java ";
                         }
                     }
@@ -120,7 +121,9 @@ public class OperationUtils {
             String jarFileName = new File(l).getName();
             if(jarFileName.contains(".jar")) {
                 String jarParent = new File(l).getParent();
-                command += "cd " + jarParent + " && " + "jar -xf " + jarFileName + " && " + "rm -r " + jarFileName + "\n";
+                String extracJAR = "jar -xf " + jarFileName;
+                String deleteJAR = "rm -r " + jarFileName + "\n";
+                command += "cd " + jarParent + " && " + extracJAR + " && " + deleteJAR;
             }
         }
         return command;
@@ -167,7 +170,10 @@ public class OperationUtils {
         String externalJarName = new File(sourceFilePath).getName();
         File libFile = new File(localPath + "\\lib\\" + externalJarName);
         if(libFile.exists() == false) {
-            new FileOperation(localPath).copyFilesfromSourceToTarget(sourceFilePath, new File(localPath + "\\lib").getPath());
+            fileOperation.copyFilesfromSourceToTarget(
+                    sourceFilePath,
+                    new File(localPath + "\\lib").getPath()
+            );
             addJar = true;
         } else {
             System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");
