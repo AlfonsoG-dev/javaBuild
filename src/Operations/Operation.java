@@ -29,7 +29,7 @@ public class Operation {
             if(f.getName().equals("src")) {
                 File srcMainFile = new File(localPath + "\\src");
                 if(srcMainFile.listFiles().length == 0) {
-                    operationUtils.CreateProyectFiles();
+                    operationUtils.createProyectFiles();
                 }
             }
         }
@@ -37,7 +37,7 @@ public class Operation {
     public void compileProyectOperation() {
         String srcClases = operationUtils.srcClases();
         String libJars = operationUtils.libJars();
-        String compileCommand = operationUtils.CreateCompileClases(libJars, srcClases);
+        String compileCommand = operationUtils.createCompileClases(libJars, srcClases);
         try {
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
@@ -54,8 +54,8 @@ public class Operation {
             if(jars.length > 0) {
                 for(String j: jars) {
                     if(new FileOperation(localPath).extractionDirContainsPath(j) == false) {
-                        operationUtils.CreateExtractionFiles(jars);
-                        String[] extractions = operationUtils.CreateExtractionCommand().split("\n");
+                        operationUtils.createExtractionFiles(jars);
+                        String[] extractions = operationUtils.createExtractionCommand().split("\n");
                         for(String e: extractions) {
                             System.out.println("extracting jar dependencies ...");
                             if(!e.isEmpty()) {
@@ -78,7 +78,7 @@ public class Operation {
     }
     public void createJarOperation() {
         try {
-            String command = operationUtils.CreateJarFileCommand();
+            String command = operationUtils.createJarFileCommand();
             if(command.equals("")) {
                 throw new Exception("error while trying to create ther jar file");
             }
@@ -93,7 +93,7 @@ public class Operation {
     }
     public void createAddJarFileOperation(String jarFilePath) {
         try {
-            boolean command = operationUtils.CreateAddJarFileCommand(jarFilePath);
+            boolean command = operationUtils.createAddJarFileCommand(jarFilePath);
             if(command == true) {
                 System.out.println("jar dependency has been added to lib folder");
             }
