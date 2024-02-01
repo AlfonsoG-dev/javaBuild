@@ -4,7 +4,7 @@
 
 ------
 
-## Features 
+# Features 
 - [x] compile the project to bin
 - [x] extracts the jar files inside lib to create later the project jar file
 - [x] create the project jar file
@@ -12,13 +12,13 @@
 - [x] create the folder structure of the project
 - [x] create the run powershell script and executes the project
 
-## TODO's 
+# TODO's 
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of `javaFX`
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
  
 ------
 
-## Usage
+# Usage
 >- use the executable
 ```console
 javabuild.exe --h
@@ -28,13 +28,13 @@ javabuild.exe --h
 java -jar JavaBuild.jar --h
 ```
 
-### Compile
+## Compile
 
 >- to compile the project
 >>- `javaBuild.exe -cm`
 >>>- it compiles the .java clases into bin
 
-### Create a jar file of the project
+## Create a jar file of the project
 
 >- to create a jar file is necessary to include or verify dependencies or libs in the project
 >>- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`
@@ -44,26 +44,31 @@ java -jar JavaBuild.jar --h
 >- now to create the project jar file
 >>- `javaBuild.exe -cj`
 
-### Build the project
+## Create or modify the manifesto file
+>- to create the manifesto file, is necessary to include or verify if you want to add to the build the extraction of the dependencies or not.
+>>- in order to create the jar file you can include the extraction files of a dependency: `javabuild.exe --i ex`
+>>- in order to create the jar file and exclude the extraction files of a dependency: `javabuild.exe --i nn` 
+
+## Build the project
 
 >- all can be done with only 1 command
 >>- `javaBuild.exe --build`
 >>>- it combines the commands: *"compile and createJar"* to build
 >>>- the extraction of the jar dependency need to be execute manually with: `-ex` and only one time per jar dependency
 
-### Create the project structure
+## Create the project structure
 
 >- creates the project structure
 >>- `javaBuild.exe -b`
 >>>- adds the manifesto file and the main class with the project folder name
 
-### Run or excute the project
+## Run or excute the project
 
 >>- `javaBuild.exe -r`
 >>>- creates the powershell script whit all the command to build the project, except the extraction operation
 >>>- executes the project
 
-### Add an external jar dependency
+## Add an external jar dependency
 
 >- add an external dependency 
 >>- `javabuild.exe --add dependency.jar`
@@ -72,13 +77,13 @@ java -jar JavaBuild.jar --h
 
 ------
 
-## Additional info
+# Additional info
 >- this app uses powershell to execute the commands
 >- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
 
 ------
 
-## Disclaimer
+# Disclaimer
 >- this project is for educational purposes
 >- it is not intended to create a full program
 >- security issues are not taken into account

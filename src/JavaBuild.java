@@ -59,6 +59,8 @@ class JavaBuild {
                         System.out.println("use -cm to compile the proyect");
                         System.out.println("use -ex to extract the lib jar files");
                         System.out.println("use -cj to create the proyect jar file");
+                        System.out.println("use --i ex to include the extraction files for building jar files");
+                        System.out.println("\tuse --i nn to exclude the extraction files for build jar files");
                         System.out.println("use --build to build the proyect");
                         System.out.println("use -r to run the proyect");
                         break;
