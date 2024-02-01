@@ -198,18 +198,9 @@ public class OperationUtils {
             }
         } 
         String command = "";
-        if(includeExtraction == true) {
-            new FileUtils().writeManifesto(new File(localPath), "Manifesto.txt", true, "");
+        if(includeExtraction) {
             command = jarTypeUnion(mainName, directory);
         } else {
-            String[] libJars = libJars().split("\n");
-            String jarFiles = "";
-            for(String l: libJars) {
-                if(!l.isEmpty()) {
-                    jarFiles += l + " ";
-                }
-            }
-            new FileUtils().writeManifesto(new File(localPath), "Manifesto.txt", false, jarFiles);
             command = jarTypeUnion(mainName, "");
         }
         return command;

@@ -34,7 +34,7 @@ public class FileOperation {
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
-                fileUtils.writeManifesto(localFile, "Manifesto.txt", false, "");
+                fileUtils.writeManifesto(localFile, "Manifesto.txt", true, "");
             } else if(fileName.equals(mainClass + ".java")) {
                 FileWriter writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
                 writeMainClass.write(

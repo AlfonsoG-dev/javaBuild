@@ -6,6 +6,7 @@ class JavaBuild {
             nThread.start();
             for(int i=0; i<args.length; ++i) {
                 Operation miOperation = new Operation(".\\");
+                boolean haveExtractions = miOperation.haveIncludeExtraction();
                 switch(args[i]) {
                     case "-b":
                         miOperation.createProyectOperation();
@@ -18,18 +19,27 @@ class JavaBuild {
                         miOperation.extractJarDependencies();
                         break;
                     case "-cj":
-                        if((i+1) < args.length && args[i+1].equals("--i-ex")) {
+                        if(haveExtractions) {
                             miOperation.createJarOperation(true);
                         } else {
                             miOperation.createJarOperation(false);
                         }
                         break;
+                    case "--i":
+                        if((i+1) < args.length && args[i+1].equals("ex")) {
+                            miOperation.createIncludeExtractions(true);
+                        } else if((i+1) < args.length && args[i+1].equals("nn")) {
+                            miOperation.createIncludeExtractions(false);
+                        }
+                        break;
                     case "--build":
-                        miOperation.compileProyectOperation();
-                        if((i+1) < args.length && args[i+1].equals("--i-ex")) {
+                        if(haveExtractions) {
+                            miOperation.compileProyectOperation();
                             miOperation.extractJarDependencies();
                             miOperation.createJarOperation(true);
                         } else {
+                            miOperation.compileProyectOperation();
+                            miOperation.extractJarDependencies();
                             miOperation.createJarOperation(false);
                         }
                         break;
@@ -49,8 +59,6 @@ class JavaBuild {
                         System.out.println("use -cm to compile the proyect");
                         System.out.println("use -ex to extract the lib jar files");
                         System.out.println("use -cj to create the proyect jar file");
-                        System.out.println("\tuse --i-x to include the jar dependency in the jar creation");
-                        System.out.println("\totherwise it will include the dependency in the manifesto file");
                         System.out.println("use --build to build the proyect");
                         System.out.println("use -r to run the proyect");
                         break;
