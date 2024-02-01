@@ -11,13 +11,13 @@ public class FileUtils {
             FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
             if(includeExtraction == true) {
                 writeManifesto.write(
-                        "Manifesto-Version: 1.0" + "\n" + 
+                        "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n"
                 );
             } else {
                 writeManifesto.write(
-                        "Manifesto-Version: 1.0" + "\n" + 
+                        "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n" + 
                         "Class-Path: " + libFiles + "\n"
