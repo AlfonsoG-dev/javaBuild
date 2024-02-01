@@ -88,9 +88,9 @@ public class Operation {
             System.err.println(e);
         }
     }
-    public void createJarOperation() {
+    public void createJarOperation(boolean includeExtraction) {
         try {
-            String command = operationUtils.createJarFileCommand();
+            String command = operationUtils.createJarFileCommand(includeExtraction);
             System.out.println(command);
             /*
             if(command.equals("")) {

@@ -18,12 +18,20 @@ class JavaBuild {
                         miOperation.extractJarDependencies();
                         break;
                     case "-cj":
-                        miOperation.createJarOperation();
+                        if((i+1) < args.length && args[i+1].equals("--i-ex")) {
+                            miOperation.createJarOperation(true);
+                        } else {
+                            miOperation.createJarOperation(false);
+                        }
                         break;
                     case "--build":
                         miOperation.compileProyectOperation();
                         miOperation.extractJarDependencies();
-                        miOperation.createJarOperation();
+                        if((i+1) < args.length && args[i+1].equals("--i-ex")) {
+                            miOperation.createJarOperation(true);
+                        } else {
+                            miOperation.createJarOperation(false);
+                        }
                         break;
                     case "-r":
                         miOperation.createRunOperation();
@@ -41,6 +49,8 @@ class JavaBuild {
                         System.out.println("use -cm to compile the proyect");
                         System.out.println("use -ex to extract the lib jar files");
                         System.out.println("use -cj to create the proyect jar file");
+                        System.out.println("\tuse --i-x to include the jar dependency in the jar creation");
+                        System.out.println("\totherwise it will include the dependency in the manifesto file");
                         System.out.println("use --build to build the proyect");
                         System.out.println("use -r to run the proyect");
                         break;

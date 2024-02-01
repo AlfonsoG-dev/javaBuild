@@ -184,15 +184,12 @@ public class OperationUtils {
         }
         return build;
     }
-    public String createJarFileCommand() throws IOException {
+    public String createJarFileCommand(boolean includeExtraction) throws IOException {
         String mainName = "";
         if(FileUtils.getMainClass(localPath) != "") {
             mainName = FileUtils.getMainClass(localPath) + ".jar";
         }
         File extractionFile = new File(localPath + "\\extractionFiles");
-        // TODO: when adding a dependency use the Class-Path in the Manifesto file for that purpose
-        // Class-Path: .\lib\java-mysql-eje\java-mysql-eje.jar
-        // and when creating the jar file don't add the extraction dependency files
 
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles() != null) {
@@ -200,7 +197,16 @@ public class OperationUtils {
                 directory += " -C " + extractionDir.getPath() + "\\ .";
             }
         } 
-        return jarTypeUnion(mainName, directory);
+        String command = "";
+        if(includeExtraction == true) {
+            // TODO: when adding a dependency use the Class-Path in the Manifesto file for that purpose
+            // Class-Path: .\lib\java-mysql-eje\java-mysql-eje.jar
+            // and when creating the jar file don't add the extraction dependency files
+            command = jarTypeUnion(mainName, "");
+        } else {
+            command = jarTypeUnion(mainName, directory);
+        }
+        return command;
     }
     public boolean createUpdateJarFileCommand() {
         boolean updated = false;
