@@ -13,14 +13,14 @@ public class FileUtils {
                 writeManifesto.write(
                         "Manifesto-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
-                        "Main-Class: " + FileUtils.getMainClass(localFile.getPath())
+                        "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n"
                 );
             } else {
                 writeManifesto.write(
                         "Manifesto-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n" + 
-                        "Class-Path: " + libFiles
+                        "Class-Path: " + libFiles + "\n"
                 );
             }
             writeManifesto.close();
@@ -151,6 +151,15 @@ public class FileUtils {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(mainName == "") {
+                try {
+                    String parentName = new File(localpath).getCanonicalPath();
+                    String localName = new File(parentName).getName();
+                    mainName = localName;
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
             if(miBufferedReader != null) {
                 try {
                     miBufferedReader.close();

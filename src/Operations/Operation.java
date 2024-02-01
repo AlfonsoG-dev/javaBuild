@@ -91,8 +91,6 @@ public class Operation {
     public void createJarOperation(boolean includeExtraction) {
         try {
             String command = operationUtils.createJarFileCommand(includeExtraction);
-            System.out.println(command);
-            /*
             if(command.equals("")) {
                 throw new Exception("error while trying to create ther jar file");
             }
@@ -101,9 +99,8 @@ public class Operation {
             if(createJarProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(createJarProcess.getErrorStream());
             }
-            */
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     public void createAddJarFileOperation(String jarFilePath) {

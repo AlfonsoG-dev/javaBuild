@@ -51,7 +51,7 @@ public class FileOperation {
                 String srcClases = utils.srcClases();
                 String libJars = utils.libJars();
                 String compileCommand = utils.createCompileClases(libJars, srcClases);
-                String createJarCommand = utils.createJarFileCommand(false);
+                String createJarCommand = utils.createJarFileCommand(true);
                 String os = System.getProperty("os.name").toLowerCase();
                 if(os.contains("windows")) {
                     writeRunScript.write(

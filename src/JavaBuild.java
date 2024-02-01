@@ -26,8 +26,8 @@ class JavaBuild {
                         break;
                     case "--build":
                         miOperation.compileProyectOperation();
-                        miOperation.extractJarDependencies();
                         if((i+1) < args.length && args[i+1].equals("--i-ex")) {
+                            miOperation.extractJarDependencies();
                             miOperation.createJarOperation(true);
                         } else {
                             miOperation.createJarOperation(false);

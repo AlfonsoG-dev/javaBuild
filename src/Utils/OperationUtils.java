@@ -217,6 +217,7 @@ public class OperationUtils {
     public boolean createUpdateJarFileCommand() {
         boolean updated = false;
         // TODO: implement the update a jar file command
+        // only works if in the root of the project alredy exists a jar file with the main class name
         // jar -uf jar_file.jar -C .\folder\ .
         // jar -uf jar_file.jar .\bin\App.class
         return updated;
