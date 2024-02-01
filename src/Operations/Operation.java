@@ -91,6 +91,8 @@ public class Operation {
     public void createJarOperation() {
         try {
             String command = operationUtils.createJarFileCommand();
+            System.out.println(command);
+            /*
             if(command.equals("")) {
                 throw new Exception("error while trying to create ther jar file");
             }
@@ -99,6 +101,7 @@ public class Operation {
             if(createJarProcess.getErrorStream() != null) {
                 operationUtils.CMDOutput(createJarProcess.getErrorStream());
             }
+            */
         } catch(Exception e) {
             System.err.println(e);
         }

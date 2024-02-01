@@ -112,12 +112,9 @@ public class FileUtils {
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
-            String local = new File(localpath).getCanonicalPath();
-            // TODO: test the verification of main class getter
-            String parentName = new File(local).getName();
             if(miFile.listFiles() != null) {
             outter: for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java") && f.getName().equals(parentName)) {
+                    if(f.isFile() && f.getName().contains(".java")) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
                             if(miBufferedReader.readLine().contains("static void main(String[] args)")) {

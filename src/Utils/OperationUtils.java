@@ -128,8 +128,63 @@ public class OperationUtils {
         }
         return command;
     }
+    private boolean manifestoIsCreated() {
+        boolean isCreated = false;
+        try {
+            File miFile = new File(localPath + "\\Manifesto.txt");
+            if(miFile.exists()) {
+                isCreated = true;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return isCreated;
+    }
+    private String jarTypeFormat(String mainName, String directory) throws IOException {
+        String jarFormat = "";
+        if(manifestoIsCreated()) {
+            jarFormat = "jar -cfm ";
+        }
+        if(!manifestoIsCreated() && mainName == "") {
+            jarFormat = "jar -cf ";
+        }
+        if(!manifestoIsCreated() && mainName != "") {
+            jarFormat = "jar -cfe ";
+        }
+        return jarFormat;
+    }
+    private String jarTypeUnion(String mainName, String directory) throws IOException {
+        String build = "";
+        String localParent = new File(localPath).getCanonicalPath();
+        String jarFormat = jarTypeFormat(mainName, directory);
+        switch(jarFormat) {
+            case "jar -cfm ":
+                if(mainName != "" && directory != "") {
+                    build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
+                } else if(mainName != "" && directory == "") {
+                    build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ .";
+                }
+                break;
+            case "jar -cf ":
+                String jarName = new File(localParent).getName() + ".jar";
+                if(directory != "") {
+                    build = jarFormat + jarName + " -C .\\bin\\ ." + directory;
+                } else {
+                    build = jarFormat + jarName + " -C .\\bin\\ .";
+                }
+                break;
+            case "jar -cfe ":
+                String mainClassName = FileUtils.getMainClass(localPath);
+                if(directory != "") {
+                    build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ ." + directory;
+                } else {
+                    build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ .";
+                }
+                break;
+        }
+        return build;
+    }
     public String createJarFileCommand() throws IOException {
-        String command = "";
         String mainName = "";
         if(FileUtils.getMainClass(localPath) != "") {
             mainName = FileUtils.getMainClass(localPath) + ".jar";
@@ -145,21 +200,7 @@ public class OperationUtils {
                 directory += " -C " + extractionDir.getPath() + "\\ .";
             }
         } 
-        // TODO: if there is no Manifesto use the mainClassName as entry point
-        // jar -cfe App.jar mainClassName -C .\bin\ .
-        if(mainName != "" && directory != "") {
-            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
-        } else if(mainName != "" && directory == "") {
-            command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ .";
-        }
-        if(mainName == "" && directory != "") {
-            String mainDir = new File(localPath).getCanonicalPath();
-            command = "jar -cf " + new File(mainDir).getName() + ".jar -C .\\bin\\ ." + directory;
-        } else if(mainName == "" && directory == "") {
-            String mainDir = new File(localPath).getCanonicalPath();
-            command = "jar -cf " + new File(mainDir).getName() + ".jar -C .\\bin\\ .";
-        }
-        return command;
+        return jarTypeUnion(mainName, directory);
     }
     public boolean createUpdateJarFileCommand() {
         boolean updated = false;
