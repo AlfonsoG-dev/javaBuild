@@ -3,8 +3,31 @@ package Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 
 public class FileUtils {
+    public void writeManifesto(File localFile, String fileName, boolean includeExtraction, String libFiles) {
+        try {
+            FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
+            if(includeExtraction == true) {
+                writeManifesto.write(
+                        "Manifesto-Version: 1.0" + "\n" + 
+                        "Created-By: Alfonso-Gomajoa" + "\n" + 
+                        "Main-Class: " + FileUtils.getMainClass(localFile.getPath())
+                );
+            } else {
+                writeManifesto.write(
+                        "Manifesto-Version: 1.0" + "\n" + 
+                        "Created-By: Alfonso-Gomajoa" + "\n" + 
+                        "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n" + 
+                        "Class-Path: " + libFiles
+                );
+            }
+            writeManifesto.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     public String getCleanPath(String filePath) {
         String build = "";
         if(filePath.contains(".\\")) {

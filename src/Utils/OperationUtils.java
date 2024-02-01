@@ -199,12 +199,18 @@ public class OperationUtils {
         } 
         String command = "";
         if(includeExtraction == true) {
-            // TODO: when adding a dependency use the Class-Path in the Manifesto file for that purpose
-            // Class-Path: .\lib\java-mysql-eje\java-mysql-eje.jar
-            // and when creating the jar file don't add the extraction dependency files
-            command = jarTypeUnion(mainName, "");
-        } else {
+            new FileUtils().writeManifesto(new File(localPath), "Manifesto.txt", true, "");
             command = jarTypeUnion(mainName, directory);
+        } else {
+            String[] libJars = libJars().split("\n");
+            String jarFiles = "";
+            for(String l: libJars) {
+                if(!l.isEmpty()) {
+                    jarFiles += l + " ";
+                }
+            }
+            new FileUtils().writeManifesto(new File(localPath), "Manifesto.txt", false, jarFiles);
+            command = jarTypeUnion(mainName, "");
         }
         return command;
     }

@@ -34,13 +34,7 @@ public class FileOperation {
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
-                FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
-                writeManifesto.write(
-                        "Manifesto-Version: 1.0" + "\n" + 
-                        "Created-By: Alfonso-Gomajoa" + "\n" + 
-                        "Main-Class: " + mainClass
-                );
-                writeManifesto.close();
+                fileUtils.writeManifesto(localFile, "Manifesto.txt", false, "");
             } else if(fileName.equals(mainClass + ".java")) {
                 FileWriter writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
                 writeMainClass.write(
@@ -69,9 +63,11 @@ public class FileOperation {
                             "Invoke-Expression $runCommand"
                     );
                 } else if(os.contains("linux")) {
-                    // TODO: create support for linux
-                    writeRunScript.close();
-                    throw new Exception("Not implemented yet");
+                    writeRunScript.write(
+                            compileCommand.replace("\\", "/") + "\n" +
+                            createJarCommand.replace("\\", "/") + "\n" + 
+                            "java -jar " + mainClass.replace("\\", "/")
+                    );
                 } else {
                     System.out.println("! OS NOT SUPPORTED ¡");
                 }
