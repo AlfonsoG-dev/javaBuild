@@ -136,7 +136,7 @@ public class Operation {
     }
     public void createIncludeExtractions(boolean includeExtraction) {
         try {
-            if(includeExtraction == true) {
+            if(!includeExtraction) {
                 String libJars = operationUtils.libJars();
                 String[] libs = libJars.split("\n");
                 String jarFiles = "";
