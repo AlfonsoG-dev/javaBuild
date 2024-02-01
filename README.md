@@ -2,6 +2,11 @@
 >- basic build tool for simple java projects
 >- build the project with 1 or 3 simple commands
 
+# Depencies
+- [compile_references](https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html)
+- [create_jar_references](https://docs.oracle.com/javase/tutorial/deployment/jar/index.html)
+- [run_java_references](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html)
+
 ------
 
 # Features 

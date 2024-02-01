@@ -44,6 +44,10 @@ class JavaBuild {
                         }
                         break;
                     case "-r":
+                        miOperation.createBuildScript();
+                        break;
+                    case "--run":
+                        miOperation.compileProyectOperation();
                         miOperation.createRunOperation();
                         break;
                     case "--add":
@@ -62,7 +66,8 @@ class JavaBuild {
                         System.out.println("use --i ex to include the extraction files for building jar files");
                         System.out.println("\tuse --i nn to exclude the extraction files for build jar files");
                         System.out.println("use --build to build the proyect");
-                        System.out.println("use -r to run the proyect");
+                        System.out.println("use -r to create the build script");
+                        System.out.println("use --run to run the proyect without building it");
                         break;
                     default: 
                         System.out.println("use --h for help");

@@ -3,8 +3,6 @@ package Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import Operations.FileOperation;
 
@@ -15,18 +13,25 @@ public class OperationUtils {
         fileOperation = new FileOperation(nLocalPath);
         localPath = nLocalPath;
     }
-    public void CMDOutput(InputStream miInputStream) {
-        String data = "";
+    public void CMDOutput(BufferedReader miCmReader) {
+        BufferedReader miReader = null;
         try {
-            BufferedReader mio = new BufferedReader(new InputStreamReader(miInputStream));
-            while(mio.read() != -1) {
-                data += mio.readLine() + "\n";
+            miReader = miCmReader;
+            while(miReader.read() > 0) {
+                System.out.println(miReader.readLine());
             }
-            mio.close();
         } catch(Exception e) {
             System.err.println(e);
+        } finally {
+            if(miReader != null) {
+                try {
+                    miReader.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                miReader = null;
+            }
         }
-        System.out.println(data);
     }
     public void createProyectFiles()  {
         try {
@@ -185,10 +190,7 @@ public class OperationUtils {
         return build;
     }
     public String createJarFileCommand(boolean includeExtraction) throws IOException {
-        String mainName = "";
-        if(FileUtils.getMainClass(localPath) != "") {
-            mainName = FileUtils.getMainClass(localPath) + ".jar";
-        }
+        String mainName = FileUtils.getMainClass(localPath) + ".jar";
         File extractionFile = new File(localPath + "\\extractionFiles");
 
         String directory = "";
@@ -238,7 +240,25 @@ public class OperationUtils {
         }
         return addJar;
     }
-    public void CreateRunComman() {
+    public String createRunCommand(String libJars) {
+        String command = "";
+        String mainName = FileUtils.getMainClass(localPath) + ".java";
+        String[] libs = libJars.split("\n");
+        String jarFiles = "'.\\bin\\;";
+        for(String l: libs) {
+            if(l.isEmpty() == false) {
+                jarFiles += l + ";";
+            }
+        }
+        if(jarFiles.isEmpty()) {
+            command = "java -XX:+ExtensiveErrorReports -d .\\bin\\" + " .\\src\\" + mainName;
+        } else {
+            String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
+            command = "java -XX:+ExtensiveErrorReports -cp " + cleanLibs + " .\\src\\" + mainName;
+        }
+        return command;
+    }
+    public void createBuildCommand() {
         String mainName = FileUtils.getMainClass(localPath) + ".jar";
         fileOperation.createFiles("java-exe.ps1", mainName);
         System.out.println("Adding build script ...");

@@ -135,9 +135,11 @@ public class FileUtils {
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
+            String localName = new File(localpath).getCanonicalPath();
+            String parentName = new File(localName).getName();
             if(miFile.listFiles() != null) {
             outter: for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java")) {
+                    if(f.isFile() && f.getName().contains(".java") && f.getName().equals(parentName + ".java")) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
                             if(miBufferedReader.readLine().contains("static void main(String[] args)")) {

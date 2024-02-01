@@ -54,7 +54,7 @@ public class Operation {
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
             if(compileProcess.getErrorStream() != null) {
-                operationUtils.CMDOutput(compileProcess.getErrorStream());
+                operationUtils.CMDOutput(compileProcess.errorReader());
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -76,7 +76,7 @@ public class Operation {
                                         "pwsh -NoProfile -Command " + e
                                 );
                                 if(extracProcess.getErrorStream() != null) {
-                                    operationUtils.CMDOutput(extracProcess.getErrorStream());
+                                    operationUtils.CMDOutput(extracProcess.errorReader());
                                 }
                             } else {
                                 System.out.println("NO EXTRACTION FILES");
@@ -100,7 +100,7 @@ public class Operation {
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("creating jar file ...");
             if(createJarProcess.getErrorStream() != null) {
-                operationUtils.CMDOutput(createJarProcess.getErrorStream());
+                operationUtils.CMDOutput(createJarProcess.errorReader());
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -173,8 +173,21 @@ public class Operation {
             e.printStackTrace();
         }
     }
-
+    public void createBuildScript() {
+        operationUtils.createBuildCommand();
+    }
     public void createRunOperation() {
-        operationUtils.CreateRunComman();
+        String libJars = operationUtils.libJars();
+        String command = operationUtils.createRunCommand(libJars);
+        try {
+            Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
+            System.out.println("running ...");
+            if(runProcess.getErrorStream() != null) {
+                operationUtils.CMDOutput(runProcess.errorReader());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

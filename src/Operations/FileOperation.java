@@ -46,7 +46,7 @@ public class FileOperation {
                 );
                 writeMainClass.close();
             } else if(fileName.equals("java-exe.ps1")) {
-                FileWriter writeRunScript = new FileWriter(localFile.getPath() + "\\" + fileName);
+                FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
                 OperationUtils utils = new OperationUtils(localPath);
                 String srcClases = utils.srcClases();
                 String libJars = utils.libJars();
@@ -54,7 +54,7 @@ public class FileOperation {
                 String createJarCommand = utils.createJarFileCommand(true);
                 String os = System.getProperty("os.name").toLowerCase();
                 if(os.contains("windows")) {
-                    writeRunScript.write(
+                    writeBuildScript.write(
                             "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
                             "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
                             "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
@@ -63,7 +63,7 @@ public class FileOperation {
                             "Invoke-Expression $runCommand"
                     );
                 } else if(os.contains("linux")) {
-                    writeRunScript.write(
+                    writeBuildScript.write(
                             compileCommand.replace("\\", "/") + "\n" +
                             createJarCommand.replace("\\", "/") + "\n" + 
                             "java -jar " + mainClass.replace("\\", "/")
@@ -71,7 +71,7 @@ public class FileOperation {
                 } else {
                     System.out.println("! OS NOT SUPPORTED ¡");
                 }
-                writeRunScript.close();
+                writeBuildScript.close();
             }
         } catch(Exception e) {
             System.err.println(e);
