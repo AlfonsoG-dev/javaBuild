@@ -135,12 +135,18 @@ public class OperationUtils {
             mainName = FileUtils.getMainClass(localPath) + ".jar";
         }
         File extractionFile = new File(localPath + "\\extractionFiles");
+        // TODO: when adding a dependency use the Class-Path in the Manifesto file for that purpose
+        // Class-Path: .\lib\java-mysql-eje\java-mysql-eje.jar
+        // and when creating the jar file don't add the extraction dependency files
+
         String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles() != null) {
             for(File extractionDir: extractionFile.listFiles()) {
                 directory += " -C " + extractionDir.getPath() + "\\ .";
             }
         } 
+        // TODO: if there is no Manifesto use the mainClassName as entry point
+        // jar -cfe App.jar mainClassName -C .\bin\ .
         if(mainName != "" && directory != "") {
             command = "jar -cfm " + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
         } else if(mainName != "" && directory == "") {
@@ -154,6 +160,13 @@ public class OperationUtils {
             command = "jar -cf " + new File(mainDir).getName() + ".jar -C .\\bin\\ .";
         }
         return command;
+    }
+    public boolean createUpdateJarFileCommand() {
+        boolean updated = false;
+        // TODO: implement the update a jar file command
+        // jar -uf jar_file.jar -C .\folder\ .
+        // jar -uf jar_file.jar .\bin\App.class
+        return updated;
     }
     public boolean createAddJarFileCommand(String jarFilePath) throws Exception {
         System.out.println("adding jar dependency in process ...");
