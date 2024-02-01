@@ -95,11 +95,11 @@ public class OperationUtils {
         }
         String compileCommand = "";
         if(jarFiles.isEmpty() == true) {
-             compileCommand = "javac -d .\\bin\\ " + srcClases;
+             compileCommand = "javac -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
             String cb = jarFiles.substring(0, jarFiles.length()-1);
             forCommand += cb + "' " + srcClases;
-            compileCommand = "javac -d .\\bin\\ -cp " + forCommand;
+            compileCommand = "javac -Xlint:all -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;
     }

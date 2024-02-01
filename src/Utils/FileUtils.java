@@ -25,7 +25,7 @@ public class FileUtils {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return count;
     }
@@ -40,7 +40,7 @@ public class FileUtils {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return fileNames;
     }
@@ -54,7 +54,7 @@ public class FileUtils {
                 fileNames += getDirectoryFiles(miFile.listFiles());
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return fileNames;
     }
@@ -69,7 +69,7 @@ public class FileUtils {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return fileNames;
     }
@@ -99,7 +99,7 @@ public class FileUtils {
                 System.out.println("directorio creado: " + mio.getName());
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     /**
@@ -112,9 +112,12 @@ public class FileUtils {
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
+            String local = new File(localpath).getCanonicalPath();
+            // TODO: test the verification of main class getter
+            String parentName = new File(local).getName();
             if(miFile.listFiles() != null) {
             outter: for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java")) {
+                    if(f.isFile() && f.getName().contains(".java") && f.getName().equals(parentName)) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
                             if(miBufferedReader.readLine().contains("static void main(String[] args)")) {
@@ -126,7 +129,7 @@ public class FileUtils {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         } finally {
             if(miBufferedReader != null) {
                 try {
