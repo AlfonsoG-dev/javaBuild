@@ -17,8 +17,9 @@ public class OperationUtils {
         BufferedReader miReader = null;
         try {
             miReader = miCmReader;
-            while(miReader.read() > 0) {
-                System.out.println(miReader.readLine());
+            char[] mr = new char[1024];
+            while(miReader.read(mr) != -1) {
+                System.out.println(miReader.readLine() + "\n");
             }
         } catch(Exception e) {
             System.err.println(e);

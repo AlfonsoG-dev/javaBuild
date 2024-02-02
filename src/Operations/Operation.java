@@ -53,7 +53,7 @@ public class Operation {
         try {
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
-            if(compileProcess.getErrorStream() != null) {
+            if(compileProcess.errorReader() != null) {
                 operationUtils.CMDOutput(compileProcess.errorReader());
             }
         } catch(Exception e) {
@@ -75,7 +75,7 @@ public class Operation {
                                 Process extracProcess = Runtime.getRuntime().exec(
                                         "pwsh -NoProfile -Command " + e
                                 );
-                                if(extracProcess.getErrorStream() != null) {
+                                if(extracProcess.errorReader() != null) {
                                     operationUtils.CMDOutput(extracProcess.errorReader());
                                 }
                             } else {
@@ -99,7 +99,7 @@ public class Operation {
             }
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("creating jar file ...");
-            if(createJarProcess.getErrorStream() != null) {
+            if(createJarProcess.errorReader() != null) {
                 operationUtils.CMDOutput(createJarProcess.errorReader());
             }
         } catch(Exception e) {
@@ -182,8 +182,11 @@ public class Operation {
         try {
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("running ...");
-            if(runProcess.getErrorStream() != null) {
+            if(runProcess.errorReader() != null) {
                 operationUtils.CMDOutput(runProcess.errorReader());
+            }
+            if(runProcess.inputReader() != null) {
+                operationUtils.CMDOutput(runProcess.inputReader());
             }
         } catch(Exception e) {
             e.printStackTrace();
