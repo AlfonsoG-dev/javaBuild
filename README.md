@@ -10,12 +10,13 @@
 ------
 
 # Features 
-- [x] compile the project to bin
-- [x] extracts the jar files inside lib to create later the project jar file
-- [x] create the project jar file
-- [x] build the project, combine the 3 previously mention
-- [x] create the folder structure of the project
-- [x] create the run powershell script and executes the project
+- [x] compile the project to bin.
+- [x] extracts the jar files inside lib to create later the project jar file.
+- [x] create the project jar file.
+- [x] run the project without using jar files.
+- [x] build the project, combine the 3 previously mention.
+- [x] create the folder structure of the project.
+- [x] create the run powershell script and executes the project.
 
 # TODO's 
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of `javaFX`
@@ -32,6 +33,22 @@ javabuild.exe --h
 ```console
 java -jar JavaBuild.jar --h
 ```
+
+## Manifesto usage
+
+- when the app have dependencies in *lib* folder you need to specify in the *Manifesto* file if you want to 
+include the extraction files of the lib dependency or you need to declara in the *Manifesto* the class path 
+of the lib dependencies
+
+```text
+Main-Class: App
+Class-Path: .\lib\dependencyFolder\dependency.jar
+```
+- when you declare the Class-Path the build operation when trying to create the project *.jar* file, it exclude
+the extraction files of the lib dependency.
+
+>- if you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
+includes the extraction files of the lib dependency as part of the project *.jar* creation.
 
 ## Compile
 
@@ -68,6 +85,10 @@ java -jar JavaBuild.jar --h
 >>>- adds the manifesto file and the main class with the project folder name
 
 ## Run or excute the project
+>- `javabuild.exe --run`
+>>- it compiles to *.\bin\* folder and executes the project using the .class files.
+
+## create build script
 
 >>- `javaBuild.exe -r`
 >>>- creates the powershell script whit all the command to build the project, except the extraction operation
