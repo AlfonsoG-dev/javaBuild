@@ -54,7 +54,7 @@ public class Operation {
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
             System.out.println("compile ...");
             if(compileProcess.errorReader() != null) {
-                operationUtils.CMDOutput(compileProcess.errorReader());
+                operationUtils.CMDOutputError(compileProcess.errorReader());
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -76,7 +76,7 @@ public class Operation {
                                         "pwsh -NoProfile -Command " + e
                                 );
                                 if(extracProcess.errorReader() != null) {
-                                    operationUtils.CMDOutput(extracProcess.errorReader());
+                                    operationUtils.CMDOutputError(extracProcess.errorReader());
                                 }
                             } else {
                                 System.out.println("NO EXTRACTION FILES");
@@ -100,7 +100,7 @@ public class Operation {
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("creating jar file ...");
             if(createJarProcess.errorReader() != null) {
-                operationUtils.CMDOutput(createJarProcess.errorReader());
+                operationUtils.CMDOutputError(createJarProcess.errorReader());
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -181,12 +181,12 @@ public class Operation {
         String command = operationUtils.createRunCommand(libJars);
         try {
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
-            System.out.println("running ...");
-            if(runProcess.errorReader() != null) {
-                operationUtils.CMDOutput(runProcess.errorReader());
+            System.out.println("running ... ");
+            if(runProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(runProcess.getInputStream());
             }
-            if(runProcess.inputReader() != null) {
-                operationUtils.CMDOutput(runProcess.inputReader());
+            if(runProcess.errorReader() != null) {
+                operationUtils.CMDOutputError(runProcess.errorReader());
             }
         } catch(Exception e) {
             e.printStackTrace();

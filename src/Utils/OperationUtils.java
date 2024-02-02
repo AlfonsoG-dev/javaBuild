@@ -3,6 +3,8 @@ package Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import Operations.FileOperation;
 
@@ -13,13 +15,38 @@ public class OperationUtils {
         fileOperation = new FileOperation(nLocalPath);
         localPath = nLocalPath;
     }
-    public void CMDOutput(BufferedReader miCmReader) {
+    public void CMDOutputError(BufferedReader miCmdReader) {
         BufferedReader miReader = null;
         try {
-            miReader = miCmReader;
+            miReader = miCmdReader;
             char[] mr = new char[1024];
             while(miReader.read(mr) != -1) {
                 System.out.println(miReader.readLine() + "\n");
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            if(miReader != null) {
+                try {
+                    miReader.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                miReader = null;
+            }
+        }
+    }
+    public void CMDOutput(InputStream miCmdStream) {
+        BufferedReader miReader = null;
+        try {
+            miReader = new BufferedReader(new InputStreamReader(miCmdStream));
+            String line = "";
+            while(true) {
+                line = miReader.readLine();
+                if(line == null) {
+                    break;
+                }
+                System.out.println(line);
             }
         } catch(Exception e) {
             System.err.println(e);
