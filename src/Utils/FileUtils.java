@@ -1,9 +1,13 @@
 package Utils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.File;
+
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileUtils {
     public void writeManifesto(File localFile, String fileName, boolean includeExtraction, String libFiles) {
@@ -52,14 +56,15 @@ public class FileUtils {
         }
         return count;
     }
-    public String getDirectoryFiles(File[] miFiles) {
+    public String getDirectoryFiles(DirectoryStream<Path> misFiles) {
         String fileNames = "";
         try {
-            for(File f: miFiles) {
+            for(Path p: misFiles) {
+                File f = p.toFile();
                 if(f.exists() && f.isFile()) {
                     fileNames += f.getCanonicalPath() + "\n";
                 } else if(f.isDirectory()) {
-                    fileNames += this.getDirectoryFiles(f.listFiles());
+                    fileNames += this.getDirectoryFiles( Files.newDirectoryStream(f.toPath()));
                 }
             }
         } catch(Exception e) {
@@ -74,17 +79,18 @@ public class FileUtils {
             if(miFile.exists() && miFile.isFile()) {
                 fileNames += miFile.getCanonicalPath() + "\n";
             } else if(miFile.listFiles() != null) {
-                fileNames += getDirectoryFiles(miFile.listFiles());
+                fileNames += getDirectoryFiles(Files.newDirectoryStream(miFile.toPath()));
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
         return fileNames;
     }
-    public String listFilesFromDirectory(File[] files) {
+    public String listFilesFromDirectory(DirectoryStream<Path> files) {
         String fileNames = "";
         try {
-            for(File f: files) {
+            for(Path p: files) {
+                File f = p.toFile();
                 if(f.isFile()) {
                     fileNames += f.getPath() + "\n";
                 } else {

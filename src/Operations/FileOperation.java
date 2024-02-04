@@ -3,6 +3,7 @@ package Operations;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
@@ -82,7 +83,9 @@ public class FileOperation {
         try {
             File libFile = new File(localPath + "\\lib");
             if(libFile.exists() && libFile.listFiles() != null) {
-                for(File f: libFile.listFiles()) {
+                DirectoryStream<Path> libFiles = Files.newDirectoryStream(libFile.toPath());
+                for(Path p: libFiles) {
+                    File f = p.toFile();
                     for(File mf: f.listFiles()) {
                         names += mf.getPath() + "\n";
                     }
@@ -98,7 +101,9 @@ public class FileOperation {
         File localFile = new File(localPath + "\\" + cPath);
         String names = "";
         if(localFile.listFiles() != null) {
-            for(File f: localFile.listFiles()) {
+            DirectoryStream<Path> localFiles = Files.newDirectoryStream(localFile.toPath());
+            for(Path p: localFiles) {
+                File f = p.toFile();
                 if(f.isDirectory()) {
                     names += f.getPath() + "\\" + "\n";
                 }
@@ -133,36 +138,6 @@ public class FileOperation {
             }
         }
         return containsPath;
-    }
-    public void deleteDirectories(String filePath) {
-        try {
-            File localFile = new File(localPath);
-            String cFile = filePath;
-            File miFile = new File(localFile.getCanonicalPath() + "\\" + cFile);
-            if(miFile.isFile()) {
-                if(miFile.delete() == true) {
-                    System.out.println("se elimino el archivo: " + miFile.getName());
-                }
-            } else if(miFile.isDirectory() && miFile.listFiles().length >0) {
-                boolean b = false;
-                File[] files = miFile.listFiles();
-                for(File f: files) {
-                    b = f.delete();
-                    if(b == true) {
-                        System.out.println("se elimino el elemento: " + f);
-                    }
-                }
-                if(b == true && miFile.delete() == true) {
-                    System.out.println("se elimino el directorio: " + miFile);
-                }
-            } else if(miFile.listFiles().length == 0) {
-                if(miFile.delete() == true) {
-                    System.out.println("se elimino el directorio: " + miFile);
-                }
-            }
-        } catch(Exception e) {
-            System.err.println(e);
-        }
     }
     public void copyFilesfromSourceToTarget(String sourceFilePath, String targetFilePath) {
         try {
