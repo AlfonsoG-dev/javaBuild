@@ -57,7 +57,7 @@ public class Operation {
                 operationUtils.CMDOutputError(compileProcess.errorReader());
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     public void extractJarDependencies() {
@@ -88,7 +88,7 @@ public class Operation {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     public void createJarOperation(boolean includeExtraction) {

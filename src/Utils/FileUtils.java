@@ -42,7 +42,7 @@ public class FileUtils {
         return build;
     }
     public int countFilesInDirectory(File myDirectory) {
-        int count = -1;
+        int count = 0;
         try {
             if(myDirectory.listFiles() != null) {
                 for(File f: myDirectory.listFiles()) {
@@ -172,7 +172,7 @@ public class FileUtils {
                 try {
                     miBufferedReader.close();
                 } catch(Exception e) {
-                    System.err.println(e);
+                    e.printStackTrace();
                 }
                 miBufferedReader = null;
             }

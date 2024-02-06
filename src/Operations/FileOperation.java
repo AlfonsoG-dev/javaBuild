@@ -41,7 +41,7 @@ public class FileOperation {
                 writeMainClass.write(
                         "class " + mainClass + " {\n" +
                         "    public static void main(String[] args) {\n" + 
-                        "        System.out.println(Hello from " + mainClass + ");" + "\n" +
+                        "        System.out.println(\"Hello from " + mainClass + "\");" + "\n" +
                         "    }\n" + 
                         "}"
                 );
@@ -75,7 +75,7 @@ public class FileOperation {
                 writeBuildScript.close();
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     public String listLibFiles() {
@@ -92,7 +92,7 @@ public class FileOperation {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return names;
     }
@@ -108,32 +108,24 @@ public class FileOperation {
                     names += f.getPath() + "\\" + "\n";
                 }
                 if(f.isDirectory() && f.listFiles() != null) {
-                    for(File mf: f.listFiles()) {
-                        if(mf.isDirectory()) {
-                            names += mf.getPath() + "\\" + "\n";
-                        }
-                        if(mf.isDirectory() && mf.listFiles() != null) {
-                            names += listSRCDirectories(mf.getCanonicalPath());
-                        }
-                    }
+                    names += listSRCDirectories(f.getCanonicalPath());
                 }
             }
         }
+
         return names;
     }
     public boolean extractionDirContainsPath(String libJars) throws IOException {
         boolean containsPath = false;
         File extractionFile = new File(localPath + "\\extractionFiles");
         File miFile = new File(libJars);
-        if(miFile.getParent() != null) {
+        if(miFile.getParent() != null && extractionFile.listFiles() != null) {
             String jarLibParent = miFile.getParent();
             String jarNameParent = new File(jarLibParent).getName();
-            if(extractionFile.listFiles() != null) {
-                for(File f: extractionFile.listFiles()) {
-                    String extractionDirName = new File(f.getCanonicalPath()).getName();
-                    if(extractionDirName.equals(jarNameParent)) {
-                        containsPath = true;
-                    }
+            for(File f: extractionFile.listFiles()) {
+                String extractionDirName = new File(f.getCanonicalPath()).getName();
+                if(extractionDirName.equals(jarNameParent)) {
+                    containsPath = true;
                 }
             }
         }
@@ -187,7 +179,7 @@ public class FileOperation {
                 }
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 }

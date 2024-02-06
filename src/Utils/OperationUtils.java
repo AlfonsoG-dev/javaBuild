@@ -24,7 +24,7 @@ public class OperationUtils {
                 System.out.println(miReader.readLine() + "\n");
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         } finally {
             if(miReader != null) {
                 try {
@@ -49,7 +49,7 @@ public class OperationUtils {
                 System.out.println(line);
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         } finally {
             if(miReader != null) {
                 try {
@@ -69,27 +69,25 @@ public class OperationUtils {
             fileOperation.createFiles("Manifesto.txt", mainClass);
             fileOperation.createFiles(mainClass + ".java", mainClass);
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     public String srcClases() {
         String names = "";
         try {
             File srcFile = new File(localPath + "\\src");
-            if(srcFile.exists()) {
-                if(srcFile.listFiles().length > 0) {
-                    for(File f: srcFile.listFiles()) {
-                        if(f.isFile() && f.getName().contains(".java")) {
-                            names += ".\\src\\*.java ";
-                            break;
-                        }
+            if(srcFile.exists() && srcFile.listFiles() != null) {
+                for(File f: srcFile.listFiles()) {
+                    if(f.isFile() && f.getName().contains(".java")) {
+                        names += ".\\src\\*.java ";
+                        break;
                     }
                 }
                 String[] srcdirs = fileOperation.listSRCDirectories("src").split("\n");
                 if(srcdirs.length > 0) {
                     for(String s: srcdirs) {
                         int countFiles = new FileUtils().countFilesInDirectory(new File(s));
-                        if(s.isEmpty() == false && countFiles != -1) {
+                        if(s.isEmpty() == false && countFiles > 0) {
                             names += s + "*.java ";
                         }
                     }
@@ -98,7 +96,7 @@ public class OperationUtils {
                 System.out.println("error in: " + localPath + "\\SRC\\ folder not found");
             }
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return names;
     }
