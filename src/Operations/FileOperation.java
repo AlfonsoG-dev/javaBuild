@@ -106,13 +106,12 @@ public class FileOperation {
                 File f = p.toFile();
                 if(f.isDirectory()) {
                     names += f.getPath() + "\\" + "\n";
-                }
-                if(f.isDirectory() && f.listFiles() != null) {
-                    names += listSRCDirectories(f.getCanonicalPath());
+                    if(f.listFiles() != null) {
+                        names += listSRCDirectories(f.getPath());
+                    }
                 }
             }
         }
-
         return names;
     }
     public boolean extractionDirContainsPath(String libJars) throws IOException {
