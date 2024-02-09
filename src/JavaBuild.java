@@ -4,9 +4,9 @@ class JavaBuild {
         Thread nThread = new Thread("build app");
         try {
             nThread.start();
+            Operation miOperation = new Operation(".\\");
+            boolean haveExtractions = miOperation.haveIncludeExtraction();
             for(int i=0; i<args.length; ++i) {
-                Operation miOperation = new Operation(".\\");
-                boolean haveExtractions = miOperation.haveIncludeExtraction();
                 switch(args[i]) {
                     case "-b":
                         miOperation.createProyectOperation();
@@ -16,7 +16,12 @@ class JavaBuild {
                         miOperation.compileProyectOperation();
                         break;
                     case "-ex":
-                        miOperation.extractJarDependencies();
+                        if(haveExtractions) {
+                            miOperation.extractJarDependencies();
+                        } else {
+                            System.out.println("Extraction files are not included");
+                        }
+
                         break;
                     case "-cj":
                         if(haveExtractions) {
@@ -28,7 +33,7 @@ class JavaBuild {
                     case "--i":
                         if((i+1) < args.length && args[i+1].equals("ex")) {
                             miOperation.createIncludeExtractions(true);
-                        } else if((i+1) < args.length && args[i+1].equals("nn")) {
+                        } else if((i+1) < args.length && args[i+1].equals("nex")) {
                             miOperation.createIncludeExtractions(false);
                         }
                         break;
@@ -64,7 +69,7 @@ class JavaBuild {
                         System.out.println("use -ex to extract the lib jar files");
                         System.out.println("use -cj to create the proyect jar file");
                         System.out.println("use --i ex to include the extraction files for building jar files");
-                        System.out.println("\tuse --i nn to exclude the extraction files for build jar files");
+                        System.out.println("\tuse --i nex to exclude the extraction files for build jar files");
                         System.out.println("use --build to build the proyect");
                         System.out.println("use -r to create the build script");
                         System.out.println("use --run to run the proyect without building it");
@@ -74,8 +79,14 @@ class JavaBuild {
                         break;
                 }
             }
+            nThread.join();
         } catch(Exception e) {
+            nThread.interrupt();
             e.printStackTrace();
+        } finally {
+            if(nThread.isInterrupted()) {
+                nThread = null;
+            }
         }
     }
 }
