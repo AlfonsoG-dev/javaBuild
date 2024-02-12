@@ -173,8 +173,8 @@ public class Operation {
             e.printStackTrace();
         }
     }
-    public void createBuildScript() {
-        operationUtils.createBuildCommand();
+    public void createBuildScript(boolean includeExtraction) {
+        operationUtils.createBuildCommand(includeExtraction);
     }
     public void createRunOperation() {
         String libJars = operationUtils.libJars();

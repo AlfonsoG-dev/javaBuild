@@ -3,6 +3,7 @@ package Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.File;
 
 import java.nio.file.DirectoryStream;
@@ -31,6 +32,34 @@ public class FileUtils {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+    public void writeBuildFile(File localFile, String fileName, String mainClass, boolean includeExtraction) throws IOException {
+        FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
+        OperationUtils utils = new OperationUtils(localFile.getPath());
+        String srcClases = utils.srcClases();
+        String libJars = utils.libJars();
+        String compileCommand = utils.createCompileClases(libJars, srcClases);
+        String createJarCommand = utils.createJarFileCommand(includeExtraction);
+        String os = System.getProperty("os.name").toLowerCase();
+        if(os.contains("windows")) {
+            writeBuildScript.write(
+                    "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
+                    "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
+                    "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
+                    "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
+                    "\"$javaCommand\"" + "\n" + 
+                    "Invoke-Expression $runCommand"
+            );
+        } else if(os.contains("linux")) {
+            writeBuildScript.write(
+                    compileCommand.replace("\\", "/") + "\n" +
+                    createJarCommand.replace("\\", "/") + "\n" + 
+                    "java -jar " + mainClass.replace("\\", "/")
+            );
+        } else {
+            System.out.println("! OS NOT SUPPORTED ¡");
+        }
+        writeBuildScript.close();
     }
     public String getCleanPath(String filePath) {
         String build = "";

@@ -18,9 +18,10 @@ public class FileOperation {
         fileUtils = new FileUtils();
         localPath = nLocalPath;
     } 
-    public void createFiles(String fileName, String mainClass) {
+    public void createFiles(String fileName, String mainClass, boolean includeExtraction) {
         try {
             File localFile = new File(localPath);
+            OperationUtils utils = new OperationUtils(localFile.getPath());
             File miFile = new File(localPath + "\\src");
             if(fileName.equals(".gitignore")) {
                 FileWriter miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
@@ -35,7 +36,8 @@ public class FileOperation {
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
-                fileUtils.writeManifesto(localFile, "Manifesto.txt", true, "");
+                String libJars = utils.libJars();
+                fileUtils.writeManifesto(localFile, "Manifesto.txt", includeExtraction, libJars);
             } else if(fileName.equals(mainClass + ".java")) {
                 FileWriter writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
                 writeMainClass.write(
@@ -47,32 +49,7 @@ public class FileOperation {
                 );
                 writeMainClass.close();
             } else if(fileName.equals("java-exe.ps1")) {
-                FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
-                OperationUtils utils = new OperationUtils(localPath);
-                String srcClases = utils.srcClases();
-                String libJars = utils.libJars();
-                String compileCommand = utils.createCompileClases(libJars, srcClases);
-                String createJarCommand = utils.createJarFileCommand(true);
-                String os = System.getProperty("os.name").toLowerCase();
-                if(os.contains("windows")) {
-                    writeBuildScript.write(
-                            "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
-                            "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
-                            "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
-                            "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
-                            "\"$javaCommand\"" + "\n" + 
-                            "Invoke-Expression $runCommand"
-                    );
-                } else if(os.contains("linux")) {
-                    writeBuildScript.write(
-                            compileCommand.replace("\\", "/") + "\n" +
-                            createJarCommand.replace("\\", "/") + "\n" + 
-                            "java -jar " + mainClass.replace("\\", "/")
-                    );
-                } else {
-                    System.out.println("! OS NOT SUPPORTED ¡");
-                }
-                writeBuildScript.close();
+                fileUtils.writeBuildFile(localFile, fileName, mainClass, includeExtraction);
             }
         } catch(Exception e) {
             e.printStackTrace();

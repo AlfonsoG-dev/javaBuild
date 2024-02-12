@@ -65,9 +65,9 @@ public class OperationUtils {
         try {
             String mainDirName = new File(localPath).getCanonicalPath();
             String mainClass = new File(mainDirName).getName();
-            fileOperation.createFiles(".gitignore", "");
-            fileOperation.createFiles("Manifesto.txt", mainClass);
-            fileOperation.createFiles(mainClass + ".java", mainClass);
+            fileOperation.createFiles(".gitignore", "", false);
+            fileOperation.createFiles("Manifesto.txt", mainClass, false);
+            fileOperation.createFiles(mainClass + ".java", mainClass, false);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -284,9 +284,9 @@ public class OperationUtils {
         }
         return command;
     }
-    public void createBuildCommand() {
+    public void createBuildCommand(boolean includeExtraction) {
         String mainName = FileUtils.getMainClass(localPath) + ".jar";
-        fileOperation.createFiles("java-exe.ps1", mainName);
+        fileOperation.createFiles("java-exe.ps1", mainName, includeExtraction);
         System.out.println("Adding build script ...");
     }
 }

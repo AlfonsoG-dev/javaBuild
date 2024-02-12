@@ -49,7 +49,7 @@ class JavaBuild {
                         }
                         break;
                     case "-r":
-                        miOperation.createBuildScript();
+                        miOperation.createBuildScript(haveExtractions);
                         break;
                     case "--run":
                         miOperation.compileProyectOperation();
