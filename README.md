@@ -2,7 +2,11 @@
 >- basic build tool for simple java projects
 >- build the project with 1 or 3 simple commands
 
-# Depencies
+# Dependencies
+- [java_jdk_17.0.8](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [powershell](https://www.microsoft.com/store/productId/9MZ1SNWT0N5D?ocid=pdpshare)
+
+# References
 - [compile_references](https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html)
 - [create_jar_references](https://docs.oracle.com/javase/tutorial/deployment/jar/index.html)
 - [run_java_references](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html)
@@ -99,7 +103,8 @@ includes the extraction files of the lib dependency as part of the project *.jar
 >- add an external dependency 
 >>- `javabuild.exe --add dependency.jar`
 >>>- add an external jar file to the lib folder of the project
->>>- this command depends on [filesManager](https://github.com/AlfonsoG-dev/filesManager)
+>>- or you can use the directory name
+>>- `javabuild.exe --add ./folderName`
 
 ------
 
