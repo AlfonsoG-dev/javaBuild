@@ -176,7 +176,7 @@ public class Operation {
     public void createBuildScript(boolean includeExtraction) {
         operationUtils.createBuildCommand(includeExtraction);
     }
-    public void createRunOperation() {
+    public void runAppOperation() {
         String libJars = operationUtils.libJars();
         String command = operationUtils.createRunCommand(libJars);
         try {

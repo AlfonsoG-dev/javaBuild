@@ -44,7 +44,6 @@ class JavaBuild {
                             miOperation.createJarOperation(true);
                         } else {
                             miOperation.compileProyectOperation();
-                            miOperation.extractJarDependencies();
                             miOperation.createJarOperation(false);
                         }
                         break;
@@ -53,7 +52,7 @@ class JavaBuild {
                         break;
                     case "--run":
                         miOperation.compileProyectOperation();
-                        miOperation.createRunOperation();
+                        miOperation.runAppOperation();
                         break;
                     case "--add":
                         if((i+1) < args.length) {
