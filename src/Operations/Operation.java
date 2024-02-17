@@ -145,11 +145,12 @@ public class Operation {
                         jarFiles += l + " ";
                     }
                 }
+                String dependencies = !jarFiles.isEmpty() ? jarFiles : "";
                 new FileUtils().writeManifesto(
                         new File(localPath),
                         "Manifesto.txt",
                         includeExtraction,
-                        jarFiles
+                        dependencies
                 );
             } else {
                 new FileUtils().writeManifesto(

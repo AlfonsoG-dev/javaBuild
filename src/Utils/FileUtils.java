@@ -20,7 +20,7 @@ public class FileUtils {
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n"
                 );
-            } else {
+            } else if(!libFiles.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
@@ -170,11 +170,9 @@ public class FileUtils {
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
-            String localName = new File(localpath).getCanonicalPath();
-            String parentName = new File(localName).getName();
             if(miFile.listFiles() != null) {
             outter: for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java") && f.getName().equals(parentName + ".java")) {
+                    if(f.isFile() && f.getName().contains(".java")) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
                             if(miBufferedReader.readLine().contains("static void main(String[] args)")) {
