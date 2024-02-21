@@ -1,12 +1,10 @@
 import Operations.Operation;
 class JavaBuild {
     public static void main(String[] args) {
-        Thread t = new Thread();
         try {
             Operation miOperation = new Operation(".\\");
             boolean haveExtractions = miOperation.haveIncludeExtraction();
             for(int i=0; i<args.length; ++i) {
-                t.start();
                 switch(args[i]) {
                     case "-b":
                         miOperation.createProyectOperation();
@@ -78,7 +76,6 @@ class JavaBuild {
                         break;
                 }
             }
-            t.join();
         } catch(Exception e) {
             e.printStackTrace();
         }
