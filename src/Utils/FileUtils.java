@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class FileUtils {
     public void writeManifesto(File localFile, String fileName, boolean includeExtraction, String libFiles) {
@@ -62,13 +63,7 @@ public class FileUtils {
         writeBuildScript.close();
     }
     public String getCleanPath(String filePath) {
-        String build = "";
-        if(filePath.contains(".\\")) {
-            build = new File(filePath).toPath().normalize().toString();
-        } else {
-            build = filePath;
-        }
-        return build;
+        return new File(filePath).toPath().normalize().toString();
     }
     public int countFilesInDirectory(File myDirectory) {
         int count = 0;
@@ -85,51 +80,57 @@ public class FileUtils {
         }
         return count;
     }
-    public String getDirectoryFiles(DirectoryStream<Path> misFiles) {
-        String fileNames = "";
-        try {
-            for(Path p: misFiles) {
-                File f = p.toFile();
+    public ArrayList<String> getDirectoryFiles(DirectoryStream<Path> misFiles) {
+        ArrayList<String> names = new ArrayList<>();
+        misFiles.forEach(e -> {
+            File f = e.toFile();
+            try {
                 if(f.exists() && f.isFile()) {
-                    fileNames += f.getCanonicalPath() + "\n";
+                    names.add(f.getCanonicalPath());
                 } else if(f.isDirectory()) {
-                    fileNames += this.getDirectoryFiles( Files.newDirectoryStream(f.toPath()));
+                    names.addAll(
+                            getDirectoryFiles(
+                                Files.newDirectoryStream(f.toPath())
+                            )
+                    );
                 }
+            } catch(Exception err) {
+                err.printStackTrace();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return fileNames;
+        });
+        return names;
     }
-    public String listFilesFromPath(String filePath) {
-        String fileNames = "";
+    public ArrayList<String> listFilesFromPath(String filePath) {
+        ArrayList<String> names = new ArrayList<>();
         try {
             File miFile = new File(filePath);
             if(miFile.exists() && miFile.isFile()) {
-                fileNames += miFile.getCanonicalPath() + "\n";
+                names.add(miFile.getCanonicalPath());
             } else if(miFile.listFiles() != null) {
-                fileNames += getDirectoryFiles(Files.newDirectoryStream(miFile.toPath()));
+                names.addAll(
+                        getDirectoryFiles(
+                            Files.newDirectoryStream(miFile.toPath())
+                        )
+                );
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return fileNames;
+        return names;
     }
-    public String listFilesFromDirectory(DirectoryStream<Path> files) {
-        String fileNames = "";
-        try {
-            for(Path p: files) {
-                File f = p.toFile();
-                if(f.isFile()) {
-                    fileNames += f.getPath() + "\n";
-                } else {
-                    this.listFilesFromPath(f.getPath());
-                }
+    public ArrayList<String> listFilesFromDirectory(DirectoryStream<Path> files) {
+        ArrayList<String> names = new ArrayList<>();
+        files.forEach(e -> {
+            File f = e.toFile();
+            if(f.isFile()) {
+                names.add(f.getPath());
+            } else if (f.isDirectory()){
+                names.addAll(
+                        listFilesFromPath(f.getPath())
+                );
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return fileNames;
+        });
+        return names;
     }
     public void createDirectory(String directory) {
         File miFile = new File(directory);
@@ -148,13 +149,13 @@ public class FileUtils {
             for(String pn: parentNames) {
                 String nFileName = pn.replace(targetFilePath.replace("/", "\\"), "");
                 File mio = new File(pn);
-                int fileLenght = nFileName.split("\\\\").length;
+                int fileLenght = new File(nFileName).toPath().getNameCount();
                 if(mio.exists() == false && fileLenght > 1) {
                     mio.mkdirs();
                 } else if(mio.exists() == false && fileLenght <= 1) {
                     mio.mkdir();
                 }
-                System.out.println("directorio creado: " + mio.getName());
+                System.out.println("CREATED: " + mio.getName());
             }
         } catch(Exception e) {
             e.printStackTrace();
