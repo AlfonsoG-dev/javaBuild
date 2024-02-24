@@ -37,11 +37,14 @@ public class FileUtils {
     public void writeBuildFile(File localFile, String fileName, String mainClass, boolean includeExtraction) throws IOException {
         FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
         OperationUtils utils = new OperationUtils(localFile.getPath());
-        String srcClases = utils.srcClases();
-        String libJars = utils.libJars();
-        String compileCommand = utils.createCompileClases(libJars, srcClases);
-        String createJarCommand = utils.createJarFileCommand(includeExtraction);
-        String os = System.getProperty("os.name").toLowerCase();
+        String 
+            srcClases        = utils.srcClases(),
+            compileCommand   = utils.createCompileClases(
+                utils.libJars(),
+                srcClases
+            ),
+            createJarCommand = utils.createJarFileCommand(includeExtraction),
+            os               = System.getProperty("os.name").toLowerCase();
         if(os.contains("windows")) {
             writeBuildScript.write(
                     "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
@@ -82,7 +85,8 @@ public class FileUtils {
     }
     public ArrayList<String> getDirectoryFiles(DirectoryStream<Path> misFiles) {
         ArrayList<String> names = new ArrayList<>();
-        misFiles.forEach(e -> {
+        misFiles
+            .forEach(e -> {
             File f = e.toFile();
             try {
                 if(f.exists() && f.isFile()) {
