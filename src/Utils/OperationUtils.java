@@ -117,25 +117,26 @@ public class OperationUtils {
             names = new ArrayList<>(),
             libfiles = fileOperation.listLibFiles();
 
-        libfiles.parallelStream()
+        libfiles
+            .parallelStream()
             .forEach(e -> {
                 File libFile = new File(e);
                 if(libFile.exists() && libFile.isFile() && libFile.getName().contains(".jar")) {
-                    names.add( libFile.getPath());
+                    names.add(libFile.getPath());
                 }
         });
         return names;
     }
-    public String createCompileClases(String libJars, String srcClases) {
-        String forCommand = "'";
-        String[] libs = libJars.split("\n");
-        String jarFiles = "";
-        for(String l: libs) {
+    public String createCompileClases(ArrayList<String> libJars, String srcClases) {
+        String
+            forCommand     = "'",
+            jarFiles       = "",
+            compileCommand = "";
+        for(String l: libJars) {
             if(l.isEmpty() == false) {
                 jarFiles += l + ";";
             }
         }
-        String compileCommand = "";
         if(jarFiles.isEmpty() == true) {
              compileCommand = "javac -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
@@ -145,13 +146,12 @@ public class OperationUtils {
         }
         return compileCommand;
     }
-    public void createExtractionFiles(String[] jars) {
+    public void createExtractionFiles(ArrayList<String> jars) {
         File extraction = new File(localPath + "\\extractionFiles");
         if(extraction.exists() == false) {
             extraction.mkdir();
         }
-        String[] libNames = jars;
-        for(String n: libNames) {
+        for(String n: jars) {
             fileOperation.copyFilesfromSourceToTarget(n, extraction.getPath());
         }
     }
@@ -161,7 +161,8 @@ public class OperationUtils {
             listFiles = fileUtils.listFilesFromPath(extractionFile.getPath()),
             commands = new ArrayList<>();
 
-        listFiles.parallelStream()
+        listFiles
+            .parallelStream()
             .forEach(e -> {
                 String jarFileName = new File(e).getName();
                 if(jarFileName.contains(".jar")) {
@@ -272,12 +273,11 @@ public class OperationUtils {
         }
         return addJar;
     }
-    public String createRunCommand(String libJars) {
+    public String createRunCommand(ArrayList<String> libJars) {
         String command = "";
         String mainName = FileUtils.getMainClass(localPath) + ".java";
-        String[] libs = libJars.split("\n");
         String jarFiles = "'.\\bin\\;";
-        for(String l: libs) {
+        for(String l: libJars) {
             if(l.isEmpty() == false) {
                 jarFiles += l + ";";
             }
