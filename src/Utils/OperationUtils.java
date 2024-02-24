@@ -5,14 +5,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import Operations.FileOperation;
 
 public class OperationUtils {
     private FileOperation fileOperation;
     private String localPath;
+    private FileUtils fileUtils;
     public OperationUtils(String nLocalPath) {
         fileOperation = new FileOperation(nLocalPath);
+        fileUtils = new FileUtils();
         localPath = nLocalPath;
     }
     public void CMDOutputError(BufferedReader miCmdReader) {
@@ -73,46 +76,54 @@ public class OperationUtils {
         }
     }
     public String srcClases() {
-        String names = "";
+        String b = "";
+        ArrayList<String> names = new ArrayList<>();
         try {
             File srcFile = new File(localPath + "\\src");
             if(srcFile.exists() && srcFile.listFiles() != null) {
                 for(File f: srcFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
-                        names += ".\\src\\*.java ";
+                        names.add(".\\src\\*.java ");
                         break;
                     }
                 }
-                String[] srcdirs = fileOperation.listSRCDirectories("src").split("\n");
-                if(srcdirs.length > 0) {
-                    for(String s: srcdirs) {
-                        int countFiles = new FileUtils().countFilesInDirectory(new File(s));
-                        if(s.isEmpty() == false && countFiles > 0) {
-                            names += s + "*.java ";
-                        }
+                ArrayList<String> srcdirs = fileOperation.listSRCDirectories("src");
+                srcdirs.parallelStream()
+                .forEach(e -> {
+                    int countFiles = fileUtils.countFilesInDirectory(new File(e));
+                    if(e.isEmpty() == false && countFiles > 0) {
+                        names.add(e + "*.java ");
                     }
-                }
+                });
             } else {
                 System.out.println("error in: " + localPath + "\\SRC\\ folder not found");
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return names;
+        if(names.size() > 0) {
+            for(String n: names) {
+                b += n;
+            }
+        }
+        return b;
     }
 
     /**
      * list all the jar files whitin lib folder
      */
-    public String libJars() {
-        String names = "";
-        String[] libfiles = fileOperation.listLibFiles().split("\n");
-        for(String l: libfiles) {
-            File libFile = new File(l);
-            if(libFile.exists() && libFile.isFile() && libFile.getName().contains(".jar")) {
-                names += libFile.getPath() + "\n";
-            }
-        }
+    public ArrayList<String> libJars() {
+        ArrayList<String> 
+            names = new ArrayList<>(),
+            libfiles = fileOperation.listLibFiles();
+
+        libfiles.parallelStream()
+            .forEach(e -> {
+                File libFile = new File(e);
+                if(libFile.exists() && libFile.isFile() && libFile.getName().contains(".jar")) {
+                    names.add( libFile.getPath());
+                }
+        });
         return names;
     }
     public String createCompileClases(String libJars, String srcClases) {
@@ -144,20 +155,23 @@ public class OperationUtils {
             fileOperation.copyFilesfromSourceToTarget(n, extraction.getPath());
         }
     }
-    public String createExtractionCommand() throws IOException {
-        String command = "";
+    public ArrayList<String> createExtractionCommand() throws IOException {
         File extractionFile = new File(localPath + "\\extractionFiles");
-        String[] listFiles = new FileUtils().listFilesFromPath(extractionFile.getPath()).split("\n");
-        for(String l: listFiles) {
-            String jarFileName = new File(l).getName();
-            if(jarFileName.contains(".jar")) {
-                String jarParent = new File(l).getParent();
-                String extracJAR = "jar -xf " + jarFileName;
-                String deleteJAR = "rm -r " + jarFileName + "\n";
-                command += "cd " + jarParent + " && " + extracJAR + " && " + deleteJAR;
-            }
-        }
-        return command;
+        ArrayList<String> 
+            listFiles = fileUtils.listFilesFromPath(extractionFile.getPath()),
+            commands = new ArrayList<>();
+
+        listFiles.parallelStream()
+            .forEach(e -> {
+                String jarFileName = new File(e).getName();
+                if(jarFileName.contains(".jar")) {
+                    String jarParent = new File(e).getParent();
+                    String extracJAR = "jar -xf " + jarFileName;
+                    String deleteJAR = "rm -r " + jarFileName + "\n";
+                    commands.add("cd " + jarParent + " && " + extracJAR + " && " + deleteJAR);
+                }
+        });
+        return commands;
     }
     private boolean manifestoIsCreated() {
         boolean isCreated = false;
@@ -232,14 +246,6 @@ public class OperationUtils {
             command = jarTypeUnion(mainName, "");
         }
         return command;
-    }
-    public boolean createUpdateJarFileCommand() {
-        boolean updated = false;
-        // TODO: implement the update a jar file command
-        // only works if in the root of the project alredy exists a jar file with the main class name
-        // jar -uf jar_file.jar -C .\folder\ .
-        // jar -uf jar_file.jar .\bin\App.class
-        return updated;
     }
     public boolean createAddJarFileCommand(String jarFilePath) throws Exception {
         System.out.println("adding jar dependency in process ...");
