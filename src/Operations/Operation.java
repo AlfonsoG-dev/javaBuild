@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import Utils.FileUtils;
 import Utils.OperationUtils;
@@ -90,7 +91,7 @@ public class Operation {
                                 try {
                                     Process extracProcess = Runtime.getRuntime().exec(
                                             "pwsh -NoProfile -Command " + p
-                                            );
+                                    );
                                     if(extracProcess.errorReader() != null) {
                                         operationUtils.CMDOutputError(extracProcess.errorReader());
                                     }
@@ -156,18 +157,17 @@ public class Operation {
         try {
             if(!includeExtraction) {
                 ArrayList<String> libJars = operationUtils.libJars();
-                String jarFiles = "";
-                for(String l: libJars) {
-                    if(!l.isEmpty()) {
-                        jarFiles += l + " ";
-                    }
-                }
-                String dependencies = !jarFiles.isEmpty() ? jarFiles : "";
+                String jarFiles = libJars
+                    .parallelStream()
+                    .filter(e -> !e.isEmpty())
+                    .map(e -> e + " ")
+                    .collect(Collectors.joining());
+
                 new FileUtils().writeManifesto(
                         new File(localPath),
                         "Manifesto.txt",
                         includeExtraction,
-                        dependencies
+                        jarFiles
                 );
             } else {
                 new FileUtils().writeManifesto(
