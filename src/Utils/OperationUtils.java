@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 
 import Operations.FileOperation;
@@ -88,13 +93,14 @@ public class OperationUtils {
                     }
                 }
                 ArrayList<String> srcdirs = fileOperation.listSRCDirectories("src");
-                srcdirs.parallelStream()
-                .forEach(e -> {
-                    int countFiles = fileUtils.countFilesInDirectory(new File(e));
-                    if(e.isEmpty() == false && countFiles > 0) {
-                        names.add(e + "*.java ");
-                    }
-                });
+                srcdirs
+                    .parallelStream()
+                    .forEach(e -> {
+                        int countFiles = fileUtils.countFilesInDirectory(new File(e));
+                        if(e.isEmpty() == false && countFiles > 0) {
+                            names.add(e + "*.java ");
+                        }
+                    });
             } else {
                 System.out.println("error in: " + localPath + "\\SRC\\ folder not found");
             }
@@ -124,7 +130,7 @@ public class OperationUtils {
                 if(libFile.exists() && libFile.isFile() && libFile.getName().contains(".jar")) {
                     names.add(libFile.getPath());
                 }
-        });
+            });
         return names;
     }
     public String createCompileClases(ArrayList<String> libJars, String srcClases) {
@@ -151,9 +157,11 @@ public class OperationUtils {
         if(extraction.exists() == false) {
             extraction.mkdir();
         }
-        for(String n: jars) {
-            fileOperation.copyFilesfromSourceToTarget(n, extraction.getPath());
-        }
+        jars
+            .parallelStream()
+            .forEach(e -> {
+                fileOperation.copyFilesfromSourceToTarget(e, extraction.getPath());
+            });
     }
     public ArrayList<String> createExtractionCommand() throws IOException {
         File extractionFile = new File(localPath + "\\extractionFiles");
