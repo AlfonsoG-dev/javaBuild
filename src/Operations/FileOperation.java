@@ -147,29 +147,35 @@ public class FileOperation {
                 );
             } else if(sf.isDirectory()) {
                 ArrayList<String> fileNames = fileUtils.listFilesFromPath(sourceFilePath);
-                for(String fn: fileNames) {
-                    File sourceFile = new File(fn);
-                    String cTargetNames = fileUtils.createTargetFromParentPath(
-                            sourceFilePath,
-                            sourceFile.getCanonicalPath()
-                    ) + ";";
-                    String[] names = cTargetNames.split(";");
-                    for(String n: names) {
-                        if(n.contains("git") == false) {
-                            File targetFile = new File(targetFilePath + "\\" + n);
-                            fileUtils.createParentFile(targetFilePath, targetFile.getParent());
-                            Path sourcePath = sourceFile.toPath();
-                            Path targetPath = targetFile.toPath();
-                            System.out.println(
-                                    Files.copy(
-                                        sourcePath,
-                                        targetPath,
-                                        StandardCopyOption.COPY_ATTRIBUTES
-                                    )
-                            );
+                fileNames
+                    .parallelStream()
+                    .forEach(e -> {
+                        try {
+                            File sourceFile = new File(e);
+                            String cTargetNames = fileUtils.createTargetFromParentPath(
+                                    sourceFilePath,
+                                    sourceFile.getCanonicalPath()
+                            ) + ";";
+                            String[] names = cTargetNames.split(";");
+                            for(String n: names) {
+                                if(n.contains("git") == false) {
+                                    File targetFile = new File(targetFilePath + "\\" + n);
+                                    fileUtils.createParentFile(targetFilePath, targetFile.getParent());
+                                    Path sourcePath = sourceFile.toPath();
+                                    Path targetPath = targetFile.toPath();
+                                    System.out.println(
+                                            Files.copy(
+                                                sourcePath,
+                                                targetPath,
+                                                StandardCopyOption.COPY_ATTRIBUTES
+                                            )
+                                    );
+                                }
+                            }
+                        } catch(Exception err) {
+                            err.printStackTrace();
                         }
-                    }
-                }
+                    });
             }
         } catch(Exception e) {
             e.printStackTrace();
