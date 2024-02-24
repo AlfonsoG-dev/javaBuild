@@ -4,6 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import java.util.ArrayList;
+
 import Utils.FileUtils;
 import Utils.OperationUtils;
 
@@ -34,20 +40,26 @@ public class Operation {
     public void createFilesOperation() {
         File localFile = new File(localPath);
         System.out.println("creating files ...");
-        for(File f: localFile.listFiles()) {
-            if(f.getName().equals("src")) {
-                File srcMainFile = new File(localPath + "\\src");
-                if(srcMainFile.listFiles().length == 0) {
-                    operationUtils.createProyectFiles();
-                }
-            }
+        try {
+            DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath());
+            files
+                .forEach(e -> {
+                    File f = e.toFile();
+                    if(f.getName().equals("src")) {
+                        File srcMainFile = new File(localPath + "\\src");
+                        if(srcMainFile.listFiles().length == 0) {
+                            operationUtils.createProyectFiles();
+                        }
+                    }
+                });
+        } catch(Exception err) {
+            err.printStackTrace();
         }
     }
     public void compileProyectOperation() {
         String srcClases = operationUtils.srcClases();
-        String libJars = operationUtils.libJars();
         String compileCommand = operationUtils.createCompileClases(
-                libJars,
+                operationUtils.libJars(),
                 srcClases
         );
         try {
@@ -61,35 +73,41 @@ public class Operation {
         }
     }
     public void extractJarDependencies() {
-        try {
-            String[] jars = operationUtils.libJars().split("\n");
-            if(jars.length > 0) {
-                for(String j: jars) {
-                    boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(j);
-                    if(libAlreadyExists == false) {
-                        operationUtils.createExtractionFiles(jars);
-                        String[] extractions = operationUtils.createExtractionCommand().split("\n");
-                        for(String e: extractions) {
+        ArrayList<String> jars = operationUtils.libJars();
+        jars
+            .parallelStream()
+            .forEach(e -> {
+            try {
+                boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
+                if(libAlreadyExists == false) {
+                    operationUtils.createExtractionFiles(jars);
+                    ArrayList<String> extractions = operationUtils.createExtractionCommand();
+                    extractions
+                        .parallelStream()
+                        .forEach(p -> {
                             System.out.println("extracting jar dependencies ...");
                             if(!e.isEmpty()) {
-                                Process extracProcess = Runtime.getRuntime().exec(
-                                        "pwsh -NoProfile -Command " + e
-                                );
-                                if(extracProcess.errorReader() != null) {
-                                    operationUtils.CMDOutputError(extracProcess.errorReader());
+                                try {
+                                    Process extracProcess = Runtime.getRuntime().exec(
+                                            "pwsh -NoProfile -Command " + p
+                                            );
+                                    if(extracProcess.errorReader() != null) {
+                                        operationUtils.CMDOutputError(extracProcess.errorReader());
+                                    }
+                                } catch(Exception err) {
+                                    err.printStackTrace();
                                 }
                             } else {
                                 System.out.println("NO EXTRACTION FILES");
                             }
-                        }
-                    } else {
-                        System.out.println("THERE IS NO DEPENDENCIES TO EXTRACT");
-                    }
+                        });
+                } else {
+                    System.out.println("THERE IS NO DEPENDENCIES TO EXTRACT");
                 }
+            } catch(Exception err) {
+                err.printStackTrace();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
     public void createJarOperation(boolean includeExtraction) {
         try {
@@ -137,10 +155,9 @@ public class Operation {
     public void createIncludeExtractions(boolean includeExtraction) {
         try {
             if(!includeExtraction) {
-                String libJars = operationUtils.libJars();
-                String[] libs = libJars.split("\n");
+                ArrayList<String> libJars = operationUtils.libJars();
                 String jarFiles = "";
-                for(String l: libs) {
+                for(String l: libJars) {
                     if(!l.isEmpty()) {
                         jarFiles += l + " ";
                     }
@@ -178,8 +195,7 @@ public class Operation {
         operationUtils.createBuildCommand(includeExtraction);
     }
     public void runAppOperation() {
-        String libJars = operationUtils.libJars();
-        String command = operationUtils.createRunCommand(libJars);
+        String command = operationUtils.createRunCommand(operationUtils.libJars());
         try {
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("running ... ");
