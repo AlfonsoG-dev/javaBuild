@@ -17,11 +17,9 @@ public class FileOperation {
 
     private FileUtils fileUtils;
     private String localPath;
-    private OperationUtils operationUtils;
     public FileOperation(String nLocalPath) {
         localPath = nLocalPath;
         fileUtils = new FileUtils();
-        operationUtils = new OperationUtils(localPath);
     } 
     public void createFiles(String fileName, String mainClass, boolean includeExtraction) {
         try {
@@ -44,7 +42,10 @@ public class FileOperation {
                 );
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
-                String libJars = operationUtils.libJars();
+                String libJars = "";
+                for(String l: new OperationUtils(localPath).libJars()) {
+                    libJars += l +";";
+                }
                 fileUtils.writeManifesto(localFile, "Manifesto.txt", includeExtraction, libJars);
             } else if(fileName.equals(mainClass + ".java")) {
                 writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
@@ -150,7 +151,8 @@ public class FileOperation {
                     File sourceFile = new File(fn);
                     String cTargetNames = fileUtils.createTargetFromParentPath(
                             sourceFilePath,
-                            sourceFile.getCanonicalPath()) + ";";
+                            sourceFile.getCanonicalPath()
+                    ) + ";";
                     String[] names = cTargetNames.split(";");
                     for(String n: names) {
                         if(n.contains("git") == false) {
