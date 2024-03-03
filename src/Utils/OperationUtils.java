@@ -17,7 +17,7 @@ public class OperationUtils {
     private FileUtils fileUtils;
     public OperationUtils(String nLocalPath) {
         fileOperation = new FileOperation(nLocalPath);
-        fileUtils = new FileUtils();
+        fileUtils = new FileUtils(localPath);
         localPath = nLocalPath;
     }
     public void CMDOutputError(BufferedReader miCmdReader) {

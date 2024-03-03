@@ -19,7 +19,7 @@ public class FileOperation {
     private String localPath;
     public FileOperation(String nLocalPath) {
         localPath = nLocalPath;
-        fileUtils = new FileUtils();
+        fileUtils = new FileUtils(localPath);
     } 
     public void createFiles(String fileName, String mainClass, boolean includeExtraction) {
         try {
@@ -46,7 +46,7 @@ public class FileOperation {
                 for(String l: new OperationUtils(localPath).libJars()) {
                     libJars += l +";";
                 }
-                fileUtils.writeManifesto(localFile, "Manifesto.txt", includeExtraction, libJars);
+                fileUtils.writeManifesto("Manifesto.txt", includeExtraction, libJars);
             } else if(fileName.equals(mainClass + ".java")) {
                 writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
                 writeMainClass.write(
@@ -58,7 +58,11 @@ public class FileOperation {
                 );
                 writeMainClass.close();
             } else if(fileName.equals("java-exe.ps1")) {
-                fileUtils.writeBuildFile(localFile, fileName, mainClass, includeExtraction);
+                fileUtils.writeBuildFile(
+                        fileName,
+                        mainClass,
+                        includeExtraction
+                );
             }
         } catch(Exception e) {
             e.printStackTrace();

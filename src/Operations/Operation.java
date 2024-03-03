@@ -9,7 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import Utils.FileUtils;
 import Utils.OperationUtils;
@@ -17,9 +19,11 @@ import Utils.OperationUtils;
 public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
+    private FileUtils fileUtils;
     public Operation(String nLocalPath){
-        operationUtils = new OperationUtils(nLocalPath);
         localPath = nLocalPath;
+        operationUtils = new OperationUtils(localPath);
+        fileUtils = new FileUtils(localPath);
     }
     public void createProyectOperation() {
         String[] names = {
@@ -30,13 +34,17 @@ public class Operation {
             "extractionFiles"
         };
         System.out.println("Creating the proyect structure ...");
-        for(String n: names) {
-            File miFile = new File(localPath + "\\" + n);
-            if(miFile.exists() == false) {
-                String u = miFile.mkdir() == true ? miFile.getPath() : "error";
-                System.out.println(u);
-            }
-        }
+
+        Stream<String> files = Arrays.stream(names);
+        files
+            .parallel()
+            .map(e -> new File(localPath  + "\\" + e))
+            .filter(e -> e.exists() && e.mkdir())
+            .forEach(e -> {
+                System.out.println(
+                        e.getPath()
+                );
+            });
     }
     public void createFilesOperation() {
         File localFile = new File(localPath);
@@ -154,6 +162,7 @@ public class Operation {
         return haveInclude;
     }
     public void createIncludeExtractions(boolean includeExtraction) {
+        System.out.println("creating manifesto ...");
         try {
             if(!includeExtraction) {
                 ArrayList<String> libJars = operationUtils.libJars();
@@ -163,15 +172,13 @@ public class Operation {
                     .map(e -> e + " ")
                     .collect(Collectors.joining());
 
-                new FileUtils().writeManifesto(
-                        new File(localPath),
+                fileUtils.writeManifesto(
                         "Manifesto.txt",
                         includeExtraction,
                         jarFiles
                 );
             } else {
-                new FileUtils().writeManifesto(
-                        new File(localPath),
+                fileUtils.writeManifesto(
                         "Manifesto.txt",
                         includeExtraction,
                         ""

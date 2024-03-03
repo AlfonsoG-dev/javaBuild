@@ -12,7 +12,15 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class FileUtils {
-    public void writeManifesto(File localFile, String fileName, boolean includeExtraction, String libFiles) {
+    private File localFile;
+    public FileUtils(String localPath) {
+        try {
+            localFile = new File(localPath);
+        } catch(Exception e) {
+            // e.printStackTrace();
+        }
+    }
+    public void writeManifesto(String fileName, boolean includeExtraction, String libFiles) {
         try {
             FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
             if(includeExtraction == true) {
@@ -34,7 +42,7 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
-    public void writeBuildFile(File localFile, String fileName, String mainClass, boolean includeExtraction) throws IOException {
+    public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
         FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
         OperationUtils utils = new OperationUtils(localFile.getPath());
         String 
@@ -43,14 +51,15 @@ public class FileUtils {
                 utils.libJars(),
                 srcClases
             ),
-            createJarCommand = utils.createJarFileCommand(includeExtraction),
+            createJarCommand = utils.createJarFileCommand(extract),
             os               = System.getProperty("os.name").toLowerCase();
         if(os.contains("windows")) {
             writeBuildScript.write(
                     "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
                     "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
                     "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
-                    "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" +" + " \" && \" +" +
+                    "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
+                    " \"$createJar\" +" + " \" && \" +" +
                     "\"$javaCommand\"" + "\n" + 
                     "Invoke-Expression $runCommand"
             );
