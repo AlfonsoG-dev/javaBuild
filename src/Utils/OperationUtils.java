@@ -160,13 +160,11 @@ public class OperationUtils {
     }
     public ArrayList<String> createExtractionCommand() throws IOException {
         File extractionFile = new File(localPath + "\\extractionFiles");
-        ArrayList<String> 
-            listFiles = fileUtils.listFilesFromPath(extractionFile.getPath()),
-            commands = new ArrayList<>();
+        ArrayList<File> listFiles = fileUtils.listFilesFromPath(extractionFile.getPath());
+        ArrayList<String> commands = new ArrayList<>();
 
         listFiles
             .parallelStream()
-            .map(e -> new File(e))
             .filter(e -> e.getName().contains(".jar"))
             .forEach(e -> {
                 String 

@@ -146,22 +146,21 @@ public class FileOperation {
                         )
                 );
             } else if(sf.isDirectory()) {
-                ArrayList<String> fileNames = fileUtils.listFilesFromPath(sourceFilePath);
+                ArrayList<File> fileNames = fileUtils.listFilesFromPath(sourceFilePath);
                 fileNames
                     .parallelStream()
                     .forEach(e -> {
                         try {
-                            File sourceFile = new File(e);
                             String cTargetNames = fileUtils.createTargetFromParentPath(
                                     sourceFilePath,
-                                    sourceFile.getCanonicalPath()
+                                    e.getCanonicalPath()
                             ) + ";";
                             String[] names = cTargetNames.split(";");
                             for(String n: names) {
                                 if(n.contains("git") == false) {
                                     File targetFile = new File(targetFilePath + "\\" + n);
                                     fileUtils.createParentFile(targetFilePath, targetFile.getParent());
-                                    Path sourcePath = sourceFile.toPath();
+                                    Path sourcePath = e.toPath();
                                     Path targetPath = targetFile.toPath();
                                     System.out.println(
                                             Files.copy(

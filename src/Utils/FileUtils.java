@@ -83,14 +83,14 @@ public class FileUtils {
         }
         return count;
     }
-    public ArrayList<String> getDirectoryFiles(DirectoryStream<Path> misFiles) {
-        ArrayList<String> names = new ArrayList<>();
+    public ArrayList<File> getDirectoryFiles(DirectoryStream<Path> misFiles) {
+        ArrayList<File> names = new ArrayList<>();
         misFiles
             .forEach(e -> {
             File f = e.toFile();
             try {
                 if(f.exists() && f.isFile()) {
-                    names.add(f.getCanonicalPath());
+                    names.add(f);
                 } else if(f.isDirectory()) {
                     names.addAll(
                             getDirectoryFiles(
@@ -104,12 +104,12 @@ public class FileUtils {
         });
         return names;
     }
-    public ArrayList<String> listFilesFromPath(String filePath) {
-        ArrayList<String> names = new ArrayList<>();
+    public ArrayList<File> listFilesFromPath(String filePath) {
+        ArrayList<File> names = new ArrayList<>();
         try {
             File miFile = new File(filePath);
             if(miFile.exists() && miFile.isFile()) {
-                names.add(miFile.getCanonicalPath());
+                names.add(miFile);
             } else if(miFile.listFiles() != null) {
                 names.addAll(
                         getDirectoryFiles(
@@ -122,12 +122,12 @@ public class FileUtils {
         }
         return names;
     }
-    public ArrayList<String> listFilesFromDirectory(DirectoryStream<Path> files) {
-        ArrayList<String> names = new ArrayList<>();
+    public ArrayList<File> listFilesFromDirectory(DirectoryStream<Path> files) {
+        ArrayList<File> names = new ArrayList<>();
         files.forEach(e -> {
             File f = e.toFile();
             if(f.isFile()) {
-                names.add(f.getPath());
+                names.add(f);
             } else if (f.isDirectory()){
                 names.addAll(
                         listFilesFromPath(f.getPath())
