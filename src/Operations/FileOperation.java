@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import Utils.FileUtils;
 import Utils.OperationUtils;
@@ -43,9 +44,12 @@ public class FileOperation {
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
                 String libJars = "";
-                for(String l: new OperationUtils(localPath).libJars()) {
-                    libJars += l +";";
-                }
+                ArrayList<String> jars = new OperationUtils(localPath).libJars();
+                libJars += jars
+                    .parallelStream()
+                    .filter(e -> !e.isEmpty())
+                    .map(e -> e + ";")
+                    .collect(Collectors.joining());
                 fileUtils.writeManifesto("Manifesto.txt", includeExtraction, libJars);
             } else if(fileName.equals(mainClass + ".java")) {
                 writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);

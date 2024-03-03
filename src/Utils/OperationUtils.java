@@ -138,7 +138,7 @@ public class OperationUtils {
         jarFiles += libJars
             .stream()
             .filter(e -> !e.isEmpty())
-            .map(e -> libJars.size() > 1  ? e + ";" : e)
+            .map(e -> e + ";")
             .collect(Collectors.joining());
 
         if(jarFiles.isEmpty() == true) {
