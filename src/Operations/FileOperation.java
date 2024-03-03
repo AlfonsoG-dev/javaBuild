@@ -106,10 +106,10 @@ public class FileOperation {
         }
         return names;
     }
-    public boolean extractionDirContainsPath(String libJars) throws IOException {
+    public boolean extractionDirContainsPath(String libJarPath) throws IOException {
         boolean containsPath = false;
         File extractionFile = new File(localPath + "\\extractionFiles");
-        File myFile = new File(libJars);
+        File myFile = new File(libJarPath);
         if(myFile.getParent() != null && extractionFile.listFiles() != null) {
             String jarLibParent = myFile.getParent();
             String jarNameParent = new File(jarLibParent).getName();
@@ -151,25 +151,22 @@ public class FileOperation {
                     .parallelStream()
                     .forEach(e -> {
                         try {
-                            String cTargetNames = fileUtils.createTargetFromParentPath(
+                            String n = fileUtils.createTargetFromParentPath(
                                     sourceFilePath,
                                     e.getCanonicalPath()
-                            ) + ";";
-                            String[] names = cTargetNames.split(";");
-                            for(String n: names) {
-                                if(n.contains("git") == false) {
-                                    File targetFile = new File(targetFilePath + "\\" + n);
-                                    fileUtils.createParentFile(targetFilePath, targetFile.getParent());
-                                    Path sourcePath = e.toPath();
-                                    Path targetPath = targetFile.toPath();
-                                    System.out.println(
-                                            Files.copy(
-                                                sourcePath,
-                                                targetPath,
-                                                StandardCopyOption.COPY_ATTRIBUTES
-                                            )
-                                    );
-                                }
+                            );
+                            if(n.contains("git") == false) {
+                                File targetFile = new File(targetFilePath + "\\" + n);
+                                fileUtils.createParentFile(targetFilePath, targetFile.getParent());
+                                Path sourcePath = e.toPath();
+                                Path targetPath = targetFile.toPath();
+                                System.out.println(
+                                        Files.copy(
+                                            sourcePath,
+                                            targetPath,
+                                            StandardCopyOption.COPY_ATTRIBUTES
+                                        )
+                                );
                             }
                         } catch(Exception err) {
                             err.printStackTrace();
