@@ -133,11 +133,14 @@ public class OperationUtils {
             forCommand     = "'",
             jarFiles       = "",
             compileCommand = "";
-        for(String l: libJars) {
-            if(l.isEmpty() == false) {
-                jarFiles += l + ";";
-            }
-        }
+
+        // create jar files command for compile operation
+        jarFiles += libJars
+            .stream()
+            .filter(e -> !e.isEmpty())
+            .map(e -> libJars.size() > 1  ? e + ";" : e)
+            .collect(Collectors.joining());
+
         if(jarFiles.isEmpty() == true) {
              compileCommand = "javac -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
@@ -283,7 +286,7 @@ public class OperationUtils {
         jarFiles += libJars
             .parallelStream()
             .filter(e -> !e.isEmpty())
-            .map(e -> e + ";")
+            .map(e -> libJars.size() > 1 ? e + ";" : e)
             .collect(Collectors.joining());
         if(jarFiles.isEmpty()) {
             command = "java -XX:+ExtensiveErrorReports -d .\\bin\\" + " .\\src\\" + mainName;
