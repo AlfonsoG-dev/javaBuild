@@ -130,22 +130,25 @@ public class OperationUtils {
     }
     public String createCompileClases(ArrayList<String> libJars, String srcClases) {
         String
-            forCommand     = "'",
-            jarFiles       = "",
             compileCommand = "";
 
         // create jar files command for compile operation
-        jarFiles += libJars
-            .stream()
-            .filter(e -> !e.isEmpty())
-            .map(e -> e + ";")
-            .collect(Collectors.joining());
+        StringBuffer 
+            b = new StringBuffer(),
+            forCommand = new StringBuffer();
+        b.append(
+                libJars
+                .stream()
+                .filter(e -> !e.isEmpty())
+                .map(e -> e + ";")
+                .collect(Collectors.joining())
+        );
 
-        if(jarFiles.isEmpty() == true) {
+        if(b.isEmpty()) {
              compileCommand = "javac -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
-            String cb = jarFiles.substring(0, jarFiles.length()-1);
-            forCommand += cb + "' " + srcClases;
+            String cb = b.substring(0, b.length()-1);
+            forCommand.append(cb + "' " + srcClases);
             compileCommand = "javac -Xlint:all -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;
@@ -280,14 +283,17 @@ public class OperationUtils {
         return isAdded;
     }
     public String createRunCommand(ArrayList<String> libJars) {
-        String command = "";
-        String mainName = FileUtils.getMainClass(localPath) + ".java";
-        String jarFiles = "'.\\bin\\;";
-        jarFiles += libJars
-            .parallelStream()
-            .filter(e -> !e.isEmpty())
-            .map(e -> libJars.size() > 1 ? e + ";" : e)
-            .collect(Collectors.joining());
+        String 
+            command  = "",
+            mainName = FileUtils.getMainClass(localPath) + ".java";
+        StringBuffer jarFiles = new StringBuffer();
+        jarFiles.append("'.\\bin\\;");
+        jarFiles.append(libJars
+                .parallelStream()
+                .filter(e -> !e.isEmpty())
+                .map(e -> libJars.size() > 1 ? e + ";" : e)
+                .collect(Collectors.joining())
+        );
         if(jarFiles.isEmpty()) {
             command = "java -XX:+ExtensiveErrorReports -d .\\bin\\" + " .\\src\\" + mainName;
         } else {
