@@ -92,9 +92,10 @@ public class OperationUtils {
                 ArrayList<String> srcdirs = fileOperation.listSRCDirectories("src");
                 srcdirs
                     .parallelStream()
+                    .filter(e -> !e.isEmpty())
                     .forEach(e -> {
                         int countFiles = fileUtils.countFilesInDirectory(new File(e));
-                        if(!e.isEmpty() && countFiles > 0) {
+                        if(countFiles > 0) {
                             names.add(e + "*.java ");
                         }
                     });
@@ -291,7 +292,7 @@ public class OperationUtils {
         jarFiles.append(libJars
                 .parallelStream()
                 .filter(e -> !e.isEmpty())
-                .map(e -> libJars.size() > 1 ? e + ";" : e)
+                .map(e -> e + ";")
                 .collect(Collectors.joining())
         );
         if(jarFiles.isEmpty()) {

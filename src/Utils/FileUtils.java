@@ -38,7 +38,7 @@ public class FileUtils {
                 );
             }
             writeManifesto.close();
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -79,38 +79,43 @@ public class FileUtils {
     }
     public int countFilesInDirectory(File myDirectory) {
         int count = 0;
-        try {
-            if(myDirectory.listFiles() != null) {
-                for(File f: myDirectory.listFiles()) {
-                    if(f.isFile()) {
-                        ++count;
-                    }
+        if(myDirectory.listFiles() != null) {
+            for(File f: myDirectory.listFiles()) {
+                if(f.isFile()) {
+                    ++count;
                 }
             }
-        } catch(Exception e) {
-            e.printStackTrace();
         }
         return count;
     }
     public ArrayList<File> getDirectoryFiles(DirectoryStream<Path> misFiles) {
         ArrayList<File> names = new ArrayList<>();
-        misFiles
-            .forEach(e -> {
-            File f = e.toFile();
-            try {
-                if(f.exists() && f.isFile()) {
-                    names.add(f);
-                } else if(f.isDirectory()) {
-                    names.addAll(
-                            getDirectoryFiles(
-                                Files.newDirectoryStream(f.toPath())
-                            )
-                    );
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                for(Path p: misFiles) {
+                    File f = p.toFile();
+                    try {
+                        if(f.exists() && f.isFile()) {
+                            names.add(f);
+                        } else if(f.isDirectory()) {
+                            names.addAll(
+                                    getDirectoryFiles(
+                                        Files.newDirectoryStream(f.toPath())
+                                    )
+                            );
+                        }
+                    } catch(IOException err) {
+                        err.printStackTrace();
+                    }
                 }
-            } catch(Exception err) {
-                err.printStackTrace();
             }
         });
+        t.start();
+        try {
+            t.join();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
         return names;
     }
     public ArrayList<File> listFilesFromPath(String filePath) {
@@ -126,23 +131,33 @@ public class FileUtils {
                         )
                 );
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return names;
     }
     public ArrayList<File> listFilesFromDirectory(DirectoryStream<Path> files) {
         ArrayList<File> names = new ArrayList<>();
-        files.forEach(e -> {
-            File f = e.toFile();
-            if(f.isFile()) {
-                names.add(f);
-            } else if (f.isDirectory()){
-                names.addAll(
-                        listFilesFromPath(f.getPath())
-                );
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                for(Path p: files) {
+                    File f = p.toFile();
+                    if(f.isFile()) {
+                        names.add(f);
+                    } else if (f.isDirectory()){
+                        names.addAll(
+                                listFilesFromPath(f.getPath())
+                        );
+                    }
+                }
             }
         });
+        t.start();
+        try {
+            t.join();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
         return names;
     }
     public void createDirectory(String directory) {
@@ -157,21 +172,17 @@ public class FileUtils {
         return targetNames;
     }
     public void createParentFile(String targetFilePath, String parentFileNames) {
-        try {
-            String[] parentNames = parentFileNames.split("\n");
-            for(String pn: parentNames) {
-                String nFileName = pn.replace(targetFilePath.replace("/", "\\"), "");
-                File mio = new File(pn);
-                int fileLenght = new File(nFileName).toPath().getNameCount();
-                if(mio.exists() == false && fileLenght > 1) {
-                    mio.mkdirs();
-                } else if(mio.exists() == false && fileLenght <= 1) {
-                    mio.mkdir();
-                }
-                System.out.println("CREATED: " + mio.getName());
+        String[] parentNames = parentFileNames.split("\n");
+        for(String pn: parentNames) {
+            String nFileName = pn.replace(targetFilePath.replace("/", "\\"), "");
+            File mio = new File(pn);
+            int fileLenght = new File(nFileName).toPath().getNameCount();
+            if(mio.exists() == false && fileLenght > 1) {
+                mio.mkdirs();
+            } else if(mio.exists() == false && fileLenght <= 1) {
+                mio.mkdir();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+            System.out.println("CREATED: " + mio.getName());
         }
     }
     /**
@@ -197,7 +208,7 @@ public class FileUtils {
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         } finally {
             if(mainName == "") {
@@ -205,14 +216,14 @@ public class FileUtils {
                     String parentName = new File(localpath).getCanonicalPath();
                     String localName = new File(parentName).getName();
                     mainName = localName;
-                } catch(Exception e) {
+                } catch(IOException e) {
                     e.printStackTrace();
                 }
             }
             if(miBufferedReader != null) {
                 try {
                     miBufferedReader.close();
-                } catch(Exception e) {
+                } catch(IOException e) {
                     e.printStackTrace();
                 }
                 miBufferedReader = null;

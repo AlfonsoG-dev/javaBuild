@@ -3,15 +3,13 @@ package Operations;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
+import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import Utils.FileUtils;
 import Utils.OperationUtils;
@@ -35,33 +33,29 @@ public class Operation {
         };
         System.out.println("Creating the proyect structure ...");
 
-        Stream<String> files = Arrays.stream(names);
-        files
-            .parallel()
-            .map(e -> new File(localPath  + "\\" + e))
-            .filter(e -> e.exists() && e.mkdir())
-            .forEach(e -> {
-                System.out.println(
-                        e.getPath()
-                );
-            });
+        for(String n: names) {
+            File f = new File(localPath + "\\" + n);
+            if(!f.exists()) {
+                f.mkdir();
+                System.out.println("Created: " + f.getPath());
+            }
+        }
     }
     public void createFilesOperation() {
         File localFile = new File(localPath);
         System.out.println("creating files ...");
         try {
             DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath());
-            files
-                .forEach(e -> {
-                    File f = e.toFile();
-                    if(f.getName().equals("src")) {
-                        File srcMainFile = new File(localPath + "\\src");
-                        if(srcMainFile.listFiles().length == 0) {
-                            operationUtils.createProyectFiles();
-                        }
+            for(Path p: files) {
+                File f = p.toFile();
+                if(f.getName().equals("src")) {
+                    File n = new File(localPath + File.pathSeparator + "src");
+                    if(n.listFiles() == null) {
+                        operationUtils.createProyectFiles();
                     }
-                });
-        } catch(Exception err) {
+                }
+            }
+        } catch(IOException err) {
             err.printStackTrace();
         }
     }
@@ -77,7 +71,7 @@ public class Operation {
             if(compileProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(compileProcess.errorReader());
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -103,7 +97,7 @@ public class Operation {
                                     if(extracProcess.errorReader() != null) {
                                         operationUtils.CMDOutputError(extracProcess.errorReader());
                                     }
-                                } catch(Exception err) {
+                                } catch(IOException err) {
                                     err.printStackTrace();
                                 }
                             } else {
@@ -113,7 +107,7 @@ public class Operation {
                 } else {
                     System.out.println("THERE IS NO DEPENDENCIES TO EXTRACT");
                 }
-            } catch(Exception err) {
+            } catch(IOException err) {
                 err.printStackTrace();
             }
         });
@@ -147,7 +141,7 @@ public class Operation {
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         } finally {
             if(myReader != null) {
@@ -163,29 +157,25 @@ public class Operation {
     }
     public void createIncludeExtractions(boolean includeExtraction) {
         System.out.println("creating manifesto ...");
-        try {
-            if(!includeExtraction) {
-                ArrayList<String> libJars = operationUtils.libJars();
-                String jarFiles = libJars
-                    .parallelStream()
-                    .filter(e -> !e.isEmpty())
-                    .map(e -> e + " ")
-                    .collect(Collectors.joining());
+        if(!includeExtraction) {
+            ArrayList<String> libJars = operationUtils.libJars();
+            String jarFiles = libJars
+                .parallelStream()
+                .filter(e -> !e.isEmpty())
+                .map(e -> e + " ")
+                .collect(Collectors.joining());
 
-                fileUtils.writeManifesto(
-                        "Manifesto.txt",
-                        includeExtraction,
-                        jarFiles
-                );
-            } else {
-                fileUtils.writeManifesto(
-                        "Manifesto.txt",
-                        includeExtraction,
-                        ""
-                );
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
+            fileUtils.writeManifesto(
+                    "Manifesto.txt",
+                    includeExtraction,
+                    jarFiles
+            );
+        } else {
+            fileUtils.writeManifesto(
+                    "Manifesto.txt",
+                    includeExtraction,
+                    ""
+            );
         }
     }
     public void createAddJarFileOperation(String jarFilePath) {
@@ -212,7 +202,7 @@ public class Operation {
             if(runProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(runProcess.errorReader());
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
 

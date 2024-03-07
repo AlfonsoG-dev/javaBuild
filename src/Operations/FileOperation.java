@@ -23,6 +23,7 @@ public class FileOperation {
         fileUtils = new FileUtils(localPath);
     } 
     public void createFiles(String fileName, String mainClass, boolean includeExtraction) {
+        System.out.println("created: " + fileName);
         try {
             File
                 localFile = new File(localPath),
@@ -74,43 +75,67 @@ public class FileOperation {
     }
     public ArrayList<String> listLibFiles() {
         ArrayList<String> names = new ArrayList<>();
-        try {
-            File lf = new File(localPath + "\\lib");
-            if(lf.listFiles() != null) {
-                DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
-                listFiles.forEach(e -> {
-                    File f = e.toFile();
-                    for(File mf: f.listFiles()) {
-                        names.add(mf.getPath());
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    File lf = new File(localPath + "\\lib");
+                    if(lf.listFiles() != null) {
+                        DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
+                        listFiles.forEach(e -> {
+                            File f = e.toFile();
+                            for(File mf: f.listFiles()) {
+                                names.add(mf.getPath());
+                            }
+                        });
                     }
-                });
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch(Exception e) {
+        });
+        t.start();
+        try {
+            t.join();
+        } catch(InterruptedException e) {
             e.printStackTrace();
         }
         return names;
     }
     public ArrayList<String> listSRCDirectories(String path) throws IOException {
         ArrayList<String> names = new ArrayList<>();
-        String c = fileUtils.getCleanPath(path);
-        File lf = new File(localPath + "\\" + c);
-        if(lf.listFiles() != null) {
-            DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
-            listFiles.forEach(e -> {
-                File f = e.toFile();
-                if(f.isDirectory()) {
-                    names.add(f.getPath() + "\\");
-                    if(f.listFiles() != null) {
-                        try {
-                            names.addAll(
-                                    listSRCDirectories(f.getPath())
-                            );
-                        } catch(Exception err) {
-                            err.printStackTrace();
-                        }
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String c = fileUtils.getCleanPath(path);
+                    File lf = new File(localPath + "\\" + c);
+                    if(lf.listFiles() != null) {
+                        DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
+                        listFiles.forEach(e -> {
+                            File f = e.toFile();
+                            if(f.isDirectory()) {
+                                names.add(f.getPath() + "\\");
+                                if(f.listFiles() != null) {
+                                    try {
+                                        names.addAll(
+                                                listSRCDirectories(f.getPath())
+                                        );
+                                    } catch(Exception err) {
+                                        err.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
                     }
+                } catch(IOException err) {
+                    err.printStackTrace();
                 }
-            });
+            }
+        });
+        t.start();
+        try {
+            t.join();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
         }
         return names;
     }
@@ -176,12 +201,12 @@ public class FileOperation {
                                         )
                                 );
                             }
-                        } catch(Exception err) {
+                        } catch(IOException err) {
                             err.printStackTrace();
                         }
                     });
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
