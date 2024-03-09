@@ -197,6 +197,7 @@ public class Operation {
                 className
         );
         try {
+            System.out.println(command + "==");
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("running ... ");
             if(runProcess.getInputStream() != null) {
