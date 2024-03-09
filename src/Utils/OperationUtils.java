@@ -121,7 +121,7 @@ public class OperationUtils {
             libfiles = fileOperation.listLibFiles();
 
         libfiles
-            .parallelStream()
+            .stream()
             .map(e -> new File(e))
             .filter(e -> e.exists() && e.isFile() && e.getName().contains(".jar"))
             .forEach(e -> {
@@ -149,7 +149,7 @@ public class OperationUtils {
              compileCommand = "javac -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
             String cb = b.substring(0, b.length()-1);
-            forCommand.append(cb + "' " + srcClases);
+            forCommand.append("'" + cb + "' " + srcClases);
             compileCommand = "javac -Xlint:all -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;
