@@ -283,11 +283,24 @@ public class OperationUtils {
         }
         return isAdded;
     }
-    public String createRunCommand(ArrayList<String> libJars) {
+    private StringBuffer runClassOption(String className, String mainName) {
+        StringBuffer runClass = new StringBuffer();
+        if(className.isEmpty() || className == null) {
+            runClass.append(" .\\src\\" + mainName);
+        } else if(className.equals(mainName)) {
+            runClass.append(" .\\src\\" + mainName);
+        } else {
+            runClass.append(" " + className);
+        }
+        return runClass;
+    }
+    public String createRunCommand(ArrayList<String> libJars, String className) {
         String 
             command  = "",
             mainName = FileUtils.getMainClass(localPath) + ".java";
-        StringBuffer jarFiles = new StringBuffer();
+        StringBuffer 
+            jarFiles = new StringBuffer(),
+            runClass = runClassOption(className, mainName);
         jarFiles.append("'.\\bin\\;");
         jarFiles.append(libJars
                 .parallelStream()
@@ -296,10 +309,10 @@ public class OperationUtils {
                 .collect(Collectors.joining())
         );
         if(jarFiles.isEmpty()) {
-            command = "java -XX:+ExtensiveErrorReports -d .\\bin\\" + " .\\src\\" + mainName;
+            command = "java -XX:+ExtensiveErrorReports -d .\\bin\\" + runClass;
         } else {
             String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
-            command = "java -XX:+ExtensiveErrorReports -cp " + cleanLibs + " .\\src\\" + mainName;
+            command = "java -XX:+ExtensiveErrorReports -cp " + cleanLibs + runClass;
         }
         return command;
     }

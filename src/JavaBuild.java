@@ -50,7 +50,11 @@ class JavaBuild {
                         break;
                     case "--run":
                         miOperation.compileProyectOperation();
-                        miOperation.runAppOperation();
+                        if((i+1) < args.length) {
+                            miOperation.runAppOperation(args[i+1]);
+                        } else {
+                            miOperation.runAppOperation("");
+                        }
                         break;
                     case "--add":
                         if((i+1) < args.length) {

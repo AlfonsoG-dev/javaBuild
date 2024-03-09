@@ -191,8 +191,11 @@ public class Operation {
     public void createBuildScript(boolean includeExtraction) {
         operationUtils.createBuildCommand(includeExtraction);
     }
-    public void runAppOperation() {
-        String command = operationUtils.createRunCommand(operationUtils.libJars());
+    public void runAppOperation(String className) {
+        String command = operationUtils.createRunCommand(
+                operationUtils.libJars(),
+                className
+        );
         try {
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("running ... ");
