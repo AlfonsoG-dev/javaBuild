@@ -50,11 +50,15 @@ class JavaBuild {
                         break;
                     case "--run":
                         miOperation.compileProyectOperation();
-                        boolean 
-                            conditionA = args[i+1].contains("-"),
-                            conditionB = args[i+1].contains("--");
-                        if((i+1) < args.length && !(conditionA || conditionB)) {
-                            miOperation.runAppOperation(args[i+1]);
+                        if((i+1) < args.length) {
+                            boolean 
+                                conditionA = args[i+1].contains("-"),
+                                conditionB = args[i+1].contains("--");
+                            if(!(conditionA || conditionB)) {
+                                miOperation.runAppOperation(args[i+1]);
+                            } else {
+                                miOperation.runAppOperation("");
+                            }
                         } else {
                             miOperation.runAppOperation("");
                         }
