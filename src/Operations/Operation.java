@@ -44,8 +44,9 @@ public class Operation {
     public void createFilesOperation() {
         File localFile = new File(localPath);
         System.out.println("creating files ...");
+        DirectoryStream<Path> files = null;
         try {
-            DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath());
+            files = Files.newDirectoryStream(localFile.toPath());
             for(Path p: files) {
                 File f = p.toFile();
                 if(f.getName().equals("src")) {
@@ -57,6 +58,15 @@ public class Operation {
             }
         } catch(IOException err) {
             err.printStackTrace();
+        } finally {
+            if(files != null) {
+                try {
+                    files.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                files = null;
+            }
         }
     }
     public void compileProyectOperation() {

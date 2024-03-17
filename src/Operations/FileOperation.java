@@ -80,13 +80,13 @@ public class FileOperation {
                 try {
                     File lf = new File(localPath + "\\lib");
                     if(lf.listFiles() != null) {
-                        DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
-                        listFiles.forEach(e -> {
-                            File f = e.toFile();
-                            for(File mf: f.listFiles()) {
-                                names.add(mf.getPath());
-                            }
-                        });
+                        Files.newDirectoryStream(lf.toPath())
+                            .forEach(e -> {
+                                File f = e.toFile();
+                                for(File mf: f.listFiles()) {
+                                    names.add(mf.getPath());
+                                }
+                            });
                     }
                 } catch(IOException e) {
                     e.printStackTrace();
@@ -109,23 +109,22 @@ public class FileOperation {
                     String c = fileUtils.getCleanPath(path);
                     File lf = new File(localPath + "\\" + c);
                     if(lf.listFiles() != null) {
-                        // TODO: all DirectoryStream instances must close or use try resources
-                        DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
-                        listFiles.forEach(e -> {
-                            File f = e.toFile();
-                            if(f.isDirectory()) {
-                                names.add(f.getPath() + "\\");
-                                if(f.listFiles() != null) {
-                                    try {
-                                        names.addAll(
-                                                listSRCDirectories(f.getPath())
-                                        );
-                                    } catch(Exception err) {
-                                        err.printStackTrace();
+                        Files.newDirectoryStream(lf.toPath())
+                            .forEach(e -> {
+                                File f = e.toFile();
+                                if(f.isDirectory()) {
+                                    names.add(f.getPath() + "\\");
+                                    if(f.listFiles() != null) {
+                                        try {
+                                            names.addAll(
+                                                    listSRCDirectories(f.getPath())
+                                            );
+                                        } catch(Exception err) {
+                                            err.printStackTrace();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
                     }
                 } catch(IOException err) {
                     err.printStackTrace();
