@@ -109,6 +109,7 @@ public class FileOperation {
                     String c = fileUtils.getCleanPath(path);
                     File lf = new File(localPath + "\\" + c);
                     if(lf.listFiles() != null) {
+                        // TODO: all DirectoryStream instances must close or use try resources
                         DirectoryStream<Path> listFiles = Files.newDirectoryStream(lf.toPath());
                         listFiles.forEach(e -> {
                             File f = e.toFile();
