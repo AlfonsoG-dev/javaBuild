@@ -70,7 +70,7 @@ public class FileUtils {
                     "java -jar " + mainClass.replace("\\", "/")
             );
         } else {
-            System.out.println("! OS NOT SUPPORTED ¡");
+            System.out.println("[ INFO ]: ! OS NOT SUPPORTED ¡");
         }
         writeBuildScript.close();
     }
@@ -182,7 +182,7 @@ public class FileUtils {
             } else if(mio.exists() == false && fileLenght <= 1) {
                 mio.mkdir();
             }
-            System.out.println("CREATED: " + mio.getName());
+            System.out.println("[ INFO ] created:" + mio.getPath());
         }
     }
     /**

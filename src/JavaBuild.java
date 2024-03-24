@@ -71,6 +71,7 @@ class JavaBuild {
                         }
                         break;
                     case "--h":
+                        System.out.println("[INFO]: ");
                         System.out.println("use -b to create the proyect folder structure");
                         System.out.println("use --add to include an external jar as a dependency");
                         System.out.println("use -cm to compile the proyect");

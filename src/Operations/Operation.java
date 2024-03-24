@@ -31,19 +31,19 @@ public class Operation {
             "docs",
             "extractionFiles"
         };
-        System.out.println("Creating the proyect structure ...");
+        System.out.println("[ INFO ]: Creating the proyect structure ...");
 
         for(String n: names) {
             File f = new File(localPath + "\\" + n);
             if(!f.exists()) {
                 f.mkdir();
-                System.out.println("Created: " + f.getPath());
+                System.out.println("[ INFO ] Created: " + f.getPath());
             }
         }
     }
     public void createFilesOperation() {
         File localFile = new File(localPath);
-        System.out.println("creating files ...");
+        System.out.println("[ INFO ]: creating files ...");
         DirectoryStream<Path> files = null;
         try {
             files = Files.newDirectoryStream(localFile.toPath());
@@ -78,7 +78,7 @@ public class Operation {
         try {
             System.out.println("[CMD]: " + compileCommand);
             Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
-            System.out.println("compile ...");
+            System.out.println("[ INFO ]: compile ...");
             if(compileProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(compileProcess.errorReader());
             }
@@ -99,7 +99,7 @@ public class Operation {
                     extractions
                         .parallelStream()
                         .forEach(p -> {
-                            System.out.println("extracting jar dependencies ...");
+                            System.out.println("[ INFO ]: extracting jar dependencies ...");
                             if(!e.isEmpty()) {
                                 System.out.println("[CMD]: " + p);
                                 try {
@@ -113,11 +113,11 @@ public class Operation {
                                     err.printStackTrace();
                                 }
                             } else {
-                                System.out.println("NO EXTRACTION FILES");
+                                System.out.println("[ INFO ]: NO EXTRACTION FILES");
                             }
                         });
                 } else {
-                    System.out.println("THERE IS NO DEPENDENCIES TO EXTRACT");
+                    System.out.println("[ INFO ]: THERE IS NO DEPENDENCIES TO EXTRACT");
                 }
             } catch(IOException err) {
                 err.printStackTrace();
@@ -129,10 +129,10 @@ public class Operation {
             String command = operationUtils.createJarFileCommand(includeExtraction);
             System.out.println("[CMD]: " + command);
             if(command.equals("")) {
-                throw new Exception("error while trying to create ther jar file");
+                throw new Exception("[ ERROR ]: while trying to create ther jar file");
             }
             Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
-            System.out.println("creating jar file ...");
+            System.out.println("[ INFO ]: creating jar file ...");
             if(createJarProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(createJarProcess.errorReader());
             }
@@ -169,7 +169,7 @@ public class Operation {
         return haveInclude;
     }
     public void createIncludeExtractions(boolean includeExtraction) {
-        System.out.println("creating manifesto ...");
+        System.out.println("[ INFO ]: creating manifesto ...");
         if(!includeExtraction) {
             ArrayList<String> libJars = operationUtils.libJars();
             String jarFiles = libJars
@@ -196,7 +196,7 @@ public class Operation {
             boolean command = operationUtils.createAddJarFileCommand(jarFilePath);
             System.out.println("[CMD]: " + command);
             if(command == true) {
-                System.out.println("jar dependency has been added to lib folder");
+                System.out.println("[ INFO ]: jar dependency has been added to lib folder");
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -213,7 +213,7 @@ public class Operation {
         try {
             System.out.println("[CMD]: " + command);
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
-            System.out.println("running ... ");
+            System.out.println("[ INFO ]: running ... ");
             if(runProcess.getInputStream() != null) {
                 operationUtils.CMDOutput(runProcess.getInputStream());
             }

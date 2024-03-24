@@ -26,7 +26,9 @@ public class OperationUtils {
             miReader = miCmdReader;
             char[] mr = new char[1024];
             while(miReader.read(mr) != -1) {
-                System.out.println(miReader.readLine() + "\n");
+                System.out.println(
+                        "[ ERROR ]" + miReader.readLine()
+                );
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -51,7 +53,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println(line);
+                System.out.println("[ INFO ]" + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -100,7 +102,7 @@ public class OperationUtils {
                         }
                     });
             } else {
-                System.out.println("error in: " + localPath + "\\SRC\\ folder not found");
+                System.out.println("[ INFO ]" + localPath + "\\SRC\\ folder not found");
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -263,7 +265,7 @@ public class OperationUtils {
         boolean isAdded = false;
         File jarFile = new File(jarFilePath);
         if(!jarFile.exists()) {
-            throw new Exception("jar file not found");
+            throw new Exception("[ ERROR ]: jar file not found");
         }
         if(jarFile.isFile()) {
             sourceFilePath = jarFile.getParent();
@@ -279,7 +281,7 @@ public class OperationUtils {
             );
             isAdded = true;
         } else {
-            System.out.println("DEPENDENCY ALREADY INSIDE THE PROYECT");
+            System.out.println("[ INFO ]: DEPENDENCY ALREADY INSIDE THE PROYECT");
         }
         return isAdded;
     }
@@ -319,6 +321,6 @@ public class OperationUtils {
     public void createBuildCommand(boolean includeExtraction) {
         String mainName = FileUtils.getMainClass(localPath) + ".jar";
         fileOperation.createFiles("java-exe.ps1", mainName, includeExtraction);
-        System.out.println("Adding build script ...");
+        System.out.println("[ INFO ]: Adding build script ...");
     }
 }
