@@ -10,6 +10,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtils {
     private File localFile;
@@ -88,8 +89,8 @@ public class FileUtils {
         }
         return count;
     }
-    public ArrayList<File> getDirectoryFiles(DirectoryStream<Path> misFiles) {
-        ArrayList<File> names = new ArrayList<>();
+    public List<File> getDirectoryFiles(DirectoryStream<Path> misFiles) {
+        List<File> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 for(Path p: misFiles) {
@@ -118,8 +119,8 @@ public class FileUtils {
         }
         return names;
     }
-    public ArrayList<File> listFilesFromPath(String filePath) {
-        ArrayList<File> names = new ArrayList<>();
+    public List<File> listFilesFromPath(String filePath) {
+        List<File> names = new ArrayList<>();
         try {
             File miFile = new File(filePath);
             if(miFile.exists() && miFile.isFile()) {
@@ -136,8 +137,8 @@ public class FileUtils {
         }
         return names;
     }
-    public ArrayList<File> listFilesFromDirectory(DirectoryStream<Path> files) {
-        ArrayList<File> names = new ArrayList<>();
+    public List<File> listFilesFromDirectory(DirectoryStream<Path> files) {
+        List<File> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 for(Path p: files) {

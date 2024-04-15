@@ -31,7 +31,7 @@ public class Operation {
             "docs",
             "extractionFiles"
         };
-        System.out.println("[ INFO ]: Creating the proyect structure ...");
+        System.out.println("[ INFO ]: Creating the project structure ...");
 
         for(String n: names) {
             File f = new File(localPath + "\\" + n);
@@ -76,8 +76,10 @@ public class Operation {
                 srcClases
         );
         try {
-            System.out.println("[CMD]: " + compileCommand);
-            Process compileProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command "  + compileCommand);
+            System.out.println("[ CMD ]: " + compileCommand);
+            Process compileProcess = Runtime.getRuntime().exec(
+                    "pwsh -NoProfile -Command "  + compileCommand
+            );
             System.out.println("[ INFO ]: compile ...");
             if(compileProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(compileProcess.errorReader());
@@ -95,13 +97,13 @@ public class Operation {
                 boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
                 if(libAlreadyExists == false) {
                     operationUtils.createExtractionFiles(jars);
-                    ArrayList<String> extractions = operationUtils.createExtractionCommand();
-                    extractions
+                    // the extraction files can be more than 1
+                    operationUtils.createExtractionCommand()
                         .parallelStream()
                         .forEach(p -> {
                             System.out.println("[ INFO ]: extracting jar dependencies ...");
                             if(!e.isEmpty()) {
-                                System.out.println("[CMD]: " + p);
+                                System.out.println("[ CMD ]: " + p);
                                 try {
                                     Process extracProcess = Runtime.getRuntime().exec(
                                             "pwsh -NoProfile -Command " + p
@@ -127,7 +129,7 @@ public class Operation {
     public void createJarOperation(boolean includeExtraction) {
         try {
             String command = operationUtils.createJarFileCommand(includeExtraction);
-            System.out.println("[CMD]: " + command);
+            System.out.println("[ CMD ]: " + command);
             if(command.equals("")) {
                 throw new Exception("[ ERROR ]: while trying to create ther jar file");
             }
@@ -194,7 +196,7 @@ public class Operation {
     public void createAddJarFileOperation(String jarFilePath) {
         try {
             boolean command = operationUtils.createAddJarFileCommand(jarFilePath);
-            System.out.println("[CMD]: " + command);
+            System.out.println("[ CMD ]: " + command);
             if(command == true) {
                 System.out.println("[ INFO ]: jar dependency has been added to lib folder");
             }
@@ -211,7 +213,7 @@ public class Operation {
                 className
         );
         try {
-            System.out.println("[CMD]: " + command);
+            System.out.println("[ CMD ]: " + command);
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("[ INFO ]: running ... ");
             if(runProcess.getInputStream() != null) {

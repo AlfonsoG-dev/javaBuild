@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import Operations.FileOperation;
@@ -53,7 +54,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[ INFO ]" + line);
+                System.out.println("[ INFO ]: " + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -102,7 +103,7 @@ public class OperationUtils {
                         }
                     });
             } else {
-                System.out.println("[ INFO ]" + localPath + "\\SRC\\ folder not found");
+                System.out.println("[ INFO ]: " + localPath + "\\SRC\\ folder not found");
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -167,22 +168,21 @@ public class OperationUtils {
                 fileOperation.copyFilesfromSourceToTarget(e, extraction.getPath());
             });
     }
-    public ArrayList<String> createExtractionCommand() throws IOException {
+    public List<String> createExtractionCommand() throws IOException {
         File extractionFile = new File(localPath + "\\extractionFiles");
-        ArrayList<File> listFiles = fileUtils.listFilesFromPath(extractionFile.getPath());
-        ArrayList<String> commands = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
 
-        listFiles
+        fileUtils.listFilesFromPath(extractionFile.getPath())
             .parallelStream()
             .filter(e -> e.getName().contains(".jar"))
             .forEach(e -> {
                 String 
                     jarFileName = e.getName(),
-                    jarParent = e.getParent(),
-                    extracJAR = "jar -xf " + jarFileName,
-                    deleteJAR = "rm -r " + jarFileName + "\n";
+                    jarParent   = e.getParent(),
+                    extracJAR   = "jar -xf " + jarFileName,
+                    deleteJAR   = "rm -r " + jarFileName + "\n";
                 commands.add("cd " + jarParent + " && " + extracJAR + " && " + deleteJAR);
-        });
+            });
         return commands;
     }
     private boolean manifestoIsCreated() {
@@ -211,9 +211,11 @@ public class OperationUtils {
         return jarFormat;
     }
     private String jarTypeUnion(String mainName, String directory) throws IOException {
-        String build = "";
-        String localParent = new File(localPath).getCanonicalPath();
-        String jarFormat = jarTypeFormat(mainName, directory);
+        String 
+            build = "",
+            localParent = new File(localPath).getCanonicalPath(),
+            jarFormat = jarTypeFormat(mainName, directory);
+
         switch(jarFormat) {
             case "jar -cfm ":
                 if(mainName != "" && directory != "") {
@@ -242,16 +244,17 @@ public class OperationUtils {
         return build;
     }
     public String createJarFileCommand(boolean includeExtraction) throws IOException {
-        String mainName = FileUtils.getMainClass(localPath) + ".jar";
+        String
+            mainName = FileUtils.getMainClass(localPath) + ".jar",
+            command = "",
+            directory = "";
         File extractionFile = new File(localPath + "\\extractionFiles");
 
-        String directory = "";
         if(extractionFile.exists() && extractionFile.listFiles() != null) {
             for(File extractionDir: extractionFile.listFiles()) {
                 directory += " -C " + extractionDir.getPath() + "\\ .";
             }
         } 
-        String command = "";
         if(includeExtraction) {
             command = jarTypeUnion(mainName, directory);
         } else {
@@ -260,7 +263,7 @@ public class OperationUtils {
         return command;
     }
     public boolean createAddJarFileCommand(String jarFilePath) throws Exception {
-        System.out.println("adding jar dependency in process ...");
+        System.out.println("[ INFO ]: adding jar dependency in process ...");
         String sourceFilePath = "";
         boolean isAdded = false;
         File jarFile = new File(jarFilePath);

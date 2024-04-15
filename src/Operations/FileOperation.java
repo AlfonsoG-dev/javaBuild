@@ -178,8 +178,7 @@ public class FileOperation {
                         )
                 );
             } else if(sf.isDirectory()) {
-                ArrayList<File> fileNames = fileUtils.listFilesFromPath(sourceFilePath);
-                fileNames
+                fileUtils.listFilesFromPath(sourceFilePath)
                     .parallelStream()
                     .forEach(e -> {
                         try {

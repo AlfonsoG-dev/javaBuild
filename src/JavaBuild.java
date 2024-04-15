@@ -17,7 +17,7 @@ class JavaBuild {
                         if(haveExtractions) {
                             miOperation.extractJarDependencies();
                         } else {
-                            System.out.println("Extraction files are not included");
+                            System.out.println("[ INFO ]: Extraction files are not included");
                         }
 
                         break;
@@ -67,7 +67,7 @@ class JavaBuild {
                         if((i+1) < args.length) {
                             miOperation.createAddJarFileOperation(args[i+1]);
                         } else {
-                            System.out.println("the path to the jar file is needed");
+                            System.out.println("[ INFO ]: the path to the jar file is needed");
                         }
                         break;
                     case "--h":
