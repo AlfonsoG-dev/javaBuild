@@ -37,7 +37,7 @@ public class Operation {
             File f = new File(localPath + "\\" + n);
             if(!f.exists()) {
                 f.mkdir();
-                System.out.println("[ INFO ] Created: " + f.getPath());
+                System.out.println("[ INFO ]: Created " + f.getPath());
             }
         }
     }

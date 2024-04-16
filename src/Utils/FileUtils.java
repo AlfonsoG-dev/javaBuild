@@ -183,7 +183,7 @@ public class FileUtils {
             } else if(mio.exists() == false && fileLenght <= 1) {
                 mio.mkdir();
             }
-            System.out.println("[ INFO ] created:" + mio.getPath());
+            System.out.println("[ INFO ]: created " + mio.getPath());
         }
     }
     /**

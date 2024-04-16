@@ -28,7 +28,7 @@ public class OperationUtils {
             char[] mr = new char[1024];
             while(miReader.read(mr) != -1) {
                 System.out.println(
-                        "[ ERROR ]" + miReader.readLine()
+                        "[ ERROR ]: " + miReader.readLine()
                 );
             }
         } catch(Exception e) {
