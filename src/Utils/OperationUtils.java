@@ -71,15 +71,15 @@ public class OperationUtils {
     }
     private String getMainClassName() {
         String name = FileUtils.getMainClass(localPath);
-        try {
-            if(name.isEmpty()) {
-                String
-                    localParent = new File(localPath).getCanonicalPath(),
-                                localName = new File(localParent).getName();
-                name = localName;
+        if(name.isEmpty()) {
+            try {
+            String
+                localParent = new File(localPath).getCanonicalPath(),
+                localName = new File(localParent).getName();
+            name = localName;
+            } catch(IOException e) {
+                e.printStackTrace();
             }
-        } catch(IOException e) {
-            e.printStackTrace();
         }
         return name;
     }
@@ -215,10 +215,10 @@ public class OperationUtils {
         if(manifestoIsCreated()) {
             jarFormat = "jar -cfm ";
         }
-        if(!manifestoIsCreated() && mainName == "") {
+        if(!manifestoIsCreated() && mainName.isEmpty()) {
             jarFormat = "jar -cf ";
         }
-        if(!manifestoIsCreated() && mainName != "") {
+        if(!manifestoIsCreated() && !mainName.isEmpty()) {
             jarFormat = "jar -cfe ";
         }
         return jarFormat;
@@ -336,7 +336,10 @@ public class OperationUtils {
         return command;
     }
     public void createBuildCommand(boolean includeExtraction) {
-        String mainName = FileUtils.getMainClass(localPath) + ".jar";
+        String mainName = FileUtils.getMainClass(localPath);
+        if(!mainName.isEmpty()) {
+            mainName = mainName + ".jar";
+        }
         fileOperation.createFiles("java-exe.ps1", mainName, includeExtraction);
         System.out.println("[ INFO ]: Adding build script ...");
     }

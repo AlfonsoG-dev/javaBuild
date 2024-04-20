@@ -230,7 +230,7 @@ public class FileUtils {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
                             if(miBufferedReader.readLine().contains("static void main(String[] args)")) {
-                                mainName = f.getName().split(".java")[0];
+                                mainName = f.getName().replace(".java", "");
                                 break outter;
                             }
                         }
