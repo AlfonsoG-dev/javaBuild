@@ -5,6 +5,7 @@
 # Dependencies
 - [java_jdk_17.0.8](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [powershell](https://www.microsoft.com/store/productId/9MZ1SNWT0N5D?ocid=pdpshare)
+- [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild)
 
 # References
 - [compile_references](https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html)
@@ -109,6 +110,7 @@ includes the extraction files of the lib dependency as part of the project *.jar
 ------
 
 # Additional info
+This project use [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild) to build itself.
 >- this app uses powershell to execute the commands
 >- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
 
