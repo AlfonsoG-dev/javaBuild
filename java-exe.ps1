@@ -2,4 +2,4 @@ $compile = "javac -Xlint:all -d .\bin\ .\src\*.java .\src\Operations\*.java .\sr
 $createJar = "jar -cfm JavaBuild.jar Manifesto.txt -C .\bin\ ."
 $javaCommand = "java -jar JavaBuild.jar"
 $runCommand = "$compile" + " && " + "$createJar" + " && " +"$javaCommand"
-Invoke-Expression $runCommand
+Invoke-Expression $runCommand 
