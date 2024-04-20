@@ -23,6 +23,7 @@ public class FileUtils {
     }
     public void writeManifesto(String fileName, boolean includeExtraction, String libFiles) {
         try {
+            // TODO: make the main-class addition optional
             FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
             if(includeExtraction == true) {
                 writeManifesto.write(
@@ -46,6 +47,8 @@ public class FileUtils {
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
         FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
         OperationUtils utils = new OperationUtils(localFile.getPath());
+
+        // TODO: when in the manifesto no main-class is provide  change the build script to just create the .jar file
         String 
             srcClases        = utils.srcClases(),
             compileCommand   = utils.createCompileClases(
