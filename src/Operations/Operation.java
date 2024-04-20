@@ -88,6 +88,28 @@ public class Operation {
             e.printStackTrace();
         }
     }
+    public void executeExtractionCommand(String extracFile) throws IOException {
+        operationUtils.createExtractionCommand()
+            .parallelStream()
+            .forEach(p -> {
+                System.out.println("[ INFO ]: extracting jar dependencies ...");
+                if(!extracFile.isEmpty()) {
+                    System.out.println("[ CMD ]: " + p);
+                    try {
+                        Process extracProcess = Runtime.getRuntime().exec(
+                                "pwsh -NoProfile -Command " + p
+                        );
+                        if(extracProcess.errorReader() != null) {
+                            operationUtils.CMDOutputError(extracProcess.errorReader());
+                        }
+                    } catch(IOException err) {
+                        err.printStackTrace();
+                    }
+                } else {
+                    System.out.println("[ INFO ]: NO EXTRACTION FILES");
+                }
+            });
+    }
     public void extractJarDependencies() {
         ArrayList<String> jars = operationUtils.libJars();
         jars
@@ -98,26 +120,7 @@ public class Operation {
                 if(libAlreadyExists == false) {
                     operationUtils.createExtractionFiles(jars);
                     // the extraction files can be more than 1
-                    operationUtils.createExtractionCommand()
-                        .parallelStream()
-                        .forEach(p -> {
-                            System.out.println("[ INFO ]: extracting jar dependencies ...");
-                            if(!e.isEmpty()) {
-                                System.out.println("[ CMD ]: " + p);
-                                try {
-                                    Process extracProcess = Runtime.getRuntime().exec(
-                                            "pwsh -NoProfile -Command " + p
-                                    );
-                                    if(extracProcess.errorReader() != null) {
-                                        operationUtils.CMDOutputError(extracProcess.errorReader());
-                                    }
-                                } catch(IOException err) {
-                                    err.printStackTrace();
-                                }
-                            } else {
-                                System.out.println("[ INFO ]: NO EXTRACTION FILES");
-                            }
-                        });
+                    executeExtractionCommand(e);
                 } else {
                     System.out.println("[ INFO ]: THERE IS NO DEPENDENCIES TO EXTRACT");
                 }

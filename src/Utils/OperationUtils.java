@@ -92,8 +92,7 @@ public class OperationUtils {
                         break;
                     }
                 }
-                ArrayList<String> srcdirs = fileOperation.listSRCDirectories("src");
-                srcdirs
+                fileOperation.listSRCDirectories("src")
                     .parallelStream()
                     .filter(e -> !e.isEmpty())
                     .forEach(e -> {
@@ -103,7 +102,7 @@ public class OperationUtils {
                         }
                     });
             } else {
-                System.out.println("[ INFO ]: " + localPath + "\\SRC\\ folder not found");
+                System.out.println("[ INFO ]: " + localPath + "\\src\\ folder not found");
             }
         } catch(Exception e) {
             e.printStackTrace();
