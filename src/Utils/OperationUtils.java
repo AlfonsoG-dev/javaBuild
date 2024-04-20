@@ -69,6 +69,20 @@ public class OperationUtils {
             }
         }
     }
+    private String getMainClassName() {
+        String name = FileUtils.getMainClass(localPath);
+        try {
+            if(name.isEmpty()) {
+                String
+                    localParent = new File(localPath).getCanonicalPath(),
+                                localName = new File(localParent).getName();
+                name = localName;
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
     public void createProyectFiles()  {
         try {
             String mainDirName = new File(localPath).getCanonicalPath();
@@ -213,7 +227,8 @@ public class OperationUtils {
         String 
             build = "",
             localParent = new File(localPath).getCanonicalPath(),
-            jarFormat = jarTypeFormat(mainName, directory);
+            jarFormat = jarTypeFormat(mainName, directory),
+            mainClassName = getMainClassName();
 
         switch(jarFormat) {
             case "jar -cfm ":
@@ -232,7 +247,6 @@ public class OperationUtils {
                 }
                 break;
             case "jar -cfe ":
-                String mainClassName = FileUtils.getMainClass(localPath);
                 if(directory != "") {
                     build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ ." + directory;
                 } else {
@@ -244,9 +258,10 @@ public class OperationUtils {
     }
     public String createJarFileCommand(boolean includeExtraction) throws IOException {
         String
-            mainName = FileUtils.getMainClass(localPath) + ".jar",
+            mainName = getMainClassName() + ".jar",
             command = "",
             directory = "";
+
         File extractionFile = new File(localPath + "\\extractionFiles");
 
         if(extractionFile.exists() && extractionFile.listFiles() != null) {
@@ -301,7 +316,7 @@ public class OperationUtils {
     public String createRunCommand(ArrayList<String> libJars, String className) {
         String 
             command  = "",
-            mainName = FileUtils.getMainClass(localPath) + ".java";
+            mainName = getMainClassName() + ".java";
         StringBuffer 
             jarFiles = new StringBuffer(),
             runClass = runClassOption(className, mainName);

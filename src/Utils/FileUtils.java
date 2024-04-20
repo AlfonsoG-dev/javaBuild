@@ -21,21 +21,38 @@ public class FileUtils {
             // e.printStackTrace();
         }
     }
+    /**
+     * creates the manifesto file for the jar file creation
+     * @param fileName: path where the manifesto is created
+     * @param includeExtraction: true if you want the lib files as part of the jar file, false otherwise
+     * @param libFiles: the lib files to include in the build
+     */
     public void writeManifesto(String fileName, boolean includeExtraction, String libFiles) {
         try {
-            // TODO: make the main-class addition optional
+            String mainClass = FileUtils.getMainClass(localFile.getPath());
             FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
-            if(includeExtraction == true) {
+            if(includeExtraction == true && !mainClass.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
-                        "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n"
+                        "Main-Class: " + mainClass + "\n"
                 );
-            } else if(!libFiles.isEmpty()) {
+            } else if(includeExtraction == true && mainClass.isEmpty()) {
+                writeManifesto.write(
+                        "Manifest-Version: 1.0" + "\n" + 
+                        "Created-By: Alfonso-Gomajoa" + "\n"
+                );
+            } else if(!libFiles.isEmpty() && !mainClass.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n" + 
+                        "Class-Path: " + libFiles + "\n"
+                );
+            } else if(!libFiles.isEmpty() && mainClass.isEmpty()) {
+                writeManifesto.write(
+                        "Manifest-Version: 1.0" + "\n" + 
+                        "Created-By: Alfonso-Gomajoa" + "\n" + 
                         "Class-Path: " + libFiles + "\n"
                 );
             }
@@ -44,11 +61,17 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
+    /**
+     * create the sentences for the build script
+     * @param fileName: path where the build script is created
+     * @param mainClass: main class name
+     * @param extract: true if you want to include the lib files as part of the jar file, false otherwise
+     * @throws IOException: exception while trying to create the build script
+     */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
         FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
         OperationUtils utils = new OperationUtils(localFile.getPath());
 
-        // TODO: when in the manifesto no main-class is provide  change the build script to just create the .jar file
         String 
             srcClases        = utils.srcClases(),
             compileCommand   = utils.createCompileClases(
@@ -57,7 +80,7 @@ public class FileUtils {
             ),
             createJarCommand = utils.createJarFileCommand(extract),
             os               = System.getProperty("os.name").toLowerCase();
-        if(os.contains("windows")) {
+        if(os.contains("windows") && !mainClass.isEmpty()) {
             writeBuildScript.write(
                     "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
                     "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
@@ -65,13 +88,15 @@ public class FileUtils {
                     "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
                     " \"$createJar\" +" + " \" && \" +" +
                     "\"$javaCommand\"" + "\n" + 
-                    "Invoke-Expression $runCommand"
+                    "Invoke-Expression $runCommand \n"
             );
-        } else if(os.contains("linux")) {
+        } else if(os.contains("windows") && mainClass.isEmpty()) {
             writeBuildScript.write(
-                    compileCommand.replace("\\", "/") + "\n" +
-                    createJarCommand.replace("\\", "/") + "\n" + 
-                    "java -jar " + mainClass.replace("\\", "/")
+                    "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
+                    "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
+                    "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
+                    " \"$createJar\"" + "\n" +
+                    "Invoke-Expression $runCommand \n"
             );
         } else {
             System.out.println("[ INFO ]: ! OS NOT SUPPORTED ¡");
@@ -215,15 +240,6 @@ public class FileUtils {
         } catch(IOException e) {
             e.printStackTrace();
         } finally {
-            if(mainName == "") {
-                try {
-                    String parentName = new File(localpath).getCanonicalPath();
-                    String localName = new File(parentName).getName();
-                    mainName = localName;
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if(miBufferedReader != null) {
                 try {
                     miBufferedReader.close();

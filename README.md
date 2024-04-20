@@ -25,8 +25,6 @@
 # TODO's 
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of `javaFX`
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
-
-- [ ] when in the manifesto no main-class is provide  change the build script to just create the .jar file
  
 ------
 
