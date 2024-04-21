@@ -21,7 +21,7 @@ public class FileOperation {
         localPath = nLocalPath;
         fileUtils = new FileUtils(localPath);
     } 
-    public void createFiles(String fileName, String mainClass, boolean includeExtraction) {
+    public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ INFO ]: created " + fileName);
         try {
             File
@@ -50,7 +50,7 @@ public class FileOperation {
                     .filter(e -> !e.isEmpty())
                     .map(e -> e + ";")
                     .collect(Collectors.joining());
-                fileUtils.writeManifesto("Manifesto.txt", includeExtraction, libJars);
+                fileUtils.writeManifesto("Manifesto.txt", includeExtraction, libJars, author);
             } else if(fileName.equals(mainClass + ".java")) {
                 writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
                 writeMainClass.write(

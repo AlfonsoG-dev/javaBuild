@@ -27,32 +27,34 @@ public class FileUtils {
      * @param includeExtraction: true if you want the lib files as part of the jar file, false otherwise
      * @param libFiles: the lib files to include in the build
      */
-    public void writeManifesto(String fileName, boolean includeExtraction, String libFiles) {
+    public void writeManifesto(String fileName, boolean includeExtraction, String libFiles, String authorName) {
         try {
-            String mainClass = FileUtils.getMainClass(localFile.getPath());
+            String
+                author    = authorName.replace(" ", "-"),
+                mainClass = FileUtils.getMainClass(localFile.getPath());
             FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
             if(includeExtraction == true && !mainClass.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: Alfonso-Gomajoa" + "\n" + 
+                        "Created-By: " + author + "\n" + 
                         "Main-Class: " + mainClass + "\n"
                 );
             } else if(includeExtraction == true && mainClass.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: Alfonso-Gomajoa" + "\n"
+                        "Created-By: " + author + "\n"
                 );
             } else if(!libFiles.isEmpty() && !mainClass.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: Alfonso-Gomajoa" + "\n" + 
+                        "Created-By: " + author + "\n" + 
                         "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n" + 
                         "Class-Path: " + libFiles + "\n"
                 );
             } else if(!libFiles.isEmpty() && mainClass.isEmpty()) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: Alfonso-Gomajoa" + "\n" + 
+                        "Created-By: " + author + "\n" + 
                         "Class-Path: " + libFiles + "\n"
                 );
             }

@@ -7,8 +7,12 @@ class JavaBuild {
             for(int i=0; i<args.length; ++i) {
                 switch(args[i]) {
                     case "-b":
-                        miOperation.createProyectOperation();
-                        miOperation.createFilesOperation();
+                        if((i+1) < args.length) {
+                            miOperation.createProyectOperation();
+                            miOperation.createFilesOperation(args[i+1]);
+                        } else {
+                            System.err.println("[ ERROR ]: no author provide");
+                        }
                         break;
                     case "-cm":
                         miOperation.compileProyectOperation();

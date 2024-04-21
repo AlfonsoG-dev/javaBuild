@@ -41,7 +41,7 @@ public class Operation {
             }
         }
     }
-    public void createFilesOperation() {
+    public void createFilesOperation(String author) {
         File localFile = new File(localPath);
         System.out.println("[ INFO ]: creating files ...");
         DirectoryStream<Path> files = null;
@@ -52,7 +52,7 @@ public class Operation {
                 if(f.getName().equals("src")) {
                     File n = new File(localPath + File.pathSeparator + "src");
                     if(n.listFiles() == null) {
-                        operationUtils.createProyectFiles();
+                        operationUtils.createProyectFiles(author);
                     }
                 }
             }
@@ -173,8 +173,41 @@ public class Operation {
         }
         return haveInclude;
     }
+    public String getAuthorName() {
+        String author = "";
+        BufferedReader myReader = null;
+        try {
+            File miFile = new File(localPath + "\\Manifesto.txt");
+            if(miFile.exists()) {
+                myReader = new BufferedReader(new FileReader(miFile));
+                while(myReader.ready()) {
+                    String lines = myReader.readLine();
+                    if(lines.contains("Created-By:")) {
+                        author = lines.trim().split(":")[1];
+                        break;
+                    }
+                }
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(myReader != null) {
+                try {
+                    myReader.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                myReader = null;
+            }
+        }
+        return author;
+    }
     public void createIncludeExtractions(boolean includeExtraction) {
         System.out.println("[ INFO ]: creating manifesto ...");
+        String author = getAuthorName();
+        if(author.isEmpty()) {
+            System.err.println("[ ERROR ]: empty author inside manifesto");
+        }
         if(!includeExtraction) {
             ArrayList<String> libJars = operationUtils.libJars();
             String jarFiles = libJars
@@ -186,13 +219,15 @@ public class Operation {
             fileUtils.writeManifesto(
                     "Manifesto.txt",
                     includeExtraction,
-                    jarFiles
+                    jarFiles,
+                    author
             );
         } else {
             fileUtils.writeManifesto(
                     "Manifesto.txt",
                     includeExtraction,
-                    ""
+                    "",
+                    author
             );
         }
     }
