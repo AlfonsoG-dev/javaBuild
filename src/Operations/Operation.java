@@ -84,7 +84,9 @@ public class Operation {
             if(compileProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(compileProcess.errorReader());
             }
-        } catch(IOException e) {
+            compileProcess.waitFor();
+            compileProcess.destroy();
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -102,7 +104,9 @@ public class Operation {
                         if(extracProcess.errorReader() != null) {
                             operationUtils.CMDOutputError(extracProcess.errorReader());
                         }
-                    } catch(IOException err) {
+                        extracProcess.waitFor();
+                        extracProcess.destroy();
+                    } catch(Exception err) {
                         err.printStackTrace();
                     }
                 } else {
@@ -141,6 +145,8 @@ public class Operation {
             if(createJarProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(createJarProcess.errorReader());
             }
+            createJarProcess.waitFor();
+            createJarProcess.destroy();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -260,7 +266,9 @@ public class Operation {
             if(runProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(runProcess.errorReader());
             }
-        } catch(IOException e) {
+            runProcess.waitFor();
+            runProcess.destroy();
+        } catch(Exception e) {
             e.printStackTrace();
         }
 

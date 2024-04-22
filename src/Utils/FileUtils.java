@@ -30,7 +30,7 @@ public class FileUtils {
     public void writeManifesto(String fileName, boolean includeExtraction, String libFiles, String authorName) {
         try {
             String
-                author    = authorName.replace(" ", "-"),
+                author    = authorName.trim().replace(" ", "-"),
                 mainClass = FileUtils.getMainClass(localFile.getPath());
             FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
             if(includeExtraction == true && !mainClass.isEmpty()) {
