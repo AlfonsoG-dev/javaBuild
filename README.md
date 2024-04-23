@@ -73,8 +73,8 @@ includes the extraction files of the lib dependency as part of the project *.jar
 
 ## Create or modify the manifesto file
 >- to create the manifesto file, is necessary to include or verify if you want to add to the build the extraction of the dependencies or not.
->>- in order to create the jar file you can include the extraction files of a dependency: `javabuild.exe --i ex`
->>- in order to create the jar file and exclude the extraction files of a dependency: `javabuild.exe --i nn` 
+>>- in order to create the jar file you can include the extraction files of a dependency: `javabuild.exe --i`
+>>- in order to create the jar file and exclude the extraction files of a dependency: `javabuild.exe --i n` 
 
 ## Build the project
 
@@ -86,12 +86,21 @@ includes the extraction files of the lib dependency as part of the project *.jar
 ## Create the project structure
 
 >- creates the project structure
->>- `javaBuild.exe -b`
+>>- `javaBuild.exe -b author-name`
 >>>- adds the manifesto file and the main class with the project folder name
 
 ## Run or excute the project
 >- `javabuild.exe --run`
 >>- it compiles to *.\bin\* folder and executes the project using the .class files.
+>>- you can specify the java class that you want to execute: 
+```pwsh
+javabuild.exe --run .\src\App.java
+```
+>>- if you don't give the class to execute the main class is selected
+>>- additional you can execute cli command with this method too
+```pwsh
+javabuild.exe --run -cm
+```
 
 ## create build script
 
