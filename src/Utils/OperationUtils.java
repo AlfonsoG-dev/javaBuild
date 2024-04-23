@@ -146,14 +146,6 @@ public class OperationUtils {
             });
         return names;
     }
-    private String haveClassCompile(String mainClass, String libJars) {
-        String command = "";
-        if(libJars.isEmpty()) {
-            command = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
-        } else if(!libJars.isEmpty()) {
-        }
-        return command;
-    }
     public String createCompileClases(ArrayList<String> libJars, String srcClases) {
         String
             mainClass = FileUtils.getMainClass(localPath),
