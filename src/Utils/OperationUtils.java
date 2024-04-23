@@ -162,18 +162,18 @@ public class OperationUtils {
                 .map(e -> e + ";")
                 .collect(Collectors.joining())
         );
-        // prepare list files 'path/lib.jar'
-        String cb = b.substring(0, b.length()-1);
-        forCommand.append("'" + cb + "' " + srcClases);
-
         if(!mainClass.isEmpty() && b.isEmpty()) {
             compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
         } else if(!mainClass.isEmpty() && !b.isEmpty()) {
+            String cb = b.substring(0, b.length()-1);
+            forCommand.append("'" + cb + "' " + srcClases);
             compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand +
                 " .\\src\\*.java -sourcepath .\\src\\";
         } else if(mainClass.isEmpty() && b.isEmpty()) {
              compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ " + srcClases;
         } else if(mainClass.isEmpty() && !b.isEmpty()) {
+            String cb = b.substring(0, b.length()-1);
+            forCommand.append("'" + cb + "' " + srcClases);
             compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;
