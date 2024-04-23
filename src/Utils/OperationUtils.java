@@ -214,13 +214,13 @@ public class OperationUtils {
     private String jarTypeFormat(String mainName, String directory) throws IOException {
         String jarFormat = "";
         if(manifestoIsCreated()) {
-            jarFormat = "jar -cfm ";
+            jarFormat = "jar -cvfm ";
         }
         if(!manifestoIsCreated() && mainName.isEmpty()) {
-            jarFormat = "jar -cf ";
+            jarFormat = "jar -cvf ";
         }
         if(!manifestoIsCreated() && !mainName.isEmpty()) {
-            jarFormat = "jar -cfe ";
+            jarFormat = "jar -cvfe ";
         }
         return jarFormat;
     }
@@ -232,14 +232,14 @@ public class OperationUtils {
             mainClassName = getMainClassName();
 
         switch(jarFormat) {
-            case "jar -cfm ":
+            case "jar -cvfm ":
                 if(mainName != "" && directory != "") {
                     build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
                 } else if(mainName != "" && directory == "") {
                     build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ .";
                 }
                 break;
-            case "jar -cf ":
+            case "jar -cvf ":
                 String jarName = new File(localParent).getName() + ".jar";
                 if(directory != "") {
                     build = jarFormat + jarName + " -C .\\bin\\ ." + directory;
@@ -247,7 +247,7 @@ public class OperationUtils {
                     build = jarFormat + jarName + " -C .\\bin\\ .";
                 }
                 break;
-            case "jar -cfe ":
+            case "jar -cvfe ":
                 if(directory != "") {
                     build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ ." + directory;
                 } else {
