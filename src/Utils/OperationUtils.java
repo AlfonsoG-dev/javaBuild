@@ -146,12 +146,13 @@ public class OperationUtils {
             });
         return names;
     }
-    private String compileCommand(String mainClass, String libJars) {
+    private String haveClassCompile(String mainClass, String libJars) {
         String command = "";
         if(libJars.isEmpty()) {
             command = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
         } else if(!libJars.isEmpty()) {
-            command = "javac -Werror -g -d .\\bin\\ -cp '" + libJars + "' .\\src\\*.java -sourcepath .\\src\\";
+            command = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp '" + libJars +
+                "' .\\src\\*.java -sourcepath .\\src\\";
         }
         return command;
     }
@@ -172,7 +173,7 @@ public class OperationUtils {
                 .collect(Collectors.joining())
         );
         if(!mainClass.isEmpty()) {
-            compileCommand(mainClass, compileCommand);
+            compileCommand = haveClassCompile(mainClass, compileCommand);
         } else if(b.isEmpty()) {
              compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
