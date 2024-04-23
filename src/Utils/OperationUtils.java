@@ -146,8 +146,18 @@ public class OperationUtils {
             });
         return names;
     }
+    private String compileCommand(String mainClass, String libJars) {
+        String command = "";
+        if(libJars.isEmpty()) {
+            command = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
+        } else if(!libJars.isEmpty()) {
+            command = "javac -Werror -g -d .\\bin\\ -cp '" + libJars + "' .\\src\\*.java -sourcepath .\\src\\";
+        }
+        return command;
+    }
     public String createCompileClases(ArrayList<String> libJars, String srcClases) {
         String
+            mainClass = FileUtils.getMainClass(localPath),
             compileCommand = "";
 
         // create jar files command for compile operation
@@ -161,13 +171,14 @@ public class OperationUtils {
                 .map(e -> e + ";")
                 .collect(Collectors.joining())
         );
-
-        if(b.isEmpty()) {
-             compileCommand = "javac -Xlint:all -d .\\bin\\ " + srcClases;
+        if(!mainClass.isEmpty()) {
+            compileCommand(mainClass, compileCommand);
+        } else if(b.isEmpty()) {
+             compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ " + srcClases;
         } else {
             String cb = b.substring(0, b.length()-1);
             forCommand.append("'" + cb + "' " + srcClases);
-            compileCommand = "javac -Xlint:all -d .\\bin\\ -cp " + forCommand;
+            compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;
     }
