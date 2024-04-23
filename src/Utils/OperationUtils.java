@@ -151,8 +151,6 @@ public class OperationUtils {
         if(libJars.isEmpty()) {
             command = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
         } else if(!libJars.isEmpty()) {
-            command = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp '" + libJars +
-                "' .\\src\\*.java -sourcepath .\\src\\";
         }
         return command;
     }
@@ -172,13 +170,18 @@ public class OperationUtils {
                 .map(e -> e + ";")
                 .collect(Collectors.joining())
         );
-        if(!mainClass.isEmpty()) {
-            compileCommand = haveClassCompile(mainClass, compileCommand);
-        } else if(b.isEmpty()) {
+        // prepare list files 'path/lib.jar'
+        String cb = b.substring(0, b.length()-1);
+        forCommand.append("'" + cb + "' " + srcClases);
+
+        if(!mainClass.isEmpty() && b.isEmpty()) {
+            compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
+        } else if(!mainClass.isEmpty() && !b.isEmpty()) {
+            compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand +
+                " .\\src\\*.java -sourcepath .\\src\\";
+        } else if(mainClass.isEmpty() && b.isEmpty()) {
              compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ " + srcClases;
-        } else {
-            String cb = b.substring(0, b.length()-1);
-            forCommand.append("'" + cb + "' " + srcClases);
+        } else if(mainClass.isEmpty() && !b.isEmpty()) {
             compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand;
         }
         return compileCommand;
@@ -226,13 +229,13 @@ public class OperationUtils {
     private String jarTypeFormat(String mainName, String directory) throws IOException {
         String jarFormat = "";
         if(manifestoIsCreated()) {
-            jarFormat = "jar -cvfm ";
+            jarFormat = "jar -cfm ";
         }
         if(!manifestoIsCreated() && mainName.isEmpty()) {
-            jarFormat = "jar -cvf ";
+            jarFormat = "jar -cf ";
         }
         if(!manifestoIsCreated() && !mainName.isEmpty()) {
-            jarFormat = "jar -cvfe ";
+            jarFormat = "jar -cfe ";
         }
         return jarFormat;
     }
@@ -244,14 +247,14 @@ public class OperationUtils {
             mainClassName = getMainClassName();
 
         switch(jarFormat) {
-            case "jar -cvfm ":
+            case "jar -cfm ":
                 if(mainName != "" && directory != "") {
                     build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
                 } else if(mainName != "" && directory == "") {
                     build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ .";
                 }
                 break;
-            case "jar -cvf ":
+            case "jar -cf ":
                 String jarName = new File(localParent).getName() + ".jar";
                 if(directory != "") {
                     build = jarFormat + jarName + " -C .\\bin\\ ." + directory;
@@ -259,7 +262,7 @@ public class OperationUtils {
                     build = jarFormat + jarName + " -C .\\bin\\ .";
                 }
                 break;
-            case "jar -cvfe ":
+            case "jar -cfe ":
                 if(directory != "") {
                     build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ ." + directory;
                 } else {

@@ -84,6 +84,9 @@ public class Operation {
             if(compileProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(compileProcess.errorReader());
             }
+            if(compileProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(compileProcess.getInputStream());
+            }
             compileProcess.waitFor();
             compileProcess.destroy();
         } catch(Exception e) {
@@ -103,6 +106,9 @@ public class Operation {
                         );
                         if(extracProcess.errorReader() != null) {
                             operationUtils.CMDOutputError(extracProcess.errorReader());
+                        }
+                        if(extracProcess.getInputStream() != null) {
+                            operationUtils.CMDOutput(extracProcess.getInputStream());
                         }
                         extracProcess.waitFor();
                         extracProcess.destroy();
@@ -144,6 +150,9 @@ public class Operation {
             System.out.println("[ INFO ]: creating jar file ...");
             if(createJarProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(createJarProcess.errorReader());
+            }
+            if(createJarProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(createJarProcess.getInputStream());
             }
             createJarProcess.waitFor();
             createJarProcess.destroy();
@@ -240,7 +249,6 @@ public class Operation {
     public void createAddJarFileOperation(String jarFilePath) {
         try {
             boolean command = operationUtils.createAddJarFileCommand(jarFilePath);
-            System.out.println("[ CMD ]: " + command);
             if(command == true) {
                 System.out.println("[ INFO ]: jar dependency has been added to lib folder");
             }
@@ -260,11 +268,11 @@ public class Operation {
             System.out.println("[ CMD ]: " + command);
             Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("[ INFO ]: running ... ");
-            if(runProcess.getInputStream() != null) {
-                operationUtils.CMDOutput(runProcess.getInputStream());
-            }
             if(runProcess.errorReader() != null) {
                 operationUtils.CMDOutputError(runProcess.errorReader());
+            }
+            if(runProcess.getInputStream() != null) {
+                operationUtils.CMDOutput(runProcess.getInputStream());
             }
             runProcess.waitFor();
             runProcess.destroy();
