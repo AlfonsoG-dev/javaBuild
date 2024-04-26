@@ -60,6 +60,10 @@ includes the extraction files of the lib dependency as part of the project *.jar
 >- to compile the project
 >>- `javaBuild.exe -cm`
 >>>- it compiles the .java clases into bin
+>- you can use: "-t directoryPath" to indicate the directory where you want to place the compiled files
+```pwsh
+javabuild.exe -cm -t .\otro\target
+```
 
 ## Create a jar file of the project
 
