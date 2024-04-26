@@ -232,8 +232,8 @@ public class OperationUtils {
         return jarFormat;
     }
     private String jarTypeUnion(String mainName, String directory) throws IOException {
+        StringBuffer build = new StringBuffer();
         String 
-            build = "",
             localParent = new File(localPath).getCanonicalPath(),
             jarFormat = jarTypeFormat(mainName, directory),
             mainClassName = getMainClassName();
@@ -241,28 +241,47 @@ public class OperationUtils {
         switch(jarFormat) {
             case "jar -cfm ":
                 if(mainName != "" && directory != "") {
-                    build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ ." + directory;
+                    build.append(jarFormat);
+                    build.append(mainName);
+                    build.append(" Manifesto.txt -C .\\bin\\ .");
+                    build.append(directory);
                 } else if(mainName != "" && directory == "") {
-                    build = jarFormat + mainName + " Manifesto.txt -C .\\bin\\ .";
+                    build.append(jarFormat);
+                    build.append(mainName);
+                    build.append(" Manifesto.txt -C .\\bin\\ .");
                 }
                 break;
             case "jar -cf ":
                 String jarName = new File(localParent).getName() + ".jar";
                 if(directory != "") {
-                    build = jarFormat + jarName + " -C .\\bin\\ ." + directory;
+                    build.append(jarFormat);
+                    build.append(jarName);
+                    build.append(" -C .\\bin\\ .");
+                    build.append(directory);
                 } else {
-                    build = jarFormat + jarName + " -C .\\bin\\ .";
+                    build.append(jarFormat);
+                    build.append(jarName);
+                    build.append(" -C .\\bin\\ .");
                 }
                 break;
             case "jar -cfe ":
                 if(directory != "") {
-                    build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ ." + directory;
+                    build.append(jarFormat);
+                    build.append(mainName);
+                    build.append(" ");
+                    build.append(mainClassName);
+                    build.append(" -C .\\bin\\ .");
+                    build.append(directory);
                 } else {
-                    build = jarFormat + mainName + " " + mainClassName +" -C .\\bin\\ .";
+                    build.append(jarFormat);
+                    build.append(mainName);
+                    build.append(" ");
+                    build.append(mainClassName);
+                    build.append(" -C .\\bin\\ .");
                 }
                 break;
         }
-        return build;
+        return build.toString();
     }
     public String createJarFileCommand(boolean includeExtraction) throws IOException {
         String
