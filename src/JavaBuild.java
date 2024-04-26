@@ -1,5 +1,14 @@
 import Operations.Operation;
 class JavaBuild {
+    private static String getCliValues(String[] args, String option) {
+        String b = "";
+        for(int i=0; i<args.length; ++i) {
+            if(args[i].equals(option) && (i+1) < args.length) {
+                b = args[i+1];
+            }
+        }
+        return b;
+    }
     public static void main(String[] args) {
         try {
             Operation miOperation = new Operation(".\\");
@@ -9,13 +18,13 @@ class JavaBuild {
                     case "-b":
                         if((i+1) < args.length) {
                             miOperation.createProyectOperation();
-                            miOperation.createFilesOperation(args[i+1]);
+                            miOperation.createFilesOperation(getCliValues(args, "-n"));
                         } else {
                             System.err.println("[ ERROR ]: no author provide");
                         }
                         break;
                     case "-cm":
-                        miOperation.compileProyectOperation();
+                        miOperation.compileProyectOperation(getCliValues(args, "-t"));
                         break;
                     case "-ex":
                         if(haveExtractions) {
@@ -40,12 +49,13 @@ class JavaBuild {
                         }
                         break;
                     case "--build":
+                        String target = getCliValues(args, "-t");
                         if(haveExtractions) {
-                            miOperation.compileProyectOperation();
+                            miOperation.compileProyectOperation(target);
                             miOperation.extractJarDependencies();
                             miOperation.createJarOperation(true);
                         } else {
-                            miOperation.compileProyectOperation();
+                            miOperation.compileProyectOperation(target);
                             miOperation.createJarOperation(false);
                         }
                         break;
@@ -53,7 +63,7 @@ class JavaBuild {
                         miOperation.createBuildScript(haveExtractions);
                         break;
                     case "--run":
-                        miOperation.compileProyectOperation();
+                        miOperation.compileProyectOperation("");
                         if((i+1) < args.length) {
                             boolean 
                                 conditionA = args[i+1].contains("-"),

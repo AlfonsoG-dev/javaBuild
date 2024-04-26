@@ -146,37 +146,56 @@ public class OperationUtils {
             });
         return names;
     }
-    public String createCompileClases(ArrayList<String> libJars, String srcClases) {
-        String
-            mainClass = FileUtils.getMainClass(localPath),
-            compileCommand = "";
-
+    private String compileFormatType(String target, String libFiles) {
+        StringBuffer compile = new StringBuffer();
+        if(target.isEmpty() && libFiles.isEmpty()) {
+            compile.append("javac -Werror -Xlint:all -d .\\bin\\ ");
+        } else if(target.isEmpty() && !libFiles.isEmpty()) {
+            compile.append("javac -Werror -Xlint:all -d .\\bin\\ -cp ");
+        } else if(!target.isEmpty() && libFiles.isEmpty()) {
+            compile.append("javac -Werror -Xlint:all -d ");
+            compile.append(new File(target).getPath());
+            compile.append(" ");
+        }
+        return compile.toString();
+    }
+    public String createCompileClases(ArrayList<String> libJars, String srcClases, String target) {
         // create jar files command for compile operation
         StringBuffer 
-            b = new StringBuffer(),
-            forCommand = new StringBuffer();
-        b.append(
+            libFiles = new StringBuffer(),
+            cLibFiles = new StringBuffer(),
+            compile = new StringBuffer();
+        // lib files
+        libFiles.append(
                 libJars
                 .stream()
                 .filter(e -> !e.isEmpty())
                 .map(e -> e + ";")
                 .collect(Collectors.joining())
         );
-        if(!mainClass.isEmpty() && b.isEmpty()) {
-            compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
-        } else if(!mainClass.isEmpty() && !b.isEmpty()) {
-            String cb = b.substring(0, b.length()-1);
-            forCommand.append("'" + cb + "' " + srcClases);
-            compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand +
-                " .\\src\\*.java -sourcepath .\\src\\";
-        } else if(mainClass.isEmpty() && b.isEmpty()) {
-             compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ " + srcClases;
-        } else if(mainClass.isEmpty() && !b.isEmpty()) {
-            String cb = b.substring(0, b.length()-1);
-            forCommand.append("'" + cb + "' " + srcClases);
-            compileCommand = "javac -Werror -g -Xlint:all -d .\\bin\\ -cp " + forCommand;
+        String
+            mainClass = FileUtils.getMainClass(localPath),
+            format = compileFormatType(target, libFiles.toString());
+
+        if(!mainClass.isEmpty() && libFiles.isEmpty()) {
+            compile.append(format);
+            compile.append(".\\src\\*.java -sourcepath .\\src\\");
+        } else if(!mainClass.isEmpty() && !libFiles.isEmpty()) {
+            String cb = libFiles.substring(0, libFiles.length()-1);
+            cLibFiles.append("'" + cb + "' " + srcClases);
+            compile.append(format);
+            compile.append(cLibFiles);
+            compile.append(" .\\src\\*.java -sourcepath .\\src\\");
+        } else if(mainClass.isEmpty() && libFiles.isEmpty()) {
+            compile.append(format);
+             compile.append(srcClases);
+        } else if(mainClass.isEmpty() && !libFiles.isEmpty()) {
+            String cb = libFiles.substring(0, libFiles.length()-1);
+            cLibFiles.append("'" + cb + "' " + srcClases);
+            compile.append(format);
+            compile.append(cLibFiles);
         }
-        return compileCommand;
+        return compile.toString();
     }
     public void createExtractionFiles(ArrayList<String> jars) {
         File extraction = new File(localPath + "\\extractionFiles");

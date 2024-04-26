@@ -78,7 +78,8 @@ public class FileUtils {
             srcClases        = utils.srcClases(),
             compileCommand   = utils.createCompileClases(
                 utils.libJars(),
-                srcClases
+                srcClases,
+                ""
             ),
             createJarCommand = utils.createJarFileCommand(extract),
             os               = System.getProperty("os.name").toLowerCase();

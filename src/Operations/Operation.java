@@ -69,11 +69,12 @@ public class Operation {
             }
         }
     }
-    public void compileProyectOperation() {
+    public void compileProyectOperation(String target) {
         String srcClases = operationUtils.srcClases();
         String compileCommand = operationUtils.createCompileClases(
                 operationUtils.libJars(),
-                srcClases
+                srcClases,
+                target
         );
         try {
             System.out.println("[ CMD ]: " + compileCommand);
