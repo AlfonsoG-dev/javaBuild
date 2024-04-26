@@ -69,6 +69,33 @@ public class Operation {
             }
         }
     }
+    /**
+     * implementation of the new API for shwll command execution.
+     * for now in java 21 this is the only working way to execute commands through java
+     * TODO: migrate from Runtime.getRuntime().exec() to {@link ProcessBuilder}
+     * the following is an example of how to compile a java project.
+     */
+    protected void processBuilderAPI() {
+        String localPath = ".\\";
+        try{
+            File local = new File(localPath);
+            String
+                command   = "",
+                localName = new File(local.getCanonicalPath()).getName();
+
+            if(localName != null && !localName.isEmpty()) {
+                command = "javac -Werror -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
+            }
+            ProcessBuilder builder = new ProcessBuilder();
+            builder.command("pwsh", "-Command", command);
+            builder.directory(new File(local.getCanonicalPath()));
+            Process p = builder.start();
+            p.waitFor();
+            p.destroy();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void compileProyectOperation(String target) {
         String srcClases = operationUtils.srcClases();
         String compileCommand = operationUtils.createCompileClases(
