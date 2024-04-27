@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Utils.CommandUtils;
 import Utils.FileUtils;
-import Utils.OperationUtils;
 public class FileOperation {
 
     private FileUtils fileUtils;
@@ -45,7 +45,7 @@ public class FileOperation {
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
                 String libJars = "";
-                List<String> jars = new OperationUtils(localPath).libJars();
+                List<String> jars = new CommandUtils(localPath).getLibFiles();
                 libJars += jars
                     .parallelStream()
                     .filter(e -> !e.isEmpty())

@@ -11,17 +11,22 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Utils.CommandUtils;
 import Utils.FileUtils;
 import Utils.OperationUtils;
 
 public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
+    private CommandUtils commandUtils;
+    private Command myCommand;
     private FileUtils fileUtils;
     public Operation(String nLocalPath){
         localPath = nLocalPath;
         operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
+        commandUtils = new CommandUtils(nLocalPath);
+        myCommand = new Command(nLocalPath);
     }
     public void createProyectOperation() {
         String[] names = {
@@ -70,10 +75,7 @@ public class Operation {
         }
     }
     public void compileProyectOperation(String target) {
-        String srcClases = operationUtils.srcClases();
-        String compileCommand = operationUtils.createCompileClases(
-                operationUtils.libJars(),
-                srcClases,
+        String compileCommand = myCommand.getCompileCommand(
                 target
         );
         try {
@@ -85,7 +87,7 @@ public class Operation {
         }
     }
     public void executeExtractionCommand(String extracFile) throws IOException {
-        operationUtils.createExtractionCommand()
+        myCommand.getExtractionsCommand()
             .parallelStream()
             .forEach(p -> {
                 if(!extracFile.isEmpty()) {
@@ -101,7 +103,7 @@ public class Operation {
             });
     }
     public void extractJarDependencies() {
-        List<String> jars = operationUtils.libJars();
+        List<String> jars = commandUtils.getLibFiles();
         jars
             .parallelStream()
             .forEach(e -> {
@@ -122,7 +124,7 @@ public class Operation {
     }
     public void createJarOperation(boolean includeExtraction) {
         try {
-            String command = operationUtils.createJarFileCommand(includeExtraction);
+            String command = myCommand.getJarFileCommand(includeExtraction);
             System.out.println("[ CMD ]: " + command);
             System.out.println("[ INFO ]: creating jar file ...");
             operationUtils.executeCommand(command);
@@ -194,7 +196,7 @@ public class Operation {
             System.err.println("[ ERROR ]: empty author inside manifesto");
         }
         if(!includeExtraction) {
-            List<String> libJars = operationUtils.libJars();
+            List<String> libJars = commandUtils.getLibFiles();
             String jarFiles = libJars
                 .parallelStream()
                 .filter(e -> !e.isEmpty())
@@ -218,7 +220,7 @@ public class Operation {
     }
     public void createAddJarFileOperation(String jarFilePath) {
         try {
-            boolean command = operationUtils.createAddJarFileCommand(jarFilePath);
+            boolean command = operationUtils.addJarDependency(jarFilePath);
             if(command == true) {
                 System.out.println("[ INFO ]: jar dependency has been added to lib folder");
             }
@@ -226,12 +228,12 @@ public class Operation {
             e.printStackTrace();
         }
     }
-    public void createBuildScript(boolean includeExtraction) {
-        operationUtils.createBuildCommand(includeExtraction);
+    public void buildScript(boolean includeExtraction) {
+        operationUtils.createBuildScript(includeExtraction);
     }
     public void runAppOperation(String className) {
-        String command = operationUtils.createRunCommand(
-                operationUtils.libJars(),
+        String command = myCommand.getRunCommand(
+                commandUtils.getLibFiles(),
                 className
         );
         try {

@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import Operations.Command;
+
 public class FileUtils {
     private File localFile;
     public FileUtils(String localPath) {
@@ -72,16 +74,13 @@ public class FileUtils {
      */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
         FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
-        OperationUtils utils = new OperationUtils(localFile.getPath());
+        Command myCommand = new Command(localFile.getPath());
 
         String 
-            srcClases        = utils.srcClases(),
-            compileCommand   = utils.createCompileClases(
-                utils.libJars(),
-                srcClases,
+            compileCommand   = myCommand.getCompileCommand(
                 ""
             ),
-            createJarCommand = utils.createJarFileCommand(extract),
+            createJarCommand = myCommand.getJarFileCommand(extract),
             os               = System.getProperty("os.name").toLowerCase();
         if(os.contains("windows") && !mainClass.isEmpty()) {
             writeBuildScript.write(
