@@ -30,6 +30,7 @@
 ------
 
 # Usage
+
 >- use the executable
 ```console
 javabuild.exe --h
@@ -126,6 +127,20 @@ javabuild.exe --run -cm
 This project use [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild) to build itself.
 >- this app uses powershell to execute the commands
 >- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
+
+In the manifesto file you can set the following
+>- Main-Class: `Main-Class: Main-Class-Name`
+```txt
+Main-Class: JavaBuild
+```
+>- Class-Path: `Class-Path: .\lib\dependency\dependency.jar`
+```txt
+Class-Path: .\lib\mysql\mysql.jar
+```
+## Conditions
+
+- if there is no main class the project name will be use instead.
+- if there is class path in the manifesto the lib dependency will be ignore when creating the project jar file.
 
 ------
 
