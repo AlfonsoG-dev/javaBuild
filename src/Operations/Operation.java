@@ -69,33 +69,6 @@ public class Operation {
             }
         }
     }
-    /**
-     * implementation of the new API for shwll command execution.
-     * for now in java 21 this is the only working way to execute commands through java
-     * TODO: migrate from Runtime.getRuntime().exec() to {@link ProcessBuilder}
-     * the following is an example of how to compile a java project.
-     */
-    protected void processBuilderAPI() {
-        String localPath = ".\\";
-        try{
-            File local = new File(localPath);
-            String
-                command   = "",
-                localName = new File(local.getCanonicalPath()).getName();
-
-            if(localName != null && !localName.isEmpty()) {
-                command = "javac -Werror -d .\\bin\\ .\\src\\*.java -sourcepath .\\src\\";
-            }
-            ProcessBuilder builder = new ProcessBuilder();
-            builder.command("pwsh", "-Command", command);
-            builder.directory(new File(local.getCanonicalPath()));
-            Process p = builder.start();
-            p.waitFor();
-            p.destroy();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void compileProyectOperation(String target) {
         String srcClases = operationUtils.srcClases();
         String compileCommand = operationUtils.createCompileClases(
@@ -105,18 +78,8 @@ public class Operation {
         );
         try {
             System.out.println("[ CMD ]: " + compileCommand);
-            Process compileProcess = Runtime.getRuntime().exec(
-                    "pwsh -NoProfile -Command "  + compileCommand
-            );
             System.out.println("[ INFO ]: compile ...");
-            if(compileProcess.errorReader() != null) {
-                operationUtils.CMDOutputError(compileProcess.errorReader());
-            }
-            if(compileProcess.getInputStream() != null) {
-                operationUtils.CMDOutput(compileProcess.getInputStream());
-            }
-            compileProcess.waitFor();
-            compileProcess.destroy();
+            operationUtils.executeCommand(compileCommand);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -125,21 +88,10 @@ public class Operation {
         operationUtils.createExtractionCommand()
             .parallelStream()
             .forEach(p -> {
-                System.out.println("[ INFO ]: extracting jar dependencies ...");
                 if(!extracFile.isEmpty()) {
                     System.out.println("[ CMD ]: " + p);
                     try {
-                        Process extracProcess = Runtime.getRuntime().exec(
-                                "pwsh -NoProfile -Command " + p
-                        );
-                        if(extracProcess.errorReader() != null) {
-                            operationUtils.CMDOutputError(extracProcess.errorReader());
-                        }
-                        if(extracProcess.getInputStream() != null) {
-                            operationUtils.CMDOutput(extracProcess.getInputStream());
-                        }
-                        extracProcess.waitFor();
-                        extracProcess.destroy();
+                        operationUtils.executeCommand(p);
                     } catch(Exception err) {
                         err.printStackTrace();
                     }
@@ -156,6 +108,7 @@ public class Operation {
             try {
                 boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
                 if(libAlreadyExists == false) {
+                    System.out.println("[ INFO ]: extracting jar dependencies ...");
                     operationUtils.createExtractionFiles(jars);
                     // the extraction files can be more than 1
                     executeExtractionCommand(e);
@@ -171,19 +124,8 @@ public class Operation {
         try {
             String command = operationUtils.createJarFileCommand(includeExtraction);
             System.out.println("[ CMD ]: " + command);
-            if(command.equals("")) {
-                throw new Exception("[ ERROR ]: while trying to create ther jar file");
-            }
-            Process createJarProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("[ INFO ]: creating jar file ...");
-            if(createJarProcess.errorReader() != null) {
-                operationUtils.CMDOutputError(createJarProcess.errorReader());
-            }
-            if(createJarProcess.getInputStream() != null) {
-                operationUtils.CMDOutput(createJarProcess.getInputStream());
-            }
-            createJarProcess.waitFor();
-            createJarProcess.destroy();
+            operationUtils.executeCommand(command);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -294,16 +236,8 @@ public class Operation {
         );
         try {
             System.out.println("[ CMD ]: " + command);
-            Process runProcess = Runtime.getRuntime().exec("pwsh -NoProfile -Command " + command);
             System.out.println("[ INFO ]: running ... ");
-            if(runProcess.errorReader() != null) {
-                operationUtils.CMDOutputError(runProcess.errorReader());
-            }
-            if(runProcess.getInputStream() != null) {
-                operationUtils.CMDOutput(runProcess.getInputStream());
-            }
-            runProcess.waitFor();
-            runProcess.destroy();
+            operationUtils.executeCommand(command);
         } catch(Exception e) {
             e.printStackTrace();
         }

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import java.lang.Process;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,15 +23,49 @@ public class OperationUtils {
         fileUtils = new FileUtils(localPath);
         localPath = nLocalPath;
     }
-    public void CMDOutputError(BufferedReader miCmdReader) {
+    public void executeCommand(String command) {
+        Process p = null;
+        try {
+            ProcessBuilder builder = new ProcessBuilder();
+            String localFULL = new File(localPath).getCanonicalPath();
+            File local = new File(localFULL);
+            if(command.isEmpty()) {
+                throw new Exception("[ ERROR ]: cannot execute an empty command: ");
+            }
+            builder.command("pwsh", "-NoProfile", "-Command", command);
+            builder.directory(local);
+            p = builder.start();
+            if(p.getErrorStream() != null) {
+                CMDOutputError(p.getErrorStream());
+            }
+            if(p.getInputStream() != null) {
+                CMDOutput(p.getInputStream());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(p != null) {
+                try {
+                    p.waitFor();
+                    p.destroy();;
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                p = null;
+            }
+        }
+    }
+    public void CMDOutputError(InputStream miCmdStream) {
         BufferedReader miReader = null;
         try {
-            miReader = miCmdReader;
-            char[] mr = new char[1024];
-            while(miReader.read(mr) != -1) {
-                System.out.println(
-                        "[ ERROR ]: " + miReader.readLine()
-                );
+            miReader = new BufferedReader(new InputStreamReader(miCmdStream));
+            String line = "";
+            while(true) {
+                line = miReader.readLine();
+                if(line == null) {
+                    break;
+                }
+                System.out.println("[ ERROR ]: " + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
