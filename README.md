@@ -133,10 +133,12 @@ In the manifesto file you can set the following
 ```txt
 Main-Class: JavaBuild
 ```
+
 >- Class-Path: `Class-Path: .\lib\dependency\dependency.jar`
 ```txt
 Class-Path: .\lib\mysql\mysql.jar
 ```
+
 ## Conditions
 
 - if there is no main class the project name will be use instead.
