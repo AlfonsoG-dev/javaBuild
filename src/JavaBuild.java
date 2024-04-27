@@ -1,14 +1,5 @@
 import Operations.Operation;
 class JavaBuild {
-    private static String getCliValues(String[] args, String option) {
-        String b = "";
-        for(int i=0; i<args.length; ++i) {
-            if(args[i].equals(option) && (i+1) < args.length) {
-                b = args[i+1];
-            }
-        }
-        return b;
-    }
     public static void main(String[] args) {
         try {
             Operation miOperation = new Operation(".\\");
@@ -104,5 +95,14 @@ class JavaBuild {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+    private static String getCliValues(String[] args, String option) {
+        String b = "";
+        for(int i=0; i<args.length; ++i) {
+            if(args[i].equals(option) && (i+1) < args.length) {
+                b = args[i+1];
+            }
+        }
+        return b;
     }
 }
