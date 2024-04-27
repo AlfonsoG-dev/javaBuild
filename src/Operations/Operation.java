@@ -8,7 +8,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import Utils.FileUtils;
@@ -101,7 +101,7 @@ public class Operation {
             });
     }
     public void extractJarDependencies() {
-        ArrayList<String> jars = operationUtils.libJars();
+        List<String> jars = operationUtils.libJars();
         jars
             .parallelStream()
             .forEach(e -> {
@@ -194,7 +194,7 @@ public class Operation {
             System.err.println("[ ERROR ]: empty author inside manifesto");
         }
         if(!includeExtraction) {
-            ArrayList<String> libJars = operationUtils.libJars();
+            List<String> libJars = operationUtils.libJars();
             String jarFiles = libJars
                 .parallelStream()
                 .filter(e -> !e.isEmpty())

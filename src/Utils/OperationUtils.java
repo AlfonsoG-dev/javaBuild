@@ -133,7 +133,7 @@ public class OperationUtils {
     }
     public String srcClases() {
         String b = "";
-        ArrayList<String> names = new ArrayList<>();
+        List<String> names = new ArrayList<>();
         try {
             File srcFile = new File(localPath + "\\src");
             if(srcFile.exists() && srcFile.listFiles() != null) {
@@ -168,8 +168,8 @@ public class OperationUtils {
     /**
      * list all the jar files whitin lib folder
      */
-    public ArrayList<String> libJars() {
-        ArrayList<String> 
+    public List<String> libJars() {
+        List<String> 
             names = new ArrayList<>(),
             libfiles = fileOperation.listLibFiles();
 
@@ -195,7 +195,7 @@ public class OperationUtils {
         }
         return compile.toString();
     }
-    public String createCompileClases(ArrayList<String> libJars, String srcClases, String target) {
+    public String createCompileClases(List<String> libJars, String srcClases, String target) {
         // create jar files command for compile operation
         StringBuffer 
             libFiles = new StringBuffer(),
@@ -233,7 +233,7 @@ public class OperationUtils {
         }
         return compile.toString();
     }
-    public void createExtractionFiles(ArrayList<String> jars) {
+    public void createExtractionFiles(List<String> jars) {
         File extraction = new File(localPath + "\\extractionFiles");
         if(extraction.exists() == false) {
             extraction.mkdir();
@@ -395,7 +395,7 @@ public class OperationUtils {
         }
         return runClass;
     }
-    public String createRunCommand(ArrayList<String> libJars, String className) {
+    public String createRunCommand(List<String> libJars, String className) {
         String 
             command  = "",
             mainName = getMainClassName() + ".java";

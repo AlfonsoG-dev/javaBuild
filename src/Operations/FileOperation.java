@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import Utils.FileUtils;
@@ -44,7 +45,7 @@ public class FileOperation {
                 miFileWriter.close();
             } else if(fileName.equals("Manifesto.txt")) {
                 String libJars = "";
-                ArrayList<String> jars = new OperationUtils(localPath).libJars();
+                List<String> jars = new OperationUtils(localPath).libJars();
                 libJars += jars
                     .parallelStream()
                     .filter(e -> !e.isEmpty())
@@ -72,8 +73,8 @@ public class FileOperation {
             e.printStackTrace();
         }
     }
-    public ArrayList<String> listLibFiles() {
-        ArrayList<String> names = new ArrayList<>();
+    public List<String> listLibFiles() {
+        List<String> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -100,8 +101,8 @@ public class FileOperation {
         }
         return names;
     }
-    public ArrayList<String> listSRCDirectories(String path) throws IOException {
-        ArrayList<String> names = new ArrayList<>();
+    public List<String> listSRCDirectories(String path) throws IOException {
+        List<String> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
