@@ -74,6 +74,20 @@ public class Operation {
             }
         }
     }
+    public void listProjectFiles(String source) {
+        String dirPath = localPath + File.separator + new File(source).toPath().normalize();
+        try {
+            fileUtils.listFilesFromDirectory(Files.newDirectoryStream(new File(dirPath).toPath()))
+                .stream()
+                .map(e -> e.getPath())
+                .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
+                .forEach(e -> {
+                    System.out.println(e);
+                });
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void compileProyectOperation(String target) {
         String compileCommand = myCommand.getCompileCommand(
                 target

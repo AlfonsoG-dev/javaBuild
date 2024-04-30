@@ -2,24 +2,33 @@ import Operations.Operation;
 class JavaBuild {
     public static void main(String[] args) {
         try {
-            Operation miOperation = new Operation(".\\");
-            boolean haveExtractions = miOperation.haveIncludeExtraction();
+            Operation op = new Operation(".\\");
+            boolean haveExtractions = op.haveIncludeExtraction();
             for(int i=0; i<args.length; ++i) {
                 switch(args[i]) {
+                    case "-ls":
+                        if((i+1) < args.length) {
+                            op.listProjectFiles(args[i+1]);
+                        } else {
+                            System.err.println(
+                                    "[ ERROR ]: you must specify src or lib dir like: -ls .\\src"
+                            );
+                        }
+                        break;
                     case "-b":
                         if((i+1) < args.length) {
-                            miOperation.createProyectOperation();
-                            miOperation.createFilesOperation(getCliValues(args, "-n"));
+                            op.createProyectOperation();
+                            op.createFilesOperation(getCliValues(args, "-n"));
                         } else {
                             System.err.println("[ ERROR ]: no author provide");
                         }
                         break;
                     case "-cm":
-                        miOperation.compileProyectOperation(getCliValues(args, "-t"));
+                        op.compileProyectOperation(getCliValues(args, "-t"));
                         break;
                     case "-ex":
                         if(haveExtractions) {
-                            miOperation.extractJarDependencies();
+                            op.extractJarDependencies();
                         } else {
                             System.out.println("[ INFO ]: Extraction files are not included");
                         }
@@ -27,52 +36,52 @@ class JavaBuild {
                         break;
                     case "-cj":
                         if(haveExtractions) {
-                            miOperation.createJarOperation(true);
+                            op.createJarOperation(true);
                         } else {
-                            miOperation.createJarOperation(false);
+                            op.createJarOperation(false);
                         }
                         break;
                     case "--i":
                         if((i+1) < args.length && args[i+1].equals("n")) {
-                            miOperation.createIncludeExtractions(false);
+                            op.createIncludeExtractions(false);
                         } else {
-                            miOperation.createIncludeExtractions(true);
+                            op.createIncludeExtractions(true);
                         }
+                        break;
+                    case "-r":
+                        op.buildScript(haveExtractions);
                         break;
                     case "--build":
                         String target = getCliValues(args, "-t");
                         if(haveExtractions) {
-                            miOperation.compileProyectOperation(target);
-                            miOperation.extractJarDependencies();
-                            miOperation.createJarOperation(true);
+                            op.compileProyectOperation(target);
+                            op.extractJarDependencies();
+                            op.createJarOperation(true);
                         } else {
-                            miOperation.compileProyectOperation(target);
-                            miOperation.createJarOperation(false);
+                            op.compileProyectOperation(target);
+                            op.createJarOperation(false);
                         }
                         break;
-                    case "-r":
-                        miOperation.buildScript(haveExtractions);
+                    case "--add":
+                        if((i+1) < args.length) {
+                            op.createAddJarFileOperation(args[i+1]);
+                        } else {
+                            System.out.println("[ INFO ]: the path to the jar file is needed");
+                        }
                         break;
                     case "--run":
-                        miOperation.compileProyectOperation("");
+                        op.compileProyectOperation("");
                         if((i+1) < args.length) {
                             boolean 
                                 conditionA = args[i+1].contains("-"),
                                 conditionB = args[i+1].contains("--");
                             if(!(conditionA || conditionB)) {
-                                miOperation.runAppOperation(args[i+1]);
+                                op.runAppOperation(args[i+1]);
                             } else {
-                                miOperation.runAppOperation("");
+                                op.runAppOperation("");
                             }
                         } else {
-                            miOperation.runAppOperation("");
-                        }
-                        break;
-                    case "--add":
-                        if((i+1) < args.length) {
-                            miOperation.createAddJarFileOperation(args[i+1]);
-                        } else {
-                            System.out.println("[ INFO ]: the path to the jar file is needed");
+                            op.runAppOperation("");
                         }
                         break;
                     case "--h":
