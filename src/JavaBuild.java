@@ -85,15 +85,16 @@ class JavaBuild {
                         }
                         break;
                     case "--h":
+                        System.out.println("use -ls to list java | jar | class files in the given path");
                         System.out.println("use -b to create the proyect folder structure");
-                        System.out.println("use --add to include an external jar as a dependency");
                         System.out.println("use -cm to compile the proyect");
                         System.out.println("use -ex to extract the lib jar files");
                         System.out.println("use -cj to create the proyect jar file");
+                        System.out.println("use -r to create the build script");
                         System.out.println("use --i ex to include the extraction files for building jar files");
                         System.out.println("\tuse --i nex to exclude the extraction files for build jar files");
                         System.out.println("use --build to build the proyect");
-                        System.out.println("use -r to create the build script");
+                        System.out.println("use --add to include an external jar as a dependency");
                         System.out.println("use --run to run the proyect without building it");
                         break;
                     default: 
