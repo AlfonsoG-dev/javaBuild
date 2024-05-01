@@ -42,7 +42,7 @@ public class CommandUtils {
         List<String> names = new ArrayList<>();
         try {
             File srcFile = new File(localPath + "\\src");
-            if(srcFile.exists() && srcFile.listFiles() != null) {
+            if(srcFile.listFiles() != null) {
                 for(File f: srcFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
                         names.add(".\\src\\*.java ");
@@ -133,12 +133,12 @@ public class CommandUtils {
 
         switch(jarFormat) {
             case "jar -cfm ":
-                if(mainName != "" && directory != "") {
+                if(!directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(mainName);
                     build.append(" Manifesto.txt -C .\\bin\\ .");
                     build.append(directory);
-                } else if(mainName != "" && directory == "") {
+                } else if(directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(mainName);
                     build.append(" Manifesto.txt -C .\\bin\\ .");
@@ -146,7 +146,7 @@ public class CommandUtils {
                 break;
             case "jar -cf ":
                 String jarName = new File(localParent).getName() + ".jar";
-                if(directory != "") {
+                if(!directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(jarName);
                     build.append(" -C .\\bin\\ .");
@@ -158,7 +158,7 @@ public class CommandUtils {
                 }
                 break;
             case "jar -cfe ":
-                if(directory != "") {
+                if(!directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(mainName);
                     build.append(" ");
@@ -179,7 +179,7 @@ public class CommandUtils {
     public StringBuffer runClassOption(String className) {
         StringBuffer runClass = new StringBuffer();
         String mainName = getProjectName() + ".java";
-        if(className.isEmpty() || className == null) {
+        if(className.isEmpty()) {
             runClass.append(" .\\src\\" + mainName);
         } else if(className.equals(mainName)) {
             runClass.append(" .\\src\\" + mainName);

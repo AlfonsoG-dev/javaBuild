@@ -85,7 +85,7 @@ public class Command {
 
         File extractionFile = new File(localPath + "\\extractionFiles");
 
-        if(extractionFile.exists() && extractionFile.listFiles() != null) {
+        if(extractionFile.listFiles() != null) {
             for(File extractionDir: extractionFile.listFiles()) {
                 directory += " -C " + extractionDir.getPath() + "\\ .";
             }
