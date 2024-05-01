@@ -29,6 +29,15 @@
  
 ------
 
+# How to
+
+- use the ps1 script to build the project.
+```shell
+pwsh java-exe.ps1
+```
+>- it will build the project and create the jar file to use for the exe file creation.
+>- now you have the jar file to test the project functionality.
+
 # Usage
 
 >- use the executable
