@@ -110,10 +110,10 @@ public class Command {
                 .collect(Collectors.joining())
         );
         if(jarFiles.isEmpty()) {
-            command = "java -XX:+ExtensiveErrorReports -d .\\bin\\" + runClass;
+            command = "java -d .\\bin\\" + runClass;
         } else {
             String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
-            command = "java -XX:+ExtensiveErrorReports -cp " + cleanLibs + runClass;
+            command = "java -cp " + cleanLibs + runClass;
         }
         return command;
     }
