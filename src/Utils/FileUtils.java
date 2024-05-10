@@ -34,30 +34,29 @@ public class FileUtils {
             String
                 author    = authorName.trim().replace(" ", "-"),
                 mainClass = FileUtils.getMainClass(localFile.getPath());
-            FileWriter writeManifesto = new FileWriter(localFile.getPath() + "\\" + fileName);
-            if(includeExtraction == true && !mainClass.isEmpty()) {
+            FileWriter writeManifesto = new FileWriter(
+                    localFile.getPath() +
+                    File.separator +
+                    fileName
+            );
+            if(!libFiles.isEmpty() && includeExtraction) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: " + author + "\n" + 
                         "Main-Class: " + mainClass + "\n"
                 );
-            } else if(includeExtraction == true && mainClass.isEmpty()) {
-                writeManifesto.write(
-                        "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: " + author + "\n"
-                );
-            } else if(!libFiles.isEmpty() && !mainClass.isEmpty()) {
+            } else if(!libFiles.isEmpty() && !includeExtraction) {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: " + author + "\n" + 
-                        "Main-Class: " + FileUtils.getMainClass(localFile.getPath()) + "\n" + 
+                        "Main-Class: " + mainClass + "\n" + 
                         "Class-Path: " + libFiles + "\n"
                 );
-            } else if(!libFiles.isEmpty() && mainClass.isEmpty()) {
+            } else {
                 writeManifesto.write(
                         "Manifest-Version: 1.0" + "\n" + 
                         "Created-By: " + author + "\n" + 
-                        "Class-Path: " + libFiles + "\n"
+                        "Main-Class: " + mainClass + "\n"
                 );
             }
             writeManifesto.close();

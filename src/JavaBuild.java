@@ -16,15 +16,15 @@ class JavaBuild {
                         }
                         break;
                     case "-b":
-                        if((i+1) < args.length) {
+                        if((i+1) < args.length && args[i+1].contains("(-n")) {
                             op.createProyectOperation();
-                            op.createFilesOperation(getCliValues(args, "-n"));
+                            op.createFilesOperation(getCliValues(args, i, "-n"));
                         } else {
                             System.err.println("[ ERROR ]: no author provide");
                         }
                         break;
                     case "-cm":
-                        op.compileProyectOperation(getCliValues(args, "-t"));
+                        op.compileProyectOperation(getCliValues(args, i, "-t"));
                         break;
                     case "-ex":
                         if(haveExtractions) {
@@ -52,7 +52,7 @@ class JavaBuild {
                         op.buildScript(haveExtractions);
                         break;
                     case "--build":
-                        String target = getCliValues(args, "-t");
+                        String target = getCliValues(args, i, "-t");
                         if(haveExtractions) {
                             op.compileProyectOperation(target);
                             op.extractJarDependencies();
@@ -106,10 +106,10 @@ class JavaBuild {
             e.printStackTrace();
         }
     }
-    private static String getCliValues(String[] args, String option) {
+    private static String getCliValues(String[] args, int i, String option) {
         String b = "";
-        for(int i=0; i<args.length; ++i) {
-            if(args[i].equals(option) && (i+1) < args.length) {
+        for(int j=i; j<args.length; ++j) {
+            if(args[j].equals(option) && (j+1) < args.length) {
                 b = args[i+1];
             }
         }
