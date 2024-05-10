@@ -16,12 +16,18 @@ import Operations.Command;
 
 public class FileUtils {
     private File localFile;
+    private String localPath;
     public FileUtils(String localPath) {
+        this.localPath = localPath;
+    }
+    public File getLocalFile() {
         try {
-            localFile = new File(localPath);
+            String fulPath = new File(localPath).getCanonicalPath();
+            localFile = new File(fulPath);
         } catch(Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
         }
+        return localFile;
     }
     /**
      * creates the manifesto file for the jar file creation
@@ -29,39 +35,47 @@ public class FileUtils {
      * @param includeExtraction: true if you want the lib files as part of the jar file, false otherwise
      * @param libFiles: the lib files to include in the build
      */
-    public void writeManifesto(String fileName, boolean includeExtraction, String libFiles, String authorName) {
+    public void writeManifesto(boolean includeExtraction, String libFiles, String authorName) {
+        FileWriter writer = null;
         try {
             String
-                author    = authorName.trim().replace(" ", "-"),
-                mainClass = FileUtils.getMainClass(localFile.getPath());
-            FileWriter writeManifesto = new FileWriter(
-                    localFile.getPath() +
+                author    = authorName.trim(),
+                mainClass = FileUtils.getMainClass(localPath);
+            StringBuffer m = new StringBuffer();
+            writer = new FileWriter(
+                    getLocalFile().getPath() +
                     File.separator +
-                    fileName
+                    "Manifesto.txt"
             );
-            if(!libFiles.isEmpty() && includeExtraction) {
-                writeManifesto.write(
-                        "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: " + author + "\n" + 
-                        "Main-Class: " + mainClass + "\n"
-                );
-            } else if(!libFiles.isEmpty() && !includeExtraction) {
-                writeManifesto.write(
-                        "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: " + author + "\n" + 
-                        "Main-Class: " + mainClass + "\n" + 
-                        "Class-Path: " + libFiles + "\n"
-                );
-            } else {
-                writeManifesto.write(
-                        "Manifest-Version: 1.0" + "\n" + 
-                        "Created-By: " + author + "\n" + 
-                        "Main-Class: " + mainClass + "\n"
-                );
+            m.append("Manifest-Version: 1.0");
+            m.append("\n");
+            if(!author.isEmpty()) {
+                m.append("Created-By: ");
+                m.append(author);
+                m.append("\n");
             }
-            writeManifesto.close();
+            if(!mainClass.isEmpty()) {
+                m.append("Main-Class: ");
+                m.append(mainClass);
+                m.append("\n");
+            }
+            if(!libFiles.isEmpty() && !includeExtraction) {
+                m.append("Class-Path: ");
+                m.append(libFiles);
+                m.append("\n");
+            }
+            writer.write(m.toString());
         } catch(IOException e) {
             e.printStackTrace();
+        } finally {
+            if(writer != null) {
+                try {
+                    writer.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                writer = null;
+            }
         }
     }
     /**
@@ -72,8 +86,8 @@ public class FileUtils {
      * @throws IOException: exception while trying to create the build script
      */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
-        FileWriter writeBuildScript = new FileWriter(localFile.getPath() + "\\" + fileName);
-        Command myCommand = new Command(localFile.getPath());
+        FileWriter writeBuildScript = new FileWriter(getLocalFile().getPath() + "\\" + fileName);
+        Command myCommand = new Command(getLocalFile().getPath());
 
         String 
             compileCommand   = myCommand.getCompileCommand(
@@ -221,7 +235,7 @@ public class FileUtils {
      * @return main class file name
      */
     public static String getMainClass(String localpath) {
-        File miFile = new File(localpath + "\\src");
+        File miFile = new File(localpath + File.separator + "src");
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
@@ -230,7 +244,7 @@ public class FileUtils {
                     if(f.isFile() && f.getName().contains(".java")) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
                         while(miBufferedReader.read() != -1) {
-                            if(miBufferedReader.readLine().contains("static void main(String[] args)")) {
+                            if(miBufferedReader.readLine().contains("public static void main(String[] args)")) {
                                 mainName = f.getName().replace(".java", "");
                                 break outter;
                             }

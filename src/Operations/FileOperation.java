@@ -51,7 +51,7 @@ public class FileOperation {
                     .filter(e -> !e.isEmpty())
                     .map(e -> e + ";")
                     .collect(Collectors.joining());
-                fileUtils.writeManifesto("Manifesto.txt", includeExtraction, libJars, author);
+                fileUtils.writeManifesto(includeExtraction, libJars, author);
             } else if(fileName.equals(mainClass + ".java")) {
                 writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
                 writeMainClass.write(

@@ -16,9 +16,9 @@ class JavaBuild {
                         }
                         break;
                     case "-b":
-                        if((i+1) < args.length && args[i+1].contains("(-n")) {
+                        if((i+1) < args.length) {
                             op.createProyectOperation();
-                            op.createFilesOperation(getCliValues(args, i, "-n"));
+                            op.createFilesOperation(args[i+1]);
                         } else {
                             System.err.println("[ ERROR ]: no author provide");
                         }

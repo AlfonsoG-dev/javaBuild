@@ -218,14 +218,12 @@ public class Operation {
                 .collect(Collectors.joining());
 
             fileUtils.writeManifesto(
-                    "Manifesto.txt",
                     includeExtraction,
                     jarFiles,
                     author
             );
         } else {
             fileUtils.writeManifesto(
-                    "Manifesto.txt",
                     includeExtraction,
                     "",
                     author
