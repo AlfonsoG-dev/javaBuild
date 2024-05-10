@@ -99,29 +99,30 @@ public class CommandUtils {
     }
     public String compileFormatType(String target) {
         StringBuffer compile = new StringBuffer();
+        compile.append("javac -Werror -Xlint:all -d");
         if(target.isEmpty() && getLibFiles().isEmpty()) {
-            compile.append("javac -Werror -Xlint:all -d .\\bin\\ ");
+            compile.append(" .\\bin\\ ");
         } else if(target.isEmpty() && !getLibFiles().isEmpty()) {
-            compile.append("javac -Werror -Xlint:all -d .\\bin\\ -cp ");
+            compile.append(" .\\bin\\ -cp ");
         } else if(!target.isEmpty() && getLibFiles().isEmpty()) {
-            compile.append("javac -Werror -Xlint:all -d ");
             compile.append(new File(target).getPath());
             compile.append(" ");
         }
         return compile.toString();
     }
     private String jarTypeFormat(String mainName, String directory) throws IOException {
-        String jarFormat = "";
+        StringBuffer jarFormat = new StringBuffer();
+        jarFormat.append("jar");
         if(haveManifesto()) {
-            jarFormat = "jar -cfm ";
+            jarFormat.append(" -cfm ");
         }
         if(!haveManifesto() && mainName.isEmpty()) {
-            jarFormat = "jar -cf ";
+            jarFormat.append(" -cf ");
         }
         if(!haveManifesto() && !mainName.isEmpty()) {
-            jarFormat = "jar -cfe ";
+            jarFormat.append(" -cfe ");
         }
-        return jarFormat;
+        return jarFormat.toString();
     }
     public String jarTypeUnion(String directory) throws IOException {
         StringBuffer build = new StringBuffer();
