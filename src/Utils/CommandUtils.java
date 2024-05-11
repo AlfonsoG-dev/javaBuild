@@ -183,7 +183,7 @@ public class CommandUtils {
             lines = fileUtils.readFileLines(localPath + File.separator + "Manifesto.txt");
         for(String l: lines.split("\n")) {
             if(l.contains("Main-Class: ")) {
-                name = l.split(": ")[1].trim();
+                name = l.split(":")[1];
             }
         }
         return name;
