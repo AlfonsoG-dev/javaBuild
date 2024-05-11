@@ -177,13 +177,26 @@ public class CommandUtils {
         }
         return build.toString();
     }
+    protected String manifestoClass() {
+        String
+            name = "",
+            lines = fileUtils.readFileLines(localPath + File.separator + "Manifesto.txt");
+        for(String l: lines.split("\n")) {
+            if(l.contains("Main-Class: ")) {
+                name = l.split(": ")[1].trim();
+            }
+        }
+        return name;
+    }
     public StringBuffer runClassOption(String className) {
         StringBuffer runClass = new StringBuffer();
-        String mainName = getProjectName() + ".java";
+        String mainName = !manifestoClass().isEmpty() ?
+            manifestoClass() : ".\\src\\" + getProjectName() + ".java";
+        
         if(className.isEmpty()) {
-            runClass.append(" .\\src\\" + mainName);
+            runClass.append(mainName);
         } else if(className.equals(mainName)) {
-            runClass.append(" .\\src\\" + mainName);
+            runClass.append(mainName);
         } else {
             runClass.append(" " + className);
         }

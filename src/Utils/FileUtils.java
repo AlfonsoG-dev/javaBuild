@@ -228,6 +228,29 @@ public class FileUtils {
             System.out.println("[ INFO ]: created " + mio.getPath());
         }
     }
+    public String readFileLines(String path) {
+        StringBuffer lines = new StringBuffer();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(new File(path)));
+            while(reader.ready()) {
+                lines.append(reader.readLine());
+                lines.append("\n");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(reader != null) {
+                try {
+                    reader.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                reader = null;
+            }
+        }
+        return lines.toString();
+    }
     /**
      * main class of the proyect
      * @param localpath: local path
