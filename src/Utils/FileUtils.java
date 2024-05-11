@@ -22,8 +22,7 @@ public class FileUtils {
     }
     public File getLocalFile() {
         try {
-            String fulPath = new File(localPath).getCanonicalPath();
-            localFile = new File(fulPath);
+            localFile = new File(localPath);
         } catch(Exception e) {
             e.printStackTrace();
         }
