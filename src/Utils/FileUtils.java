@@ -9,15 +9,21 @@ import java.io.File;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Operations.Command;
 
 public class FileUtils {
     private File localFile;
     private String localPath;
+    private CommandUtils commandUtils;
+    private Command myCommand;
     public FileUtils(String localPath) {
+        commandUtils = new CommandUtils(localPath);
+        myCommand = new Command(localPath);
         this.localPath = localPath;
     }
     public File getLocalFile() {
@@ -86,30 +92,32 @@ public class FileUtils {
      */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
         FileWriter writeBuildScript = new FileWriter(getLocalFile().getPath() + "\\" + fileName);
-        Command myCommand = new Command(getLocalFile().getPath());
 
         String 
-            compileCommand   = myCommand.getCompileCommand(
-                ""
-            ),
-            createJarCommand = myCommand.getJarFileCommand(extract),
-            os               = System.getProperty("os.name").toLowerCase();
+            srcClases = commandUtils.getSrcClases(),
+            libFiles = "",
+            compile = "",
+            os = System.getProperty("os.name").toLowerCase();
+        libFiles += commandUtils.getLibFiles()
+            .stream()
+            .sorted()
+            .map(e -> e + ";")
+            .collect(Collectors.joining());
         if(os.contains("windows") && !mainClass.isEmpty()) {
+            if(!libFiles.isEmpty()) {
+                compile = "javac -Werror -Xlint:all -d .\\bin\\ -cp $libFiles $srcClases";
+            } else {
+                compile = "javac -Werror -Xlint:all -d .\\bin\\ $srcClases";
+            }
             writeBuildScript.write(
-                    "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
-                    "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
+                    "$srcClases = " + srcClases + "\n" + 
+                    "$libFiles = '" + libFiles + "'\n" +
+                    "$compile = " + compile + "\n" + 
+                    "$createJar = " + "\"" + myCommand.getJarFileCommand(extract) + "\"" + "\n" + 
                     "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
                     "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
                     " \"$createJar\" +" + " \" && \" +" +
                     "\"$javaCommand\"" + "\n" + 
-                    "Invoke-Expression $runCommand \n"
-            );
-        } else if(os.contains("windows") && mainClass.isEmpty()) {
-            writeBuildScript.write(
-                    "$compile = " + "\"" + compileCommand + "\"" + "\n" + 
-                    "$createJar = " + "\"" + createJarCommand + "\"" + "\n" + 
-                    "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
-                    " \"$createJar\"" + "\n" +
                     "Invoke-Expression $runCommand \n"
             );
         } else {
