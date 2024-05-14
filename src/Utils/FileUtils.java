@@ -94,7 +94,8 @@ public class FileUtils {
             srcClases = cUtils.getSrcClases(),
             libFiles = "",
             compile = "javac -Werror -Xlint:all -d .\\bin\\",
-            os = System.getProperty("os.name").toLowerCase();
+            runJar = "",
+            runCommand = "";
         libFiles += cUtils.getLibFiles()
             .stream()
             .sorted()
@@ -105,21 +106,24 @@ public class FileUtils {
         } else {
             compile += " $srcClases";
         }
-        if(os.contains("windows") && !mainClass.isEmpty()) {
-            writeBuildScript.write(
-                    "$srcClases = \"" + srcClases + "\"\n" +
-                    "$libFiles = \"" + libFiles + "\"\n" +
-                    "$compile = \"" + compile + "\"\n" + 
-                    "$createJar = " + "\"" + myCommand.getJarFileCommand(extract) + "\"" + "\n" + 
-                    "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
-                    "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
-                    " \"$createJar\" +" + " \" && \" +" +
-                    "\"$javaCommand\"" + "\n" + 
-                    "Invoke-Expression $runCommand \n"
-            );
+            runCommand =
+                "$runCommand = " + "\"$compile\" +" +
+                " \" && \" +" + " \"$createJar\" ";
+        if(!mainClass.isEmpty()) {
+            runJar = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
+            runCommand += "+ \" && \" +" + "\"$javaCommand\"" + "\n";
         } else {
-            System.out.println("[ INFO ]: ! OS NOT SUPPORTED ¡");
+            runCommand += "\n";
         }
+        writeBuildScript.write(
+                "$srcClases = \"" + srcClases + "\"\n" +
+                "$libFiles = \"" + libFiles + "\"\n" +
+                "$compile = \"" + compile + "\"\n" + 
+                "$createJar = " + "\"" + myCommand.getJarFileCommand(extract) + "\"" + "\n" + 
+                runJar + 
+                runCommand +
+                "Invoke-Expression $runCommand \n"
+        );
         writeBuildScript.close();
     }
     public String getCleanPath(String filePath) {
