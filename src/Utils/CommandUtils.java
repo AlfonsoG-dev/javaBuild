@@ -12,8 +12,8 @@ import Operations.FileOperation;
 public class CommandUtils {
 
     private String localPath;
-    private FileOperation fileOperation;
     private FileUtils fileUtils;
+    private FileOperation fileOperation;
     public CommandUtils(String localPath) {
         this.localPath = localPath;
         fileOperation = new FileOperation(localPath);

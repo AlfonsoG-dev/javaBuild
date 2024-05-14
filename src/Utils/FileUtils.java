@@ -19,11 +19,7 @@ import Operations.Command;
 public class FileUtils {
     private File localFile;
     private String localPath;
-    private CommandUtils commandUtils;
-    private Command myCommand;
     public FileUtils(String localPath) {
-        commandUtils = new CommandUtils(localPath);
-        myCommand = new Command(localPath);
         this.localPath = localPath;
     }
     public File getLocalFile() {
@@ -92,27 +88,28 @@ public class FileUtils {
      */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
         FileWriter writeBuildScript = new FileWriter(getLocalFile().getPath() + "\\" + fileName);
-
-        String 
-            srcClases = commandUtils.getSrcClases(),
+        Command myCommand = new Command(getLocalFile().getPath());
+        CommandUtils cUtils = new CommandUtils(getLocalFile().getPath());
+        String
+            srcClases = cUtils.getSrcClases(),
             libFiles = "",
-            compile = "",
+            compile = "javac -Werror -Xlint:all -d .\\bin\\",
             os = System.getProperty("os.name").toLowerCase();
-        libFiles += commandUtils.getLibFiles()
+        libFiles += cUtils.getLibFiles()
             .stream()
             .sorted()
             .map(e -> e + ";")
             .collect(Collectors.joining());
+        if(!libFiles.isEmpty()) {
+            compile += " -cp '$libFiles' $srcClases";
+        } else {
+            compile += " $srcClases";
+        }
         if(os.contains("windows") && !mainClass.isEmpty()) {
-            if(!libFiles.isEmpty()) {
-                compile = "javac -Werror -Xlint:all -d .\\bin\\ -cp $libFiles $srcClases";
-            } else {
-                compile = "javac -Werror -Xlint:all -d .\\bin\\ $srcClases";
-            }
             writeBuildScript.write(
-                    "$srcClases = " + srcClases + "\n" + 
-                    "$libFiles = '" + libFiles + "'\n" +
-                    "$compile = " + compile + "\n" + 
+                    "$srcClases = \"" + srcClases + "\"\n" +
+                    "$libFiles = \"" + libFiles + "\"\n" +
+                    "$compile = \"" + compile + "\"\n" + 
                     "$createJar = " + "\"" + myCommand.getJarFileCommand(extract) + "\"" + "\n" + 
                     "$javaCommand = \"java -jar " + mainClass + "\""  + "\n" +
                     "$runCommand = " + "\"$compile\" +" + " \" && \" +" +
