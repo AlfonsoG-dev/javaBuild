@@ -46,10 +46,8 @@ class JavaBuild {
                         }
                         break;
                     case "--i":
-                        String
-                            extract = getCliValues(args, i, "n"),
-                            author = getCliValues(args, i, "-a");
-                        if(!extract.isEmpty()) {
+                        String author = getCliValues(args, i, "-a");
+                        if((i+1) < args.length && args[i+1].equals("n")) {
                             op.createIncludeExtractions(false, author);
                         } else {
                             op.createIncludeExtractions(true, author);
