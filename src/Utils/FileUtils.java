@@ -119,7 +119,7 @@ public class FileUtils {
                 "$srcClases = \"" + srcClases + "\"\n" +
                 "$libFiles = \"" + libFiles + "\"\n" +
                 "$compile = \"" + compile + "\"\n" + 
-                "$createJar = " + "\"" + myCommand.getJarFileCommand(extract) + "\"" + "\n" + 
+                "$createJar = " + "\"" + myCommand.getJarFileCommand(extract, "") + "\"" + "\n" + 
                 runJar + 
                 runCommand +
                 "Invoke-Expression $runCommand \n"

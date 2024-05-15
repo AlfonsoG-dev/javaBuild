@@ -84,6 +84,10 @@ javabuild.exe -cm .\otro\target
 
 >- now to create the project jar file.
 >>- `javaBuild.exe -cj`.
+>>- it also can be created using source files as param:
+```pwsh
+javabuild.exe -cj .\testing\
+```
 
 ## Create or modify the manifesto file
 >- to create the manifesto file, is necessary to include or verify if you want to add to the build the extraction of the dependencies or not.

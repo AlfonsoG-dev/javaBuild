@@ -124,25 +124,32 @@ public class CommandUtils {
         }
         return jarFormat.toString();
     }
-    public String jarTypeUnion(String directory) throws IOException {
+    public String jarTypeUnion(String directory, String source) throws IOException {
         StringBuffer build = new StringBuffer();
         String 
             mainName = getProjectName() + ".jar",
             localParent = new File(localPath).getCanonicalPath(),
             jarFormat = jarTypeFormat(mainName, directory),
             mainClassName = getProjectName();
+        if(source.isEmpty()) {
+            source = ".\\bin\\ .";
+        } else {
+            source = new File(source).getPath() + File.separator + " .";
+        }
 
         switch(jarFormat) {
             case "jar -cfm ":
                 if(!directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(mainName);
-                    build.append(" Manifesto.txt -C .\\bin\\ .");
+                    build.append(" Manifesto.txt -C ");
+                    build.append(source);
                     build.append(directory);
                 } else if(directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(mainName);
-                    build.append(" Manifesto.txt -C .\\bin\\ .");
+                    build.append(" Manifesto.txt -C ");
+                    build.append(source);
                 }
                 break;
             case "jar -cf ":
@@ -150,12 +157,14 @@ public class CommandUtils {
                 if(!directory.isEmpty()) {
                     build.append(jarFormat);
                     build.append(jarName);
-                    build.append(" -C .\\bin\\ .");
+                    build.append(" -C ");
+                    build.append(source);
                     build.append(directory);
                 } else {
                     build.append(jarFormat);
                     build.append(jarName);
-                    build.append(" -C .\\bin\\ .");
+                    build.append(" -C ");
+                    build.append(source);
                 }
                 break;
             case "jar -cfe ":
@@ -164,14 +173,16 @@ public class CommandUtils {
                     build.append(mainName);
                     build.append(" ");
                     build.append(mainClassName);
-                    build.append(" -C .\\bin\\ .");
+                    build.append(" -C ");
+                    build.append(source);
                     build.append(directory);
                 } else {
                     build.append(jarFormat);
                     build.append(mainName);
                     build.append(" ");
                     build.append(mainClassName);
-                    build.append(" -C .\\bin\\ .");
+                    build.append(" -C ");
+                    build.append(source);
                 }
                 break;
         }

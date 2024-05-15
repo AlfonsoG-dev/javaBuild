@@ -78,7 +78,7 @@ public class Command {
             });
         return commands;
     }
-    public String getJarFileCommand(boolean includeExtraction) throws IOException {
+    public String getJarFileCommand(boolean includeExtraction, String source) throws IOException {
         String
             command = "",
             directory = "";
@@ -91,9 +91,9 @@ public class Command {
             }
         } 
         if(includeExtraction) {
-            command = commandUtils.jarTypeUnion(directory);
+            command = commandUtils.jarTypeUnion(directory, source);
         } else {
-            command = commandUtils.jarTypeUnion("");
+            command = commandUtils.jarTypeUnion("", source);
         }
         return command;
     }

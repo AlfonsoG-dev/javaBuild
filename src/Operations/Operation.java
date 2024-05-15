@@ -135,9 +135,9 @@ public class Operation {
             }
         });
     }
-    public void createJarOperation(boolean includeExtraction) {
+    public void createJarOperation(boolean includeExtraction, String source) {
         try {
-            String command = myCommand.getJarFileCommand(includeExtraction);
+            String command = myCommand.getJarFileCommand(includeExtraction, source);
             System.out.println("[ CMD ]: " + command);
             System.out.println("[ INFO ]: creating jar file ...");
             operationUtils.executeCommand(command);
