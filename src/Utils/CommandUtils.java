@@ -202,7 +202,7 @@ public class CommandUtils {
     public StringBuffer runClassOption(String className) {
         StringBuffer runClass = new StringBuffer();
         String mainName = !manifestoClass().isEmpty() ?
-            manifestoClass() : ".\\src\\" + getProjectName() + ".java";
+            manifestoClass() : " .\\src\\" + getProjectName() + ".java";
         
         if(className.isEmpty()) {
             runClass.append(mainName);
