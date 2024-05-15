@@ -110,10 +110,14 @@ javabuild.exe -cm .\otro\target
 ```pwsh
 javabuild.exe --run .\src\App.java
 ```
+>>- you can give also the source directory
+```pwsh
+javabuild.exe --run .\src\App.java -s .\testing\
+```
 >>- if you don't give the class to execute the main class is selected
 >>- additional you can execute cli command with this method too
 ```pwsh
-javabuild.exe --run -cm
+javabuild.exe --run --h
 ```
 
 ## create build script
