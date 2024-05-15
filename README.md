@@ -67,23 +67,23 @@ includes the extraction files of the lib dependency as part of the project *.jar
 
 ## Compile
 
->- to compile the project
->>- `javaBuild.exe -cm`
->>>- it compiles the .java clases into bin
->- you can use: "-t directoryPath" to indicate the directory where you want to place the compiled files
+>- to compile the project.
+>>- `javaBuild.exe -cm`.
+>>>- it compiles the .java clases into bin.
+>- you can give a *directoryPath* to indicate the directory where you want to place the compiled files.
 ```pwsh
-javabuild.exe -cm -t .\otro\target
+javabuild.exe -cm .\otro\target
 ```
 
 ## Create a jar file of the project
 
->- to create a jar file is necessary to include or verify dependencies or libs in the project
->>- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`
->>- use the *extractionFiles* to include in the project jar file the dependencies
->>>- `javaBuild.exe -ex`
+>- to create a jar file is necessary to include or verify dependencies or libs in the project.
+>>- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`.
+>>- use the *extractionFiles* to include in the project jar file the dependencies.
+>>>- `javaBuild.exe -ex`.
 
->- now to create the project jar file
->>- `javaBuild.exe -cj`
+>- now to create the project jar file.
+>>- `javaBuild.exe -cj`.
 
 ## Create or modify the manifesto file
 >- to create the manifesto file, is necessary to include or verify if you want to add to the build the extraction of the dependencies or not.
