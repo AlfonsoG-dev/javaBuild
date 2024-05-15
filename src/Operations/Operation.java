@@ -39,9 +39,8 @@ public class Operation {
         System.out.println("[ INFO ]: Creating the project structure ...");
 
         for(String n: names) {
-            File f = new File(localPath + "\\" + n);
-            if(!f.exists()) {
-                f.mkdir();
+            File f = new File(localPath + File.separator + n);
+            if(!f.exists() && f.mkdir()) {
                 System.out.println("[ INFO ]: Created " + f.getPath());
             }
         }
@@ -203,11 +202,10 @@ public class Operation {
         }
         return author;
     }
-    public void createIncludeExtractions(boolean includeExtraction) {
+    public void createIncludeExtractions(boolean includeExtraction, String author) {
         System.out.println("[ INFO ]: creating manifesto ...");
-        String author = getAuthorName();
-        if(author.isEmpty()) {
-            System.err.println("[ ERROR ]: empty author inside manifesto");
+        if(author.isEmpty() && !getAuthorName().isEmpty()) {
+            author = getAuthorName();
         }
         if(!includeExtraction) {
             List<String> libJars = commandUtils.getLibFiles();
