@@ -4,7 +4,7 @@ class JavaBuild {
         try {
             Operation op = new Operation(".\\");
             boolean haveExtractions = op.haveIncludeExtraction();
-            for(int i=0; i<args.length; ++i) {
+            outter: for(int i=0; i<args.length; ++i) {
                 switch(args[i]) {
                     case "-ls":
                         if((i+1) < args.length) {
@@ -75,18 +75,19 @@ class JavaBuild {
                         }
                         break;
                     case "--run":
-                        op.compileProyectOperation("");
+                        String source = getCliValues(args, i, "-s");
+                        op.compileProyectOperation(source);
                         if((i+1) < args.length) {
                             boolean 
                                 conditionA = args[i+1].contains("-"),
                                 conditionB = args[i+1].contains("--");
                             if(!(conditionA || conditionB)) {
-                                op.runAppOperation(args[i+1]);
+                                op.runAppOperation(args[i+1], source);
                             } else {
-                                op.runAppOperation("");
+                                op.runAppOperation("", source);
                             }
                         } else {
-                            op.runAppOperation("");
+                            op.runAppOperation("", source);
                         }
                         break;
                     case "--h":
@@ -111,7 +112,7 @@ class JavaBuild {
                         break;
                     default: 
                         System.out.println("use --h for help");
-                        break;
+                        break outter;
                 }
             }
         } catch(Exception e) {

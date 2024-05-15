@@ -97,12 +97,18 @@ public class Command {
         }
         return command;
     }
-    public String getRunCommand(List<String> libJars, String className) {
+    public String getRunCommand(List<String> libJars, String className, String source) {
         String command  = "";
         StringBuffer 
             jarFiles = new StringBuffer(),
             runClass = commandUtils.runClassOption(className);
-        jarFiles.append("'.\\bin\\;");
+        if(source.isEmpty()) {
+            source = ".\\bin\\;";
+        } else {
+            source = new File(source).getPath() + File.separator;
+        }
+        jarFiles.append("'");
+        jarFiles.append(source);
         jarFiles.append(libJars
                 .parallelStream()
                 .filter(e -> !e.isEmpty())
@@ -110,7 +116,7 @@ public class Command {
                 .collect(Collectors.joining())
         );
         if(jarFiles.isEmpty()) {
-            command = "java -d .\\bin\\" + runClass;
+            command = "java -d " + source + runClass;
         } else {
             String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
             command = "java -cp " + cleanLibs + runClass;

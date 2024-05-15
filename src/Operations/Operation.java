@@ -241,10 +241,11 @@ public class Operation {
     public void buildScript(boolean includeExtraction) {
         operationUtils.createBuildScript(includeExtraction);
     }
-    public void runAppOperation(String className) {
+    public void runAppOperation(String className, String source) {
         String command = myCommand.getRunCommand(
                 commandUtils.getLibFiles(),
-                className
+                className,
+                source
         );
         try {
             System.out.println("[ CMD ]: " + command);
