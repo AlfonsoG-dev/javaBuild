@@ -105,7 +105,7 @@ public class Command {
         if(source.isEmpty()) {
             source = ".\\bin\\;";
         } else {
-            source = new File(source).getPath() + File.separator;
+            source = new File(source).getPath() + File.separator + ";";
         }
         jarFiles.append("'");
         jarFiles.append(source);

@@ -105,8 +105,11 @@ public class CommandUtils {
         } else if(target.isEmpty() && !getLibFiles().isEmpty()) {
             compile.append(" .\\bin\\ -cp ");
         } else if(!target.isEmpty() && getLibFiles().isEmpty()) {
-            compile.append(new File(target).getPath());
+            compile.append(target);
             compile.append(" ");
+        } else if(!target.isEmpty() && !getLibFiles().isEmpty()) {
+            compile.append(target + File.separator);
+            compile.append(" -cp ");
         }
         return compile.toString();
     }

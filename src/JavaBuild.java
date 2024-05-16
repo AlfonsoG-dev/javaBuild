@@ -46,6 +46,9 @@ class JavaBuild {
                             op.createJarOperation(false, sourceDir);
                         }
                         break;
+                    case "-cr":
+                        op.buildScript(haveExtractions);
+                        break;
                     case "--i":
                         String author = getCliValues(args, i, "-a");
                         if((i+1) < args.length && args[i+1].equals("n")) {
@@ -53,9 +56,6 @@ class JavaBuild {
                         } else {
                             op.createIncludeExtractions(true, author);
                         }
-                        break;
-                    case "-cr":
-                        op.buildScript(haveExtractions);
                         break;
                     case "--build":
                         String target = getCliValues(args, i, "-s");
@@ -94,14 +94,42 @@ class JavaBuild {
                     case "--h":
                         System.out.println("use -ls to list java | jar | class files in the given path");
                         System.out.println("use -cb to create the proyect folder structure");
+                        System.out.println("\t when creating give the author name");
+                        System.out.println("\t\t -ls author-name");
+                        System.out.println("");
                         System.out.println("use -cm to compile the proyect");
+                        System.out.println("\t when compiling give the directory target");
+                        System.out.println("\t\t -cm .\\target\\");
+                        System.out.println("\t if you don't provide the path for default its set to .\\bin\\");
+                        System.out.println("");
                         System.out.println("use -cx to extract the lib jar files");
+                        System.out.println("");
                         System.out.println("use -cj to create the proyect jar file");
+                        System.out.println("\t when creating the jar file give the source directory");
+                        System.out.println("\t\t -cj .\\testing\\");
+                        System.out.println("\t if you don't provide the path for default its set to .\\bin\\");
+                        System.out.println("");
                         System.out.println("use -cr to create the build script");
-                        System.out.println("use --i n to not include lib dependency as part of the build");
+                        System.out.println("");
+                        System.out.println("use --i to include lib jar files as part of the build");
+                        System.out.println("\t if you don't want to include jar files use n");
+                        System.out.println("\t\t --i n");
+                        System.out.println("\t if you want to change the author use -a and give the author name");
+                        System.out.println("\t\t --i -a author-name");
+                        System.out.println("");
                         System.out.println("use --build to build the proyect");
+                        System.out.println("\t when building the proyect you can give the source directory");
+                        System.out.println("\t\t --build -s .\\testing\\");
+                        System.out.println("");
                         System.out.println("use --add to include an external jar as a dependency");
+                        System.out.println("\t you need to give the external jar file/dir path");
+                        System.out.println("\t\t --add .\\external\\file.jar");
+                        System.out.println("");
                         System.out.println("use --run to run the proyect without building it");
+                        System.out.println("\t when running the project you can give the source directory");
+                        System.out.println("\t\t --run -s .\\testing\\");
+                        System.out.println("\t when running the project you can give also the main class to run");
+                        System.out.println("\t\t --run -s .\\testing\\ .\\main.java\\");
                         break;
                     default: 
                         System.out.println("use --h for help");
