@@ -129,7 +129,7 @@ class JavaBuild {
                         System.out.println("\t when running the project you can give the source directory");
                         System.out.println("\t\t --run -s .\\testing\\");
                         System.out.println("\t when running the project you can give also the main class to run");
-                        System.out.println("\t\t --run -s .\\testing\\ .\\main.java\\");
+                        System.out.println("\t\t --run .\\main.java\\ -s .\\testing\\");
                         break;
                     default: 
                         System.out.println("use --h for help");
