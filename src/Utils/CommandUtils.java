@@ -108,7 +108,7 @@ public class CommandUtils {
             compile.append(target);
             compile.append(" ");
         } else if(!target.isEmpty() && !getLibFiles().isEmpty()) {
-            compile.append(target + File.separator);
+            compile.append(target);
             compile.append(" -cp ");
         }
         return compile.toString();
