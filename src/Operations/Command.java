@@ -46,7 +46,7 @@ public class Command {
             compile.append(srcClases);
         } else if(!mainClass.isEmpty() && !libFiles.isEmpty()) {
             String cb = libFiles.substring(0, libFiles.length()-1);
-            cLibFiles.append("'" + cb + "'");
+            cLibFiles.append("'" + cb + "' ");
             compile.append(format);
             compile.append(cLibFiles);
             compile.append(srcClases);
