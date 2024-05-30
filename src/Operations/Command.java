@@ -43,13 +43,13 @@ public class Command {
 
         if(!mainClass.isEmpty() && libFiles.isEmpty()) {
             compile.append(format);
-            compile.append(".\\src\\*.java -sourcepath .\\src\\");
+            compile.append(srcClases);
         } else if(!mainClass.isEmpty() && !libFiles.isEmpty()) {
             String cb = libFiles.substring(0, libFiles.length()-1);
             cLibFiles.append("'" + cb + "'");
             compile.append(format);
             compile.append(cLibFiles);
-            compile.append(" .\\src\\*.java -sourcepath .\\src\\");
+            compile.append(srcClases);
         } else if(mainClass.isEmpty() && libFiles.isEmpty()) {
             compile.append(format);
              compile.append(srcClases);
