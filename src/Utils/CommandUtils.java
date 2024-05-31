@@ -66,7 +66,6 @@ public class CommandUtils {
         }
         b += names
             .parallelStream()
-            .sorted()
             .collect(Collectors.joining());
         return b;
     }

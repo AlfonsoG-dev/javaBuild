@@ -98,7 +98,6 @@ public class FileUtils {
             runCommand = "";
         libFiles += cUtils.getLibFiles()
             .stream()
-            .sorted()
             .map(e -> e + ";")
             .collect(Collectors.joining());
         if(!libFiles.isEmpty()) {
