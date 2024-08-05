@@ -27,12 +27,12 @@ public class FileOperation {
         try {
             File
                 localFile = new File(localPath),
-                miFile    = new File(localPath + "\\src");
+                miFile    = new File(localPath + File.separator + "src");
             FileWriter 
                 miFileWriter = null,
                 writeMainClass = null;
             if(fileName.equals(".gitignore")) {
-                miFileWriter = new FileWriter(localFile.getPath() + "\\" + fileName);
+                miFileWriter = new FileWriter(localFile.getPath() + File.separator + fileName);
                 miFileWriter.write(
                         "**bin" + "\n" +
                         "**lib" + "\n" +
@@ -53,7 +53,7 @@ public class FileOperation {
                     .collect(Collectors.joining());
                 fileUtils.writeManifesto(includeExtraction, libJars, author);
             } else if(fileName.equals(mainClass + ".java")) {
-                writeMainClass = new FileWriter(miFile.getPath() + "\\" + fileName);
+                writeMainClass = new FileWriter(miFile.getPath() + File.separator + fileName);
                 writeMainClass.write(
                         "class " + mainClass + " {\n" +
                         "    public static void main(String[] args) {\n" + 
@@ -62,6 +62,7 @@ public class FileOperation {
                         "}"
                 );
                 writeMainClass.close();
+                // TODO: get linux support
             } else if(fileName.equals("java-exe.ps1")) {
                 fileUtils.writeBuildFile(
                         fileName,
@@ -78,7 +79,7 @@ public class FileOperation {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
-                    File lf = new File(localPath + "\\lib");
+                    File lf = new File(localPath + File.separator + "lib");
                     if(lf.listFiles() != null) {
                         Files.newDirectoryStream(lf.toPath())
                             .forEach(e -> {
@@ -107,13 +108,13 @@ public class FileOperation {
             public void run() {
                 try {
                     String c = fileUtils.getCleanPath(path);
-                    File lf = new File(localPath + "\\" + c);
+                    File lf = new File(localPath + File.separator + c);
                     if(lf.listFiles() != null) {
                         Files.newDirectoryStream(lf.toPath())
                             .forEach(e -> {
                                 File f = e.toFile();
                                 if(f.isDirectory()) {
-                                    names.add(f.getPath() + "\\");
+                                    names.add(f.getPath() + File.separator);
                                     if(f.listFiles() != null) {
                                         try {
                                             names.addAll(
@@ -141,7 +142,7 @@ public class FileOperation {
     }
     public boolean extractionDirContainsPath(String libJarPath) throws IOException {
         boolean containsPath = false;
-        File extractionFile = new File(localPath + "\\extractionFiles");
+        File extractionFile = new File(localPath + File.separator + "extractionFiles");
         File myFile = new File(libJarPath);
         if(myFile.getParent() != null && extractionFile.listFiles() != null) {
             String jarLibParent = myFile.getParent();
@@ -163,8 +164,8 @@ public class FileOperation {
                 String sourceParent = sf.getParent();
                 String sourceParentName = new File(sourceParent).getName();
                 File tf = new File(
-                        targetFilePath + "\\" +
-                        sourceParentName + "\\" +
+                        targetFilePath + File.separator +
+                        sourceParentName + File.separator +
                         sourceFileName
                 );
                 fileUtils.createParentFile(
@@ -188,7 +189,7 @@ public class FileOperation {
                                     e.getCanonicalPath()
                             );
                             if(n.contains("git") == false) {
-                                File targetFile = new File(targetFilePath + "\\" + n);
+                                File targetFile = new File(targetFilePath + File.separator + n);
                                 fileUtils.createParentFile(targetFilePath, targetFile.getParent());
                                 Path sourcePath = e.toPath();
                                 Path targetPath = targetFile.toPath();

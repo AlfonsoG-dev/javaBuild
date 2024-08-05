@@ -1,8 +1,10 @@
+import java.io.File;
+
 import Operations.Operation;
 class JavaBuild {
     public static void main(String[] args) {
         try {
-            Operation op = new Operation(".\\");
+            Operation op = new Operation("." + File.separator);
             boolean haveExtractions = op.haveIncludeExtraction();
             outter: for(int i=0; i<args.length; ++i) {
                 switch(args[i]) {

@@ -27,7 +27,7 @@ public class OperationUtils {
             if(command.isEmpty()) {
                 throw new Exception("[ ERROR ]: cannot execute an empty command: ");
             }
-            builder.command("pwsh", "-NoProfile", "-Command", command);
+            builder.command("bash", "-c", command);
             builder.directory(local);
             p = builder.start();
             if(p.getErrorStream() != null) {
@@ -113,7 +113,7 @@ public class OperationUtils {
         }
     }
     public void createExtractionFiles(List<String> jars) {
-        File extraction = new File(localPath + "\\extractionFiles");
+        File extraction = new File(localPath + File.separator + "extractionFiles");
         if(extraction.exists() == false) {
             extraction.mkdir();
         }
@@ -137,11 +137,11 @@ public class OperationUtils {
             sourceFilePath = jarFile.getPath();
         }
         String externalJarName = new File(sourceFilePath).getName();
-        File libFile = new File(localPath + "\\lib\\" + externalJarName);
+        File libFile = new File(localPath + File.separator + "lib" + File.separator+ externalJarName);
         if(libFile.exists() == false) {
             fileOperation.copyFilesfromSourceToTarget(
                     sourceFilePath,
-                    new File(localPath + "\\lib").getPath()
+                    new File(localPath + File.separator + "lib").getPath()
             );
             isAdded = true;
         } else {
@@ -149,6 +149,7 @@ public class OperationUtils {
         }
         return isAdded;
     }
+    // TODO: use linuz sh build shell script language
     public void createBuildScript(boolean includeExtraction) {
         String mainName = FileUtils.getMainClass(localPath);
         if(!mainName.isEmpty()) {

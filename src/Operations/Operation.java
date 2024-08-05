@@ -149,7 +149,7 @@ public class Operation {
         boolean haveInclude = true; 
         BufferedReader myReader = null;
         try {
-            File miFile = new File(localPath + "\\Manifesto.txt");
+            File miFile = new File(localPath + File.separator + "Manifesto.txt");
             if(miFile.exists()) {
                 myReader = new BufferedReader(new FileReader(miFile));
                 while(myReader.ready()) {
@@ -177,7 +177,7 @@ public class Operation {
         String author = "";
         BufferedReader myReader = null;
         try {
-            File miFile = new File(localPath + "\\Manifesto.txt");
+            File miFile = new File(localPath + File.separator + "Manifesto.txt");
             if(miFile.exists()) {
                 myReader = new BufferedReader(new FileReader(miFile));
                 while(myReader.ready()) {

@@ -62,7 +62,7 @@ public class Command {
         return compile.toString();
     }
     public List<String> getExtractionsCommand() throws IOException {
-        File extractionFile = new File(localPath + "\\extractionFiles");
+        File extractionFile = new File(localPath + File.separator + "extractionFiles");
         List<String> commands = new ArrayList<>();
 
         fileUtils.listFilesFromPath(extractionFile.getPath())
@@ -83,11 +83,11 @@ public class Command {
             command = "",
             directory = "";
 
-        File extractionFile = new File(localPath + "\\extractionFiles");
+        File extractionFile = new File(localPath + File.separator + "extractionFiles");
 
         if(extractionFile.listFiles() != null) {
             for(File extractionDir: extractionFile.listFiles()) {
-                directory += " -C " + extractionDir.getPath() + "\\ .";
+                directory += " -C " + extractionDir.getPath() + File.separator + " .";
             }
         } 
         if(includeExtraction) {
@@ -103,7 +103,7 @@ public class Command {
             jarFiles = new StringBuffer(),
             runClass = commandUtils.runClassOption(className);
         if(source.isEmpty()) {
-            source = ".\\bin\\;";
+            source = "." + File.separator + "bin" + File.separator + ";";
         } else {
             source = new File(source).getPath() + File.separator + ";";
         }

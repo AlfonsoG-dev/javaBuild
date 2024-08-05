@@ -41,11 +41,15 @@ public class CommandUtils {
         String b = "";
         List<String> names = new ArrayList<>();
         try {
-            File srcFile = new File(localPath + "\\src");
+            File srcFile = new File(localPath + File.separator + "src");
             if(srcFile.listFiles() != null) {
                 for(File f: srcFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
-                        names.add(".\\src\\*.java ");
+                        names.add(".");
+                        names.add(File.separator);
+                        names.add("src");
+                        names.add(File.separator);
+                        names.add("*.java ");
                         break;
                     }
                 }
@@ -87,7 +91,7 @@ public class CommandUtils {
     private boolean haveManifesto() {
         boolean exists = false;
         try {
-            File miFile = new File(localPath + "\\Manifesto.txt");
+            File miFile = new File(localPath + File.separator + "Manifesto.txt");
             if(miFile.exists()) {
                 exists = true;
             }
@@ -98,11 +102,18 @@ public class CommandUtils {
     }
     public String compileFormatType(String target) {
         StringBuffer compile = new StringBuffer();
-        compile.append("javac -Werror -Xlint:all -d");
+        compile.append("javac -Werror -Xlint:all -d ");
         if(target.isEmpty() && getLibFiles().isEmpty()) {
-            compile.append(" .\\bin\\ ");
+            compile.append(".");
+            compile.append(File.separator);
+            compile.append("bin ");
+            compile.append(File.separator);
         } else if(target.isEmpty() && !getLibFiles().isEmpty()) {
-            compile.append(" .\\bin\\ -cp ");
+            compile.append(".");
+            compile.append(File.separator);
+            compile.append("bin");
+            compile.append(File.separator);
+            compile.append(" -cp ");
         } else if(!target.isEmpty() && getLibFiles().isEmpty()) {
             compile.append(target);
             compile.append(" ");
@@ -134,7 +145,7 @@ public class CommandUtils {
             jarFormat = jarTypeFormat(mainName, directory),
             mainClassName = getProjectName();
         if(source.isEmpty()) {
-            source = ".\\bin\\ .";
+            source = "." + File.separator + "bin" + File.separator + " .";
         } else {
             source = new File(source).getPath() + File.separator + " .";
         }
@@ -203,8 +214,10 @@ public class CommandUtils {
     }
     public StringBuffer runClassOption(String className) {
         StringBuffer runClass = new StringBuffer();
-        String mainName = !manifestoClass().isEmpty() ?
-            manifestoClass() : " .\\src\\" + getProjectName() + ".java";
+        String
+            name = " ." + File.separator + "src" + File.separator + getProjectName() + ".java",
+            mainName = !manifestoClass().isEmpty() ?
+            manifestoClass() : name;
         
         if(className.isEmpty()) {
             runClass.append(mainName);

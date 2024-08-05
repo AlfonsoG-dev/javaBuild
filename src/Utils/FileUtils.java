@@ -87,13 +87,15 @@ public class FileUtils {
      * @throws IOException: exception while trying to create the build script
      */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
-        FileWriter writeBuildScript = new FileWriter(getLocalFile().getPath() + "\\" + fileName);
+        // TODO: add linux support to build script to run project
+        String name = getLocalFile().getPath() + File.separator + fileName;
+        FileWriter writeBuildScript = new FileWriter(name);
         Command myCommand = new Command(getLocalFile().getPath());
         CommandUtils cUtils = new CommandUtils(getLocalFile().getPath());
         String
             srcClases = cUtils.getSrcClases(),
             libFiles = "",
-            compile = "javac -Werror -Xlint:all -d .\\bin\\",
+            compile = "javac -Werror -Xlint:all -d ." + File.separator + "bin" + File.separator,
             runJar = "",
             runCommand = "";
         libFiles += cUtils.getLibFiles()
@@ -225,7 +227,7 @@ public class FileUtils {
     public void createParentFile(String targetFilePath, String parentFileNames) {
         String[] parentNames = parentFileNames.split("\n");
         for(String pn: parentNames) {
-            String nFileName = pn.replace(targetFilePath.replace("/", "\\"), "");
+            String nFileName = new File(pn).toPath().normalize().toFile().getPath();
             File mio = new File(pn);
             int fileLenght = new File(nFileName).toPath().getNameCount();
             if(mio.exists() == false && fileLenght > 1) {
