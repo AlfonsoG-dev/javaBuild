@@ -149,7 +149,7 @@ public class OperationUtils {
         }
         return isAdded;
     }
-    // TODO: use linuz sh build shell script language
+    // TODO: use linux sh build shell script language
     public void createBuildScript(boolean includeExtraction) {
         String mainName = FileUtils.getMainClass(localPath);
         if(!mainName.isEmpty()) {
