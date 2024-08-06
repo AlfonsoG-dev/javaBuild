@@ -79,6 +79,53 @@ public class FileUtils {
             }
         }
     }
+    private String getRunCommand() {
+        String command = "";
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" " +
+                "+ \" && \" +" + "\"$javaCommand\"" + "\n";
+        }
+        return command;
+    }
+    private String getJavaCommand(String mainClass) {
+        String command = "";
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            command = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
+        } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
+            command = "java -jar " + mainClass + "\n";
+        }
+        return command;
+    }
+    private String buildCommand() {
+        String command = "";
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" \n";
+        }
+        return command;
+    }
+
+    private void writeSentences(FileWriter writeBuildScript, String srcClases, String libFiles, String compile,
+            String extractJar, String runJar, String runCommand) throws IOException {
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            writeBuildScript.write(
+                    "$srcClases = \"" + srcClases + "\"\n" +
+                    "$libFiles = \"" + libFiles + "\"\n" +
+                    "$compile = \"" + compile + "\"\n" + 
+                    "$createJar = " + "\"" + extractJar + "\"" + "\n" + 
+                    runJar + 
+                    runCommand +
+                    "Invoke-Expression $runCommand \n"
+            );
+        } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
+            writeBuildScript.write(
+                    "srcClases = " + "\"" + srcClases + "\"\n" + 
+                    "libFiles = " + "\"" + libFiles + "\"\n" + 
+                    compile + "\n" + 
+                    extractJar + "\n" + 
+                    runJar
+            );
+        }
+    }
     /**
      * create the sentences for the build script
      * @param fileName: path where the build script is created
@@ -107,23 +154,20 @@ public class FileUtils {
         } else {
             compile += " $srcClases";
         }
-            runCommand =
-                "$runCommand = " + "\"$compile\" +" +
-                " \" && \" +" + " \"$createJar\" ";
         if(!mainClass.isEmpty()) {
-            runJar = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
-            runCommand += "+ \" && \" +" + "\"$javaCommand\"" + "\n";
+            runJar = getJavaCommand(mainClass);
+            runCommand = getRunCommand();
         } else {
-            runCommand += "\n";
+            runCommand = buildCommand();
         }
-        writeBuildScript.write(
-                "$srcClases = \"" + srcClases + "\"\n" +
-                "$libFiles = \"" + libFiles + "\"\n" +
-                "$compile = \"" + compile + "\"\n" + 
-                "$createJar = " + "\"" + myCommand.getJarFileCommand(extract, "") + "\"" + "\n" + 
-                runJar + 
-                runCommand +
-                "Invoke-Expression $runCommand \n"
+        writeSentences(
+                writeBuildScript,
+                srcClases,
+                libFiles,
+                compile,
+                myCommand.getJarFileCommand(extract, ""),
+                runJar, 
+                runCommand
         );
         writeBuildScript.close();
     }
