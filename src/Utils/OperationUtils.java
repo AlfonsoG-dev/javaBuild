@@ -27,7 +27,7 @@ public class OperationUtils {
             if(command.isEmpty()) {
                 throw new Exception("[ ERROR ]: cannot execute an empty command: ");
             }
-            builder.command("bash", "-c", command);
+            builder.command("pwsh", "-NoProfile", "-Command", command);
             builder.directory(local);
             p = builder.start();
             if(p.getErrorStream() != null) {

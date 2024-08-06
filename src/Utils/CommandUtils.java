@@ -105,8 +105,9 @@ public class CommandUtils {
         if(target.isEmpty() && getLibFiles().isEmpty()) {
             compile.append(".");
             compile.append(File.separator);
-            compile.append("bin ");
+            compile.append("bin");
             compile.append(File.separator);
+            compile.append(" ");
         } else if(target.isEmpty() && !getLibFiles().isEmpty()) {
             compile.append(".");
             compile.append(File.separator);
