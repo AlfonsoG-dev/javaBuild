@@ -62,8 +62,7 @@ public class FileOperation {
                         "}"
                 );
                 writeMainClass.close();
-                // TODO: get linux support
-            } else if(fileName.equals("java-exe.ps1")) {
+            } else if(fileName.equals("java-exe.ps1") || fileName.equals("build.sh")) {
                 fileUtils.writeBuildFile(
                         fileName,
                         mainClass,

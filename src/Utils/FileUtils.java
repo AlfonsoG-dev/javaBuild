@@ -104,7 +104,7 @@ public class FileUtils {
         return command;
     }
 
-    private void writeSentences(FileWriter writeBuildScript, String srcClases, String libFiles, String compile,
+    private void writeSentences(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles, String compile,
             String extractJar, String runJar, String runCommand) throws IOException {
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             writeBuildScript.write(
@@ -124,6 +124,10 @@ public class FileUtils {
                     extractJar + "\n" + 
                     runJar
             );
+            File local = new File(filePath);
+            if(local.setExecutable(true)) {
+                System.out.println("[ INFO ]: change file to executable " + local.getPath());
+            }
         }
     }
     /**
@@ -134,7 +138,6 @@ public class FileUtils {
      * @throws IOException: exception while trying to create the build script
      */
     public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
-        // TODO: add linux support to build script to run project
         String name = getLocalFile().getPath() + File.separator + fileName;
         FileWriter writeBuildScript = new FileWriter(name);
         Command myCommand = new Command(getLocalFile().getPath());
@@ -161,6 +164,7 @@ public class FileUtils {
             runCommand = buildCommand();
         }
         writeSentences(
+                name,
                 writeBuildScript,
                 srcClases,
                 libFiles,

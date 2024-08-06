@@ -1,7 +1,6 @@
 package Utils;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,7 +30,7 @@ public class OperationUtils {
             if(System.getProperty("os.name").toLowerCase().contains("windows")) {
                 builder.command("pwsh", "-NoProfile", "-Command", command);
             } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-                builder.command("bash", "-c", command);
+                builder.command("/bin/sh", "-c", command);
             }
             builder.directory(local);
             p = builder.start();
@@ -154,13 +153,26 @@ public class OperationUtils {
         }
         return isAdded;
     }
-    // TODO: use linux sh build shell script language
+    private String getBuildFileName() {
+        String name = "";
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            name = "java-exe.ps1";
+        } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
+            name = "build.sh";
+        }
+        return name;
+    }
     public void createBuildScript(boolean includeExtraction) {
         String mainName = FileUtils.getMainClass(localPath);
         if(!mainName.isEmpty()) {
             mainName = mainName + ".jar";
         }
-        fileOperation.createFiles("", "java-exe.ps1", mainName, includeExtraction);
+        fileOperation.createFiles(
+                "",
+                getBuildFileName(),
+                mainName,
+                includeExtraction
+        );
         System.out.println("[ INFO ]: Adding build script ...");
     }
 }
