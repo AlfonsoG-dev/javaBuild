@@ -26,6 +26,16 @@
 # TODO's 
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of `javaFX`
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
+- [ ] error of implementations, output:
+```shell
+[ INFO ]: .\\src\ folder not found
+[ CMD ]: javac -Werror -Xlint:all -d .\bin\
+[ INFO ]: compile ...
+[ ERROR ]: error: no source files
+[ CMD ]: jar -cfe jooglem.jar jooglem -C .\bin\ .
+[ INFO ]: creating jar file ...
+[ ERROR ]: .\bin\. : no such file or directory
+```
  
 ------
 
