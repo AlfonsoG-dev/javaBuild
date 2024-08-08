@@ -118,8 +118,8 @@ public class FileUtils {
             );
         } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
             writeBuildScript.write(
-                    "srcClases = " + "\"" + srcClases + "\"\n" + 
-                    "libFiles = " + "\"" + libFiles + "\"\n" + 
+                    "srcClases=" + "\"" + srcClases + "\"\n" + 
+                    "libFiles=" + "\"" + libFiles + "\"\n" + 
                     compile + "\n" + 
                     extractJar + "\n" + 
                     runJar
