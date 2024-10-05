@@ -15,6 +15,9 @@ import Utils.CommandUtils;
 import Utils.FileUtils;
 import Utils.OperationUtils;
 
+/**
+ * Its the perform class of the java command
+ */
 public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
@@ -28,6 +31,10 @@ public class Operation {
         commandUtils = new CommandUtils(nLocalPath);
         myCommand = new Command(nLocalPath);
     }
+    /**
+     * creates the folder or directory structure:
+     * bin, lib, src, docs, extractionFiles.
+     */
     public void createProyectOperation() {
         String[] names = {
             "bin",
@@ -45,6 +52,12 @@ public class Operation {
             }
         }
     }
+    /**
+     * creates the initial files needed in at the start:
+     *  Manifesto, gitignore and the mainClass file for java.
+     *  @param author its the name of the author for the Manifesto file.
+     *  @throws IOException
+     */
     public void createFilesOperation(String author) {
         File localFile = new File(localPath);
         System.out.println("[ INFO ]: creating files ...");
@@ -73,6 +86,11 @@ public class Operation {
             }
         }
     }
+    /**
+     * used to list the .java or .jar or .class files in the project.
+     * @param source its the folder/directory where the files are stored.
+     * @throws IOException
+     */
     public void listProjectFiles(String source) {
         String dirPath = localPath + File.separator + new File(source).toPath().normalize();
         try {
@@ -87,6 +105,11 @@ public class Operation {
             e.printStackTrace();
         }
     }
+    /**
+     * Performs the compile operation using the compile command.
+     * @param target the folder/directory where you want to store the .class files. Its ./bin/ by default.
+     * @throws Exception when the compile command gets an error.
+     */
     public void compileProyectOperation(String target) {
         String compileCommand = myCommand.getCompileCommand(
                 target
@@ -99,6 +122,12 @@ public class Operation {
             e.printStackTrace();
         }
     }
+    /**
+     * Performs the extraction operation using the extract command.
+     * Usually you will extract the .jar files stored in the lib folder. 
+     * @param extracFile the file to extract.
+     * @throws IOException the file doesn't exists
+     */
     public void executeExtractionCommand(String extracFile) throws IOException {
         myCommand.getExtractionsCommand()
             .parallelStream()
@@ -115,6 +144,10 @@ public class Operation {
                 }
             });
     }
+    /**
+     * helper function to get the lib folder/directory dependency or .jar files
+     * @throws IOException
+     */
     public void extractJarDependencies() {
         List<String> jars = commandUtils.getLibFiles();
         jars
@@ -135,6 +168,12 @@ public class Operation {
             }
         });
     }
+    /**
+     * Performs create jar operation using the command.
+     * @param includeExtraction boolean valuea that indicates if you add or not to the build the lib file.
+     * @param source the folder to include in the build.
+     * @throws Exception when creating a jar file gets an error.
+     */
     public void createJarOperation(boolean includeExtraction, String source) {
         try {
             String command = myCommand.getJarFileCommand(includeExtraction, source);
@@ -145,6 +184,11 @@ public class Operation {
             e.printStackTrace();
         }
     }
+    /**
+     * Helper function that allow to identified if you include or not in the build the lib dependency.
+     * By adding the Class-Path property in the Manifesto file you exclude the lib dependency in the build.
+     * @throws IOException
+     */
     public boolean haveIncludeExtraction() {
         boolean haveInclude = true; 
         BufferedReader myReader = null;
@@ -173,6 +217,10 @@ public class Operation {
         }
         return haveInclude;
     }
+    /**
+     * Helper function that allow to get the author name of the manifesto file.
+     * @throws IOException
+     */
     public String getAuthorName() {
         String author = "";
         BufferedReader myReader = null;
@@ -202,6 +250,11 @@ public class Operation {
         }
         return author;
     }
+    /**
+     * Heper function that writes in the manifesto the lib .jar dependencies.
+     * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
+     * @param author name of the author of the project.
+     */
     public void createIncludeExtractions(boolean includeExtraction, String author) {
         System.out.println("[ INFO ]: creating manifesto ...");
         if(author.isEmpty() && !getAuthorName().isEmpty()) {
@@ -228,6 +281,12 @@ public class Operation {
             );
         }
     }
+    /**
+     * Performs the add jar dependency operation.
+     * This takes the .jar or the folder and copies it in the lib folder.
+     * @param jarFilePath the path to the jar file, it can be the .jar or the folder.
+     * @throws Exception while trying to copy the jar dependency.
+     */
     public void createAddJarFileOperation(String jarFilePath) {
         try {
             boolean command = operationUtils.addJarDependency(jarFilePath);
@@ -238,9 +297,20 @@ public class Operation {
             e.printStackTrace();
         }
     }
+    /**
+     * Performs the create build script operation.
+     * <br><b>Post: </b> If the OS is windows creates a *.ps1* script, otherwise creates a *.sh* script.
+     * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
+     */
     public void buildScript(boolean includeExtraction) {
         operationUtils.createBuildScript(includeExtraction);
     }
+    /**
+     * Performs the run operation using the compile or *.class* folder path.
+     * @param className the main class name or the name of the class that you want to execute.
+     * @param source the *.class* folder path. By default its *./bin/*
+     * @throws Exception while trying to execute run operation.
+     */
     public void runAppOperation(String className, String source) {
         String command = myCommand.getRunCommand(
                 commandUtils.getLibFiles(),
