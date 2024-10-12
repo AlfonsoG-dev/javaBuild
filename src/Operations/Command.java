@@ -20,6 +20,11 @@ public class Command {
         fileUtils = new FileUtils(localPath);
     }
 
+    /**
+     * create the compile command using lib files and src files to build.
+     * @param target its the folder/directory to allocate the .class files.
+     * @return the compile command
+     */
     public String getCompileCommand(String target) {
         // create jar files command for compile operation
         StringBuffer 
@@ -61,6 +66,11 @@ public class Command {
         }
         return compile.toString();
     }
+    /**
+     * create a list of jar files to extract for the build process.
+     * <br/><b>pre: </b> The extraction jars are the .jar files in the lib folder.
+     * @return the list of jar files to extract.
+     */
     public List<String> getExtractionsCommand() throws IOException {
         File extractionFile = new File(localPath + File.separator + "extractionFiles");
         List<String> commands = new ArrayList<>();
@@ -78,6 +88,13 @@ public class Command {
             });
         return commands;
     }
+    /**
+     * create the jar command for the build process.
+     * <br/><b>pre: </b> use the Manifesto, main class files to create the java cli command for the jar file.
+     * @param includeExtraction boolean value that indicates if you want to include or not the lib files in the build.
+     * @param source where the lib files are.
+     * @return the jar command for the build process.
+     */
     public String getJarFileCommand(boolean includeExtraction, String source) throws IOException {
         String
             command = "",
@@ -97,6 +114,13 @@ public class Command {
         }
         return command;
     }
+    /**
+     * creates the run command or the execute command.
+     * @param libJars a list of jar files of lib folder.
+     * @param className the main class name.
+     * @param source the source folder of the .class files.
+     * @return the run or execute command.
+     */
     public String getRunCommand(List<String> libJars, String className, String source) {
         String command  = "";
         StringBuffer 

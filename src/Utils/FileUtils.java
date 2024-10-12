@@ -104,8 +104,8 @@ public class FileUtils {
         return command;
     }
 
-    private void writeSentences(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles, String compile,
-            String extractJar, String runJar, String runCommand) throws IOException {
+    private void writeSentences(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles,
+            String compile, String extractJar, String runJar, String runCommand) throws IOException {
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             writeBuildScript.write(
                     "$srcClases = \"" + srcClases + "\"\n" +
