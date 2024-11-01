@@ -27,19 +27,19 @@
 - [x] create the folder structure of the project.
 - [x] create the run powershell script and executes the project.
 
-# TODO's 
-- [ ] add to the *--add* CLI command the aggregation of modules like the ones of `javaFX`
+# TODO's
+- [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
  
 ------
 
 # How to
 
-- use the ps1 script to build the project.
+- use the `.ps1` script to build the project.
 ```shell
 pwsh java-exe.ps1
 ```
->- it will build the project and create the jar file to use for the exe file creation.
+>- it will build the project and create the jar file to use for the *.exe* file creation.
 >- now you have the jar file to test the project functionality.
 
 # Usage
@@ -74,21 +74,21 @@ includes the extraction files of the lib dependency as part of the project *.jar
 >- to compile the project.
 >>- `javaBuild.exe -cm`.
 >>>- it compiles the .java clases into bin.
->- you can give a *directoryPath* to indicate the directory where you want to place the compiled files.
+>- you can give a folder path to indicate the directory where you want to place the compiled files.
 ```pwsh
 javabuild.exe -cm .\otro\target
 ```
 
 ## Create a jar file of the project
 
->- to create a jar file is necessary to include or verify dependencies or libs in the project.
+>- to create a jar file is necessary to include or verify dependencies or libraries in the project.
 >>- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`.
->>- use the *extractionFiles* to include in the project jar file the dependencies.
+>>- use the extracted files to include the library files in the build process of the project *.jar* file.
 >>>- `javaBuild.exe -ex`.
 
 >- now to create the project jar file.
 >>- `javaBuild.exe -cj`.
->>- it also can be created using source files as param:
+>>- it also can be created using source folder as parameter:
 ```pwsh
 javabuild.exe -cj .\testing\
 ```
@@ -102,7 +102,7 @@ javabuild.exe -cj .\testing\
 
 >- all can be done with only 1 command
 >>- `javaBuild.exe --build`
->>>- it combines the commands: *"compile and createJar"* to build
+>>>- it combines the commands: *compile* & *create jar* to build the project.
 >>>- the extraction of the jar dependency need to be execute manually with: `-ex` and only one time per jar dependency
 
 ## Create the project structure
@@ -111,7 +111,7 @@ javabuild.exe -cj .\testing\
 >>- `javaBuild.exe -b author-name`
 >>>- adds the manifesto file and the main class with the project folder name
 
-## Run or excute the project
+## Run or execute the project
 >- `javabuild.exe --run`
 >>- it compiles to *.\bin\* folder and executes the project using the .class files.
 >>- you can specify the java class that you want to execute: 
@@ -123,7 +123,7 @@ javabuild.exe --run .\src\App.java
 javabuild.exe --run .\src\App.java -s .\testing\
 ```
 >>- if you don't give the class to execute the main class is selected
->>- additional you can execute cli command with this method too
+>>- additional you can execute CLI command with this method too
 ```pwsh
 javabuild.exe --run --h
 ```
@@ -154,6 +154,5 @@ This project use [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild) to 
 
 # Disclaimer
 >- this project is for educational purposes
->- it is not intended to create a full program
 >- security issues are not taken into account
->- only works when the lib file do not contain modules
+>- only works when the lib file don't contain modules
