@@ -2,6 +2,10 @@
 >- basic build tool for simple java projects
 >- build the project with 1 or 3 simple commands
 
+![expected output](./docs/build_command.png)
+
+-----
+
 # Dependencies
 - [java_jdk_17.0.8](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [powershell](https://www.microsoft.com/store/productId/9MZ1SNWT0N5D?ocid=pdpshare)
