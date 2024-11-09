@@ -10,12 +10,12 @@
 # Dependencies
 - [java_jdk_17.0.8](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [powershell](https://www.microsoft.com/store/productId/9MZ1SNWT0N5D?ocid=pdpshare)
-- [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild)
 
 # References
 - [compile_references](https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html)
 - [create_jar_references](https://docs.oracle.com/javase/tutorial/deployment/jar/index.html)
 - [run_java_references](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html)
+- [executables_from_jar_linux](https://stackoverflow.com/questions/44427355/how-to-convert-jar-to-linux-executable-file)
 
 ------
 
@@ -155,11 +155,17 @@ This project use [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild) to 
 >- this app uses powershell to execute the commands on WINDOWS.
 >- this app uses bash to execute commands on LINUX.
 >- if you want to use the CLI tool you have to create a `.exe` file and place it in system path
-
+>- for **LINUX**
+```bash
+$ echo '#!/usr/bin/java -jar' > myBin
+$ cat my.jar >> myBin
+$ chmod +x myBin
+$ ./myBin
+```
+- with that you can create an **environment variable** and use it from there.
 ------
 
 # Disclaimer
 >- this project is for educational purposes
 >- security issues are not taken into account
->- only works when the lib file don't contain modules
 >- only works when the lib file don't contain modules
