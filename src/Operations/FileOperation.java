@@ -157,9 +157,6 @@ public class FileOperation {
     }
     public void copyFilesfromSourceToTarget(String sourceFilePath, String targetFilePath) {
         try {
-            if(sourceFilePath.startsWith(".") || sourceFilePath.startsWith("..")) {
-                throw new IOException("Only full paths are supported");
-            }
             File sf = new File(sourceFilePath);
             if(sf.isFile()) {
                 String sourceFileName = sf.getName();
