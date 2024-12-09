@@ -43,12 +43,12 @@ public class Operation {
             "docs",
             "extractionFiles"
         };
-        System.out.println("[ INFO ]: Creating the project structure ...");
+        System.out.println("[ Info ]: Creating the project structure ...");
 
         for(String n: names) {
             File f = new File(localPath + File.separator + n);
             if(!f.exists() && f.mkdir()) {
-                System.out.println("[ INFO ]: Created " + f.getPath());
+                System.out.println("[ Info ]: Created " + f.getPath());
             }
         }
     }
@@ -60,7 +60,7 @@ public class Operation {
      */
     public void createFilesOperation(String author) {
         File localFile = new File(localPath);
-        System.out.println("[ INFO ]: creating files ...");
+        System.out.println("[ Info ]: creating files ...");
         DirectoryStream<Path> files = null;
         try {
             files = Files.newDirectoryStream(localFile.toPath());
@@ -115,8 +115,8 @@ public class Operation {
                 target
         );
         try {
-            System.out.println("[ CMD ]: " + compileCommand);
-            System.out.println("[ INFO ]: compile ...");
+            System.out.println("[ Command ]: " + compileCommand);
+            System.out.println("[ Info ]: compile ...");
             operationUtils.executeCommand(compileCommand);
         } catch(Exception e) {
             e.printStackTrace();
@@ -133,14 +133,14 @@ public class Operation {
             .parallelStream()
             .forEach(p -> {
                 if(!extracFile.isEmpty()) {
-                    System.out.println("[ CMD ]: " + p);
+                    System.out.println("[ Command ]: " + p);
                     try {
                         operationUtils.executeCommand(p);
                     } catch(Exception err) {
                         err.printStackTrace();
                     }
                 } else {
-                    System.out.println("[ INFO ]: NO EXTRACTION FILES");
+                    System.out.println("[ Info ]: NO EXTRACTION FILES");
                 }
             });
     }
@@ -156,12 +156,12 @@ public class Operation {
             try {
                 boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
                 if(libAlreadyExists == false) {
-                    System.out.println("[ INFO ]: extracting jar dependencies ...");
+                    System.out.println("[ Info ]: extracting jar dependencies ...");
                     operationUtils.createExtractionFiles(jars);
                     // the extraction files can be more than 1
                     executeExtractionCommand(e);
                 } else {
-                    System.out.println("[ INFO ]: THERE IS NO DEPENDENCIES TO EXTRACT");
+                    System.out.println("[ Info ]: THERE IS NO DEPENDENCIES TO EXTRACT");
                 }
             } catch(IOException err) {
                 err.printStackTrace();
@@ -177,8 +177,8 @@ public class Operation {
     public void createJarOperation(boolean includeExtraction, String source) {
         try {
             String command = myCommand.getJarFileCommand(includeExtraction, source);
-            System.out.println("[ CMD ]: " + command);
-            System.out.println("[ INFO ]: creating jar file ...");
+            System.out.println("[ Command ]: " + command);
+            System.out.println("[ Info ]: creating jar file ...");
             operationUtils.executeCommand(command);
         } catch(Exception e) {
             e.printStackTrace();
@@ -256,7 +256,7 @@ public class Operation {
      * @param author name of the author of the project.
      */
     public void createIncludeExtractions(boolean includeExtraction, String author) {
-        System.out.println("[ INFO ]: creating manifesto ...");
+        System.out.println("[ Info ]: creating manifesto ...");
         if(author.isEmpty() && !getAuthorName().isEmpty()) {
             author = getAuthorName();
         }
@@ -291,7 +291,7 @@ public class Operation {
         try {
             boolean command = operationUtils.addJarDependency(jarFilePath);
             if(command == true) {
-                System.out.println("[ INFO ]: jar dependency has been added to lib folder");
+                System.out.println("[ Info ]: jar dependency has been added to lib folder");
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -318,8 +318,8 @@ public class Operation {
                 source
         );
         try {
-            System.out.println("[ CMD ]: " + command);
-            System.out.println("[ INFO ]: running ... ");
+            System.out.println("[ Command ]: " + command);
+            System.out.println("[ Info ]: running ... ");
             operationUtils.executeCommand(command);
         } catch(Exception e) {
             e.printStackTrace();

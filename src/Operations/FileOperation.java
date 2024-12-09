@@ -23,7 +23,7 @@ public class FileOperation {
         fileUtils = new FileUtils(localPath);
     } 
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
-        System.out.println("[ INFO ]: created " + fileName);
+        System.out.println("[ Info ]: created " + fileName);
         try {
             File
                 localFile = new File(localPath),

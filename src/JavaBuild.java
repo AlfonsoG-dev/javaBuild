@@ -13,7 +13,7 @@ class JavaBuild {
                             op.listProjectFiles(args[i+1]);
                         } else {
                             System.err.println(
-                                    "[ ERROR ]: you must specify src or lib dir like: -ls .\\src"
+                                    "[ Error ]: you must specify src or lib dir like: -ls .\\src"
                             );
                         }
                         break;
@@ -22,7 +22,7 @@ class JavaBuild {
                             op.createProyectOperation();
                             op.createFilesOperation(args[i+1]);
                         } else {
-                            System.err.println("[ ERROR ]: no author provide");
+                            System.err.println("[ Error ]: no author provide");
                         }
                         break;
                     case "-cm":
@@ -36,7 +36,7 @@ class JavaBuild {
                         if(haveExtractions) {
                             op.extractJarDependencies();
                         } else {
-                            System.out.println("[ INFO ]: Extraction files are not included");
+                            System.out.println("[ Info ]: Extraction files are not included");
                         }
 
                         break;
@@ -74,7 +74,7 @@ class JavaBuild {
                         if((i+1) < args.length) {
                             op.createAddJarFileOperation(args[i+1]);
                         } else {
-                            System.out.println("[ INFO ]: the path to the jar file is needed");
+                            System.out.println("[ Info ]: the path to the jar file is needed");
                         }
                         break;
                     case "--run":

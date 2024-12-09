@@ -25,7 +25,7 @@ public class OperationUtils {
             String localFULL = new File(localPath).getCanonicalPath();
             File local = new File(localFULL);
             if(command.isEmpty()) {
-                throw new Exception("[ ERROR ]: cannot execute an empty command: ");
+                throw new Exception("[ Error ]: cannot execute an empty command: ");
             }
             if(System.getProperty("os.name").toLowerCase().contains("windows")) {
                 builder.command("pwsh", "-NoProfile", "-Command", command);
@@ -35,10 +35,10 @@ public class OperationUtils {
             builder.directory(local);
             p = builder.start();
             if(p.getErrorStream() != null) {
-                CMDOutputError(p.getErrorStream());
+                CommandOutputError(p.getErrorStream());
             }
             if(p.getInputStream() != null) {
-                CMDOutput(p.getInputStream());
+                CommandOutput(p.getInputStream());
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -54,7 +54,7 @@ public class OperationUtils {
             }
         }
     }
-    public void CMDOutputError(InputStream miCmdStream) {
+    public void CommandOutputError(InputStream miCmdStream) {
         BufferedReader miReader = null;
         try {
             miReader = new BufferedReader(new InputStreamReader(miCmdStream));
@@ -64,7 +64,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[ ERROR ]: " + line);
+                System.out.println("[ Error ]: " + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class OperationUtils {
             }
         }
     }
-    public void CMDOutput(InputStream miCmdStream) {
+    public void CommandOutput(InputStream miCmdStream) {
         BufferedReader miReader = null;
         try {
             miReader = new BufferedReader(new InputStreamReader(miCmdStream));
@@ -89,7 +89,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[ INFO ]: " + line);
+                System.out.println("[ Info ]: " + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -128,12 +128,12 @@ public class OperationUtils {
             });
     }
     public boolean addJarDependency(String jarFilePath) throws Exception {
-        System.out.println("[ INFO ]: adding jar dependency in process ...");
+        System.out.println("[ Info ]: adding jar dependency in process ...");
         String sourceFilePath = "";
         boolean isAdded = false;
         File jarFile = new File(jarFilePath);
         if(!jarFile.exists()) {
-            throw new Exception("[ ERROR ]: jar file not found");
+            throw new Exception("[ Error ]: jar file not found");
         }
         if(jarFile.isFile()) {
             sourceFilePath = jarFile.getParent();
@@ -149,7 +149,7 @@ public class OperationUtils {
             );
             isAdded = true;
         } else {
-            System.out.println("[ INFO ]: DEPENDENCY ALREADY INSIDE THE PROYECT");
+            System.out.println("[ Info ]: DEPENDENCY ALREADY INSIDE THE PROYECT");
         }
         return isAdded;
     }
@@ -173,6 +173,6 @@ public class OperationUtils {
                 mainName,
                 includeExtraction
         );
-        System.out.println("[ INFO ]: Adding build script ...");
+        System.out.println("[ Info ]: Adding build script ...");
     }
 }
