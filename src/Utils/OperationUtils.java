@@ -25,7 +25,7 @@ public class OperationUtils {
             String localFULL = new File(localPath).getCanonicalPath();
             File local = new File(localFULL);
             if(command.isEmpty()) {
-                throw new Exception("[ Error ]: cannot execute an empty command: ");
+                throw new Exception("[Error] cannot execute an empty command: ");
             }
             if(System.getProperty("os.name").toLowerCase().contains("windows")) {
                 builder.command("pwsh", "-NoProfile", "-Command", command);
@@ -64,7 +64,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[ Error ]: " + line);
+                System.out.println("[Error] " + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[ Info ]: " + line);
+                System.out.println("[Info] " + line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -128,12 +128,12 @@ public class OperationUtils {
             });
     }
     public boolean addJarDependency(String jarFilePath) throws Exception {
-        System.out.println("[ Info ]: adding jar dependency in process ...");
+        System.out.println("[Info] adding jar dependency in process ...");
         String sourceFilePath = "";
         boolean isAdded = false;
         File jarFile = new File(jarFilePath);
         if(!jarFile.exists()) {
-            throw new Exception("[ Error ]: jar file not found");
+            throw new Exception("[Error] jar file not found");
         }
         if(jarFile.isFile()) {
             sourceFilePath = jarFile.getParent();
@@ -149,7 +149,7 @@ public class OperationUtils {
             );
             isAdded = true;
         } else {
-            System.out.println("[ Info ]: DEPENDENCY ALREADY INSIDE THE PROYECT");
+            System.out.println("[Info] DEPENDENCY ALREADY INSIDE THE PROYECT");
         }
         return isAdded;
     }
@@ -173,6 +173,6 @@ public class OperationUtils {
                 mainName,
                 includeExtraction
         );
-        System.out.println("[ Info ]: Adding build script ...");
+        System.out.println("[Info] Adding build script ...");
     }
 }

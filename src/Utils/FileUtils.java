@@ -126,7 +126,7 @@ public class FileUtils {
             );
             File local = new File(filePath);
             if(local.setExecutable(true)) {
-                System.out.println("[ Info ]: change file to executable " + local.getPath());
+                System.out.println("[Info] change file to executable " + local.getPath());
             }
         }
     }
@@ -283,7 +283,7 @@ public class FileUtils {
             } else if(mio.exists() == false && fileLenght <= 1) {
                 mio.mkdir();
             }
-            System.out.println("[ Info ]: created " + mio.getPath());
+            System.out.println("[Info] created " + mio.getPath());
         }
     }
     public String readFileLines(String path) {

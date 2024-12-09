@@ -62,7 +62,7 @@ public class CommandUtils {
                         }
                     });
             } else {
-                System.out.println("[ Info ]: " + localPath + "\\src\\ folder not found");
+                System.out.println("[Info] " + srcFile.getPath() + " not found");
             }
         } catch(Exception e) {
             e.printStackTrace();
