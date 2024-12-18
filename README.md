@@ -31,6 +31,7 @@
 # TODO's
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
+- [ ] add cli option to the create build script to allow the user to name the script.
  
 ------
 
@@ -62,6 +63,7 @@ include the extraction files of the lib dependency or you need to declara in the
 of the lib dependencies
 
 ```text
+Created-By: Author-Name
 Main-Class: App
 Class-Path: .\lib\dependencyFolder\dependency.jar
 ```
@@ -83,8 +85,13 @@ javaBuild -ls .\src\
 - Use this to create the structure for the project.
 >- You need to provide the author
 ```shell
-javaBuild -cb -ls Author-Name
+javaBuild -cb Author-Name
 ```
+>- As soon you create the project you need to change the manifesto adding the main class.
+```shell
+javaBuild --i
+```
+>- This will add the main class value to the manifesto.
 
 ## Compile
 
@@ -94,7 +101,7 @@ javaBuild -cb -ls Author-Name
 >>- you can give a folder path to indicate the directory where you want to place the compiled files.
 >>- The default folder for the *class* files is **.\bin\**
 ```pwsh
-javabuild -cm .\otro\target
+javabuild -cm .\other\target
 ```
 
 ## Create a jar file of the project
@@ -110,6 +117,8 @@ javabuild -cm .\otro\target
 ```pwsh
 javabuild -cx .\testing\
 ```
+>- remember that the manifesto determines the behavior for the build process.
+
 ## Create the build script
 
 - Use this to create the build script for **powershell** in windows and **bash** for linux.
