@@ -302,8 +302,8 @@ public class Operation {
      * <br><b>Post: </b> If the OS is windows creates a *.ps1* script, otherwise creates a *.sh* script.
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      */
-    public void buildScript(boolean includeExtraction) {
-        operationUtils.createBuildScript(includeExtraction);
+    public void buildScript(boolean includeExtraction, String fileName) {
+        operationUtils.createBuildScript(includeExtraction, fileName);
     }
     /**
      * Performs the run operation using the compile or *.class* folder path.

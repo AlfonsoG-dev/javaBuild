@@ -153,23 +153,23 @@ public class OperationUtils {
         }
         return isAdded;
     }
-    private String getBuildFileName() {
+    private String getBuildFileName(String fileName) {
         String name = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            name = "java-exe.ps1";
+            name = fileName + ".ps1";
         } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-            name = "build.sh";
+            name = fileName + ".sh";
         }
         return name;
     }
-    public void createBuildScript(boolean includeExtraction) {
+    public void createBuildScript(boolean includeExtraction, String fileName) {
         String mainName = FileUtils.getMainClass(localPath);
         if(!mainName.isEmpty()) {
             mainName = mainName + ".jar";
         }
         fileOperation.createFiles(
                 "",
-                getBuildFileName(),
+                getBuildFileName(fileName),
                 mainName,
                 includeExtraction
         );

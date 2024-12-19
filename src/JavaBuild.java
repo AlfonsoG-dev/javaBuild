@@ -49,7 +49,11 @@ class JavaBuild {
                         }
                         break;
                     case "-cr":
-                        op.buildScript(haveExtractions);
+                        if((i+1)<args.length) {
+                            op.buildScript(haveExtractions, args[i+1]);
+                        } else {
+                            op.buildScript(haveExtractions, "build");
+                        }
                         break;
                     case "--i":
                         String author = getCliValues(args, i, "-a");
@@ -112,6 +116,8 @@ class JavaBuild {
                         System.out.println("\t if you don't provide the path for default its set to .\\bin\\");
                         System.out.println("");
                         System.out.println("use -cr to create the build script");
+                        System.out.println("\t if you want to name the script provide it following the -cr cli comand");
+                        System.out.println("\t -cr build or -cr script");
                         System.out.println("");
                         System.out.println("use --i to include lib jar files as part of the build");
                         System.out.println("\t if you don't want to include jar files use n");

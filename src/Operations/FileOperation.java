@@ -62,7 +62,7 @@ public class FileOperation {
                         "}"
                 );
                 writeMainClass.close();
-            } else if(fileName.equals("java-exe.ps1") || fileName.equals("build.sh")) {
+            } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
                 fileUtils.writeBuildFile(
                         fileName,
                         mainClass,

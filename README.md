@@ -27,11 +27,11 @@
 - [x] build the project, combine the 3 previously mention.
 - [x] create the folder structure of the project.
 - [x] create the run powershell script and executes the project.
+- [x] add cli option to the create build script to allow the user to name the script.
 
 # TODO's
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
-- [ ] add cli option to the create build script to allow the user to name the script.
  
 ------
 
@@ -39,7 +39,11 @@
 
 - use the `.ps1` script to build the project.
 ```shell
-pwsh java-exe.ps1
+build.ps1
+
+or
+
+./build.sh
 ```
 >- it will build the project and create the jar file to use for the *.exe* file creation.
 >- now you have the jar file to test the project functionality.
