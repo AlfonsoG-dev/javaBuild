@@ -3,7 +3,10 @@
 - build the project with 1 or 3 simple commands
 - It works on WINDOWS & LINUX
 
+- First build of the project.
 ![expected output](./docs/build_command.png)
+
+- When you compile after the first build.
 ![expected_recompile](./docs/recompile.png)
 
 -----
