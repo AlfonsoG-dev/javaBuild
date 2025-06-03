@@ -110,8 +110,11 @@ public class Operation {
      * @param target the folder/directory where you want to store the .class files. Its ./bin/ by default.
      * @throws Exception when the compile command gets an error.
      */
-    public void compileProyectOperation(String target) {
+    public void compileProyectOperation(String source, String target) {
+        if(source.isEmpty()) source = "src";
+        if(target.isEmpty()) target = "bin";
         String compileCommand = myCommand.getCompileCommand(
+                source,
                 target
         );
         try {

@@ -143,7 +143,7 @@ public class FileUtils {
         Command myCommand = new Command(getLocalFile().getPath());
         CommandUtils cUtils = new CommandUtils(getLocalFile().getPath());
         String
-            srcClases = cUtils.getSrcClases(),
+            srcClases = cUtils.getSrcClases("src", "bin"),
             libFiles = "",
             compile = "javac -Werror -Xlint:all -d ." + File.separator + "bin" + File.separator,
             runJar = "",

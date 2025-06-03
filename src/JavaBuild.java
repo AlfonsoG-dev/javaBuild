@@ -26,10 +26,10 @@ class JavaBuild {
                         }
                         break;
                     case "-cm":
-                        if((i+1) < args.length) {
-                            op.compileProyectOperation(args[i+1]);
+                        if((i+1) < args.length && (i+2) < args.length) {
+                            op.compileProyectOperation(args[i+1], args[i+2]);
                         } else {
-                            op.compileProyectOperation("");
+                            op.compileProyectOperation("", "");
                         }
                         break;
                     case "-cx":
@@ -64,13 +64,14 @@ class JavaBuild {
                         }
                         break;
                     case "--build":
-                        String target = getCliValues(args, i, "-s");
+                        String sourceFile = getCliValues(args, i, "-s");
+                        String target = getCliValues(args, i, "-t");
                         if(haveExtractions) {
-                            op.compileProyectOperation(target);
+                            op.compileProyectOperation(sourceFile, target);
                             op.extractJarDependencies();
                             op.createJarOperation(true, target);
                         } else {
-                            op.compileProyectOperation(target);
+                            op.compileProyectOperation(sourceFile, target);
                             op.createJarOperation(false, target);
                         }
                         break;
@@ -83,7 +84,8 @@ class JavaBuild {
                         break;
                     case "--run":
                         String source = getCliValues(args, i, "-s");
-                        op.compileProyectOperation(source);
+                        String targetFile = getCliValues(args, i, "-t");
+                        op.compileProyectOperation(source, targetFile);
                         if((i+1) < args.length) {
                             boolean 
                                 conditionA = args[i+1].contains("-"),
@@ -105,7 +107,7 @@ class JavaBuild {
                         System.out.println("");
                         System.out.println("use -cm to compile the proyect");
                         System.out.println("\t when compiling give the directory target");
-                        System.out.println("\t\t -cm .\\target\\");
+                        System.out.println("\t\t -cm .\\source\\ .\\target\\");
                         System.out.println("\t if you don't provide the path for default its set to .\\bin\\");
                         System.out.println("");
                         System.out.println("use -cx to extract the lib jar files");

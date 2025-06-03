@@ -25,7 +25,7 @@ public class Command {
      * @param target its the folder/directory to allocate the .class files.
      * @return the compile command
      */
-    public String getCompileCommand(String target) {
+    public String getCompileCommand(String source, String target) {
         // create jar files command for compile operation
         StringBuffer 
             libFiles = new StringBuffer(),
@@ -42,7 +42,7 @@ public class Command {
                 .collect(Collectors.joining())
         );
         String
-            srcClases = commandUtils.getSrcClases(),
+            srcClases = commandUtils.getSrcClases(source, target),
             mainClass = commandUtils.getMainClass(),
             format = commandUtils.compileFormatType(target);
 
@@ -68,7 +68,8 @@ public class Command {
             compile = new StringBuffer();
             compile.append("javac -d .");
             compile.append(File.separator);
-            compile.append("bin -cp 'bin;");
+            compile.append(target);
+            compile.append(" -cp '" + target + ";");
             if(!libFiles.isEmpty()) {
                 String cb = libFiles.substring(0, libFiles.length()-1);
                 cLibFiles.append(cb);
@@ -80,8 +81,6 @@ public class Command {
                 compile.append("' ");
             }
             compile.append(srcClases);
-            System.out.println("[Error] using unsafe compilation process");
-            System.out.println("[Info] complete the code in Command.java - CommandUtils.java - FileUtils.java");
         }
         return compile.toString();
     }

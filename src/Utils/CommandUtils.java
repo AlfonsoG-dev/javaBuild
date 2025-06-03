@@ -40,25 +40,26 @@ public class CommandUtils {
         }
         return name;
     }
-    public boolean recompile(Path filePath) {
+    public boolean recompile(Path filePath, Path source, Path target) {
+        boolean shouldRecompile = true;
         try {
-            Path relative = Paths.get("src").relativize(filePath);
-            Path classFilePath = Paths.get("bin").resolve(relative.toString().replace(".java", ".class"));
+            Path relative = source.relativize(filePath);
+            Path classFilePath = target.resolve(relative.toString().replace(".java", ".class"));
 
             File javaFile = filePath.toFile();
             File classFile = classFilePath.toFile();
-            return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
+            shouldRecompile = !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
         } catch(Exception e) {
             e.printStackTrace();
-            return true;
         }
+        return shouldRecompile;
     }
-    public String getSrcClases() {
+    public String getSrcClases(String source, String target) {
         String b = "";
         List<String> names = new ArrayList<>();
         try {
-            File srcFile = new File(localPath + File.separator + "src");
-            File binFile = new File(localPath + File.separator + "bin");
+            File srcFile = new File(localPath + File.separator + source);
+            File binFile = new File(localPath + File.separator + target);
             if(srcFile.listFiles() == null) {
                 System.out.println("[Info] " + srcFile.getPath() + " is empty");
             }
@@ -66,7 +67,7 @@ public class CommandUtils {
                 fileUtils.listFilesFromPath(srcFile.toString())
                     .stream()
                     .map(f -> f.toPath())
-                    .filter(p -> recompile(p))
+                    .filter(p -> recompile(p, srcFile.toPath(), binFile.toPath()))
                     .forEach(e -> {
                         names.add(e + " ");
                     });
