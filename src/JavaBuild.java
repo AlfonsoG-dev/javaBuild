@@ -25,14 +25,14 @@ class JavaBuild {
                             System.err.println("[Error] no author provide");
                         }
                         break;
-                    case "-cm":
+                    case "--compile":
                         if((i+1) < args.length && (i+2) < args.length) {
                             op.compileProyectOperation(args[i+1], args[i+2]);
                         } else {
                             op.compileProyectOperation("", "");
                         }
                         break;
-                    case "-cx":
+                    case "--extract":
                         if(haveExtractions) {
                             op.extractJarDependencies();
                         } else {
@@ -40,7 +40,7 @@ class JavaBuild {
                         }
 
                         break;
-                    case "-cj":
+                    case "--jar":
                         String sourceDir = (i+1) < args.length ? args[i+1] : "";
                         if(haveExtractions) {
                             op.createJarOperation(true, sourceDir);
@@ -48,7 +48,7 @@ class JavaBuild {
                             op.createJarOperation(false, sourceDir);
                         }
                         break;
-                    case "-cr":
+                    case "--script":
                         if((i+1)<args.length) {
                             op.buildScript(haveExtractions, args[i+1]);
                         } else {
@@ -105,21 +105,21 @@ class JavaBuild {
                         System.out.println("\t when creating give the author name");
                         System.out.println("\t\t -ls author-name");
                         System.out.println("");
-                        System.out.println("use -cm to compile the proyect");
+                        System.out.println("use --compile to compile the proyect");
                         System.out.println("\t when compiling give the directory target");
-                        System.out.println("\t\t -cm .\\source\\ .\\target\\");
+                        System.out.println("\t\t --compile .\\source\\ .\\target\\");
                         System.out.println("\t if you don't provide the path for default its set to .\\bin\\");
                         System.out.println("");
-                        System.out.println("use -cx to extract the lib jar files");
+                        System.out.println("use --extract to extract the lib jar files");
                         System.out.println("");
-                        System.out.println("use -cj to create the proyect jar file");
+                        System.out.println("use --jar to create the proyect jar file");
                         System.out.println("\t when creating the jar file give the source directory");
-                        System.out.println("\t\t -cj .\\testing\\");
+                        System.out.println("\t\t --jar .\\testing\\");
                         System.out.println("\t if you don't provide the path for default its set to .\\bin\\");
                         System.out.println("");
-                        System.out.println("use -cr to create the build script");
+                        System.out.println("use --script to create the build script");
                         System.out.println("\t if you want to name the script provide it following the -cr cli comand");
-                        System.out.println("\t -cr build or -cr script");
+                        System.out.println("\t --script build or --script test");
                         System.out.println("");
                         System.out.println("use --i to include lib jar files as part of the build");
                         System.out.println("\t if you don't want to include jar files use n");
