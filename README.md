@@ -16,6 +16,7 @@
 - [create_jar_references](https://docs.oracle.com/javase/tutorial/deployment/jar/index.html)
 - [run_java_references](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html)
 - [executables_from_jar_linux](https://stackoverflow.com/questions/44427355/how-to-convert-jar-to-linux-executable-file)
+- [tsoding-nob](https://www.youtube.com/watch?v=l9_TUMZSewo&list=PLpM-Dvs8t0Va1sCJpPFjs2lKzv8bw3Lpw&index=5)
 
 ------
 
@@ -32,6 +33,10 @@
 # TODO's
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
+- [ ] when *powershell* isn't installed use the default **cmd** option.
+- [ ] List the files that have a modified date more recent than the compiled files, to compile and build the project from the second time and further.
+- Use `lastModified()` that returns a `long` value in milliseconds or 0L if file doesn't exists or when an I/O error occurs.
+- Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
  
 ------
 
