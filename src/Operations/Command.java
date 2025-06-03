@@ -64,6 +64,25 @@ public class Command {
             compile.append(format);
             compile.append(cLibFiles);
         }
+        if(srcClases.contains(".java")) {
+            compile = new StringBuffer();
+            compile.append("javac -d .");
+            compile.append(File.separator);
+            compile.append("bin -cp 'bin;");
+            if(!libFiles.isEmpty()) {
+                String cb = libFiles.substring(0, libFiles.length()-1);
+                cLibFiles.append(cb);
+                cLibFiles.append("'");
+
+                compile.append(cLibFiles);
+                compile.append(" ");
+            } else {
+                compile.append("' ");
+            }
+            compile.append(srcClases);
+            System.out.println("[Error] using unsafe compilation process");
+            System.out.println("[Info] complete the code in Command.java - CommandUtils.java - FileUtils.java");
+        }
         return compile.toString();
     }
     /**

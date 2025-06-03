@@ -1,12 +1,16 @@
 package Utils;
 
+import Utils.FileUtils;
+import Operations.FileOperation;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import Operations.FileOperation;
 
 public class CommandUtils {
 
@@ -36,12 +40,38 @@ public class CommandUtils {
         }
         return name;
     }
+    public boolean recompile(Path filePath) {
+        try {
+            Path relative = Paths.get("src").relativize(filePath);
+            Path classFilePath = Paths.get("bin").resolve(relative.toString().replace(".java", ".class"));
+
+            File javaFile = filePath.toFile();
+            File classFile = classFilePath.toFile();
+            return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
     public String getSrcClases() {
         String b = "";
         List<String> names = new ArrayList<>();
         try {
             File srcFile = new File(localPath + File.separator + "src");
-            if(srcFile.listFiles() != null) {
+            File binFile = new File(localPath + File.separator + "bin");
+            if(srcFile.listFiles() == null) {
+                System.out.println("[Info] " + srcFile.getPath() + " is empty");
+            }
+            if(binFile.exists()) {
+                fileUtils.listFilesFromPath(srcFile.toString())
+                    .stream()
+                    .map(f -> f.toPath())
+                    .filter(p -> recompile(p))
+                    .forEach(e -> {
+                        names.add(e + " ");
+                    });
+            }
+            if(!binFile.exists()) {
                 for(File f: srcFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
                         names.add(".");
@@ -61,11 +91,12 @@ public class CommandUtils {
                             names.add(e + "*.java ");
                         }
                     });
-            } else {
-                System.out.println("[Info] " + srcFile.getPath() + " not found");
-            }
+                }
         } catch(Exception e) {
             e.printStackTrace();
+        }
+        if(names.isEmpty()) {
+            System.out.println("[ERROR] empty src list of files");
         }
         b += names
             .parallelStream()
