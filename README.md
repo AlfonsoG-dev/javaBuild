@@ -4,6 +4,7 @@
 - It works on WINDOWS & LINUX
 
 ![expected output](./docs/build_command.png)
+![expected_recompile](./docs/recompile.png)
 
 -----
 
@@ -106,12 +107,12 @@ javaBuild --i
 ## Compile
 
 - to compile the project.
->- `javaBuild -cm`.
+>- `javaBuild --compile`.
 >>- it compiles the .java clases into bin.
 >>- you can give a folder path to indicate the directory where you want to place the compiled files.
 >>- The default folder for the *class* files is **.\bin\**
 ```pwsh
-javabuild -cm .\other\target
+javabuild --compile .\other\source .\other\target
 ```
 
 ## Create a jar file of the project
@@ -119,13 +120,13 @@ javabuild -cm .\other\target
 - to create a jar file is necessary to include or verify dependencies or libraries in the project.
 >- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`.
 >- use the extracted files to include the library files in the build process of the project *.jar* file.
->>- `javaBuild -ex`.
+>>- `javaBuild --extract`.
 
 - now to create the project jar file.
->- `javaBuild -cx`.
+>- `javaBuild --extract`.
 >- it also can be created using source folder as parameter:
 ```pwsh
-javabuild -cx .\testing\
+javabuild --extract .\testing\
 ```
 >- remember that the manifesto determines the behavior for the build process.
 
@@ -135,7 +136,7 @@ javabuild -cx .\testing\
 >- Creates the script whit all the command to build the project, except the extraction operation.
 >- And at last it executes the project.
 ```shell
-javaBuild -cr
+javaBuild --script
 ```
 
 ## Create or modify the manifesto file
@@ -146,7 +147,7 @@ javaBuild -cr
 
 - All can be done with only 1 command
 >- It combines the commands: *compile* & *create jar* to build the project.
->- The extraction of the jar dependency need to execute manually with: `-ex` and only one time per jar dependency.
+>- The extraction of the jar dependency need to execute manually with: `--extract` and only one time per jar dependency.
 >- If you have configured the manifesto the dependency extraction will behave as describe previously.
 ```shell
 javaBuild --build
@@ -154,7 +155,7 @@ javaBuild --build
 >>- Also you can give the source folder of the **class** files.
 >>- If not *.\bin\* will be use
 ```shell
-javaBuild --build -s .\testing\
+javaBuild --build -s .\source\ -t .\target\
 ```
 
 ## Run or execute the project
@@ -165,9 +166,11 @@ javaBuild --build -s .\testing\
 ```pwsh
 javabuild --run .\src\App.java
 ```
->- you can give also the source directory
+>- you can give also the source directory and target
+> the **target** directory is where the `.class` files are stored.
+> the **source** directory is where the `.java` files are stored.
 ```pwsh
-javabuild --run .\src\App.java -s .\testing\
+javabuild --run .\src\App.java -s .\source\ -t .\target\
 ```
 >>- if you don't give the class to execute the main class is selected
 >>- additional you can execute CLI command with this method too
