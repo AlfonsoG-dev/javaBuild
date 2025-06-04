@@ -142,8 +142,18 @@ public class FileUtils {
         FileWriter writeBuildScript = new FileWriter(name);
         Command myCommand = new Command(getLocalFile().getPath());
         CommandUtils cUtils = new CommandUtils(getLocalFile().getPath());
+        List<File> fileNames = listFilesFromPath(localPath + File.separator + "src");
+
+        StringBuffer srcFiles = new StringBuffer();
+        srcFiles.append(
+            fileNames
+                .stream()
+                .map(e -> e.getPath())
+                .filter(e -> !e.isEmpty())
+                .map(e -> e + " ")
+                .collect(Collectors.joining())
+        );
         String
-            srcClases = cUtils.getSrcClases("src", "bin"),
             libFiles = "",
             compile = "javac -Werror -Xlint:all -d ." + File.separator + "bin" + File.separator,
             runJar = "",
@@ -166,7 +176,7 @@ public class FileUtils {
         writeSentences(
                 name,
                 writeBuildScript,
-                srcClases,
+                srcFiles.toString(),
                 libFiles,
                 compile,
                 myCommand.getJarFileCommand(extract, ""),

@@ -63,7 +63,7 @@ public class CommandUtils {
             if(srcFile.listFiles() == null) {
                 System.out.println("[Info] " + srcFile.getPath() + " is empty");
             }
-            if(binFile.exists()) {
+            if(binFile.exists() && binFile.listFiles() != null) {
                 fileUtils.listFilesFromPath(srcFile.toString())
                     .stream()
                     .map(f -> f.toPath())
@@ -72,7 +72,7 @@ public class CommandUtils {
                         names.add(e + " ");
                     });
             }
-            if(!binFile.exists()) {
+            if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
                 for(File f: srcFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
                         names.add(".");
@@ -83,7 +83,7 @@ public class CommandUtils {
                         break;
                     }
                 }
-                fileOperation.listSRCDirectories("src")
+                fileOperation.listSRCDirectories(source)
                     .parallelStream()
                     .filter(e -> !e.isEmpty())
                     .forEach(e -> {
@@ -91,8 +91,8 @@ public class CommandUtils {
                         if(countFiles > 0) {
                             names.add(e + "*.java ");
                         }
-                    });
-                }
+                });
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
