@@ -60,10 +60,11 @@ public class CommandUtils {
         try {
             File srcFile = new File(localPath + File.separator + source);
             File binFile = new File(localPath + File.separator + target);
+            List<File> targetFiles = fileUtils.listFilesFromPath(binFile.getPath());
             if(srcFile.listFiles() == null) {
                 System.out.println("[Info] " + srcFile.getPath() + " is empty");
             }
-            if(binFile.exists() && binFile.listFiles() != null) {
+            if(binFile.exists() && targetFiles.size() > 0) {
                 fileUtils.listFilesFromPath(srcFile.toString())
                     .stream()
                     .map(f -> f.toPath())
@@ -71,8 +72,7 @@ public class CommandUtils {
                     .forEach(e -> {
                         names.add(e + " ");
                     });
-            }
-            if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
+            } else if(binFile.exists() && targetFiles.size() == 0 || !binFile.exists()) {
                 for(File f: srcFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
                         names.add(".");
