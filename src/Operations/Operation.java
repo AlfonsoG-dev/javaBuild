@@ -94,13 +94,20 @@ public class Operation {
     public void listProjectFiles(String source) {
         String dirPath = localPath + File.separator + new File(source).toPath().normalize();
         try {
-            fileUtils.listFilesFromDirectory(Files.newDirectoryStream(new File(dirPath).toPath()))
-                .stream()
-                .map(e -> e.getPath())
-                .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
-                .forEach(e -> {
-                    System.out.println(e);
-                });
+            File read = new File(dirPath);
+            if(read.isFile()) {
+                System.out.println("[Info] Only directory types are allow but here you have it°!");
+                System.out.println(read.getPath());
+            }
+            if(read.isDirectory()) {
+                fileUtils.listFilesFromDirectory(Files.newDirectoryStream(new File(dirPath).toPath()))
+                    .stream()
+                    .map(e -> e.getPath())
+                    .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
+                    .forEach(e -> {
+                        System.out.println(e);
+                    });
+            }
         } catch(IOException e) {
             e.printStackTrace();
         }
