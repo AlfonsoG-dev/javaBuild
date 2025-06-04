@@ -71,15 +71,9 @@ public class Command {
             compile.append(target);
             compile.append(" -cp '" + target + ";");
             if(!libFiles.isEmpty()) {
-                String cb = libFiles.substring(0, libFiles.length()-1);
-                cLibFiles.append(cb);
-                cLibFiles.append("'");
-
-                compile.append(cLibFiles);
-                compile.append(" ");
-            } else {
-                compile.append("' ");
+                compile.append(libFiles);
             }
+            compile.append("' ");
             compile.append(srcClases);
         }
         return compile.toString();
