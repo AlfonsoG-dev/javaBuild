@@ -109,12 +109,19 @@ public class Operation {
      * @param target the folder/directory where you want to store the .class files. Its ./bin/ by default.
      * @throws Exception when the compile command gets an error.
      */
-    public void compileProyectOperation(String source, String target) {
+    public void compileProyectOperation(String source, String target, String release) {
         if(source.isEmpty()) source = "src";
         if(target.isEmpty()) target = "bin";
+        int javaVersion = 0;
+        if(release.isEmpty()){
+            javaVersion = Integer.parseInt(System.getProperty("java.specification.version"));
+        } else {
+            javaVersion = Integer.parseInt(release);
+        }
         String compileCommand = myCommand.getCompileCommand(
                 source,
-                target
+                target,
+                javaVersion
         );
         try {
             System.out.println("[Command] " + compileCommand);

@@ -25,7 +25,7 @@ public class Command {
      * @param target its the folder/directory to allocate the .class files.
      * @return the compile command
      */
-    public String getCompileCommand(String source, String target) {
+    public String getCompileCommand(String source, String target, int release) {
         // create jar files command for compile operation
         StringBuffer 
             libFiles = new StringBuffer(),
@@ -44,11 +44,11 @@ public class Command {
         String
             srcClases = commandUtils.getSrcClases(source, target),
             mainClass = commandUtils.getMainClass(),
-            format = commandUtils.compileFormatType(target);
+            format = commandUtils.compileFormatType(target, release);
 
         if(!srcClases.contains("*.java")) {
             compile = new StringBuffer();
-            compile.append("javac -Werror -Xlint:all -d .");
+            compile.append("javac --release " + release + " -Werror -Xlint:all -d .");
             compile.append(File.separator);
             compile.append(target);
             compile.append(" -cp '" + target + ";");

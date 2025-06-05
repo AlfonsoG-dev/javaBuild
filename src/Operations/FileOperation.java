@@ -177,7 +177,7 @@ public class FileOperation {
         List<String> dirNames = listSRCDirectories(source);
         List<String> libNames = listLibFiles();
 
-        StringBuffer sourceFiles = new StringBuffer("." + File.separator + source + File.separator + "* ");
+        StringBuffer sourceFiles = new StringBuffer("." + File.separator + source + File.separator + "*.java ");
         String
             libFiles = "",
             compile = "javac -Werror -Xlint:all -d ." + File.separator + target + File.separator,
@@ -188,7 +188,7 @@ public class FileOperation {
                 dirNames
                 .parallelStream()
                 .filter(e -> fileUtils.countFilesInDirectory(new File(e)) > 0)
-                .map(e -> e + "* ")
+                .map(e -> e + "*.java ")
                 .collect(Collectors.joining())
         );
 
