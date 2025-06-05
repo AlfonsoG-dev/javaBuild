@@ -30,53 +30,11 @@ public class FileUtils {
         }
         return localFile;
     }
-    /**
-     * creates the manifesto file for the jar file creation
-     * @param fileName: path where the manifesto is created
-     * @param includeExtraction: true if you want the lib files as part of the jar file, false otherwise
-     * @param libFiles: the lib files to include in the build
-     */
-    public void writeManifesto(boolean includeExtraction, String libFiles, String authorName) {
-        FileWriter writer = null;
-        try {
-            String
-                author    = authorName.trim(),
-                mainClass = FileUtils.getMainClass(localPath);
-            StringBuffer m = new StringBuffer();
-            writer = new FileWriter(
-                    getLocalFile().getPath() +
-                    File.separator +
-                    "Manifesto.txt"
-            );
-            m.append("Manifest-Version: 1.0");
-            m.append("\n");
-            if(!author.isEmpty()) {
-                m.append("Created-By: ");
-                m.append(author);
-                m.append("\n");
-            }
-            if(!mainClass.isEmpty()) {
-                m.append("Main-Class: ");
-                m.append(mainClass);
-                m.append("\n");
-            }
-            if(!libFiles.isEmpty() && !includeExtraction) {
-                m.append("Class-Path: ");
-                m.append(libFiles);
-                m.append("\n");
-            }
-            writer.write(m.toString());
+    public void writeToFile(String lines, String filePath) {
+        try(FileWriter w new FileWriter(getLocalFile().toPath().resolve(filePath).toFile())) {
+            w.write(lines);
         } catch(IOException e) {
             e.printStackTrace();
-        } finally {
-            if(writer != null) {
-                try {
-                    writer.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                writer = null;
-            }
         }
     }
     private String getRunCommand() {

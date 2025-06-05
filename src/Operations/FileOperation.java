@@ -22,55 +22,80 @@ public class FileOperation {
         localPath = nLocalPath;
         fileUtils = new FileUtils(localPath);
     } 
+    /**
+     * creates the manifesto file for the jar file creation
+     * @param fileName: path where the manifesto is created
+     * @param includeExtraction: true if you want the lib files as part of the jar file, false otherwise
+     * @param libFiles: the lib files to include in the build
+     */
+    private void writeManifesto(boolean includeExtraction, String libFiles, String authorName) {
+        FileWriter writer = null;
+        String
+            author    = authorName.trim(),
+            mainClass = FileUtils.getMainClass(localPath);
+
+        StringBuffer m = new StringBuffer();
+
+        m.append("Manifest-Version: 1.0");
+        m.append("\n");
+
+        if(!author.isEmpty()) {
+            m.append("Created-By: ");
+            m.append(author);
+            m.append("\n");
+        }
+        if(!mainClass.isEmpty()) {
+            m.append("Main-Class: ");
+            m.append(mainClass);
+            m.append("\n");
+        }
+        if(!libFiles.isEmpty() && !includeExtraction) {
+            m.append("Class-Path: ");
+            m.append(libFiles);
+            m.append("\n");
+        }
+
+        // write lines to file
+        fileUtils.writeToFile(m.toString(), "Manifesto.txt");
+    }
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ Info ]: created " + fileName);
-        try {
-            File
-                localFile = new File(localPath),
-                miFile    = new File(localPath + File.separator + "src");
-            FileWriter 
-                miFileWriter = null,
-                writeMainClass = null;
-            if(fileName.equals(".gitignore")) {
-                miFileWriter = new FileWriter(localFile.getPath() + File.separator + fileName);
-                miFileWriter.write(
-                        "**bin" + "\n" +
-                        "**lib" + "\n" +
-                        "**extractionFiles" + "\n" +
-                        "**Manifesto.txt" + "\n" +
-                        "**Session.vim" + "\n" +
-                        "**.jar" + "\n" +
-                        "**.exe"
-                );
-                miFileWriter.close();
-            } else if(fileName.equals("Manifesto.txt")) {
-                String libJars = "";
-                List<String> jars = new CommandUtils(localPath).getLibFiles();
-                libJars += jars
-                    .parallelStream()
-                    .filter(e -> !e.isEmpty())
-                    .map(e -> e + ";")
-                    .collect(Collectors.joining());
-                fileUtils.writeManifesto(includeExtraction, libJars, author);
-            } else if(fileName.equals(mainClass + ".java")) {
-                writeMainClass = new FileWriter(miFile.getPath() + File.separator + fileName);
-                writeMainClass.write(
-                        "class " + mainClass + " {\n" +
-                        "    public static void main(String[] args) {\n" + 
-                        "        System.out.println(\"Hello from " + mainClass + "\");" + "\n" +
-                        "    }\n" + 
-                        "}"
-                );
-                writeMainClass.close();
-            } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
-                fileUtils.writeBuildFile(
-                        fileName,
-                        mainClass,
-                        includeExtraction
-                );
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
+        File
+            localFile = new File(localPath),
+            miFile    = new File(localPath + File.separator + "src");
+        if(fileName.equals(".gitignore")) {
+            String ignoreFiles = "";
+            ignoreFiles = "**bin" + "\n" +
+                "**lib" + "\n" +
+                "**extractionFiles" + "\n" +
+                "**Manifesto.txt" + "\n" +
+                "**Session.vim" + "\n" +
+                "**.jar" + "\n" +
+                "**.exe";
+            fileUtils.writeToFile(ignoreFiles, fileName);
+        } else if(fileName.equals("Manifesto.txt")) {
+            String libJars = "";
+            List<String> jars = new CommandUtils(localPath).getLibFiles();
+            libJars += jars
+                .parallelStream()
+                .filter(e -> !e.isEmpty())
+                .map(e -> e + ";")
+                .collect(Collectors.joining());
+            writeManifesto(includeExtraction, libJars, author);
+        } else if(fileName.equals(mainClass + ".java")) {
+            String mainClassLines = "";
+            mainClassLines = "class " + mainClass + " {\n" +
+                "    public static void main(String[] args) {\n" + 
+                "        System.out.println(\"Hello from " + mainClass + "\");" + "\n" +
+                "    }\n" + 
+                "}";
+            fileUtils.writeToFile(mainClassLines, fileName);
+        } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
+            fileUtils.writeBuildFile(
+                    fileName,
+                    mainClass,
+                    includeExtraction
+            );
         }
     }
     public List<String> listLibFiles() {
