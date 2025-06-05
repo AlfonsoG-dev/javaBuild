@@ -24,10 +24,12 @@ public class Operation {
     private CommandUtils commandUtils;
     private Command myCommand;
     private FileUtils fileUtils;
+    private FileOperation fileOperation;
     public Operation(String nLocalPath){
         localPath = nLocalPath;
         operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
+        fileOperation = new FileOperation(nLocalPath);
         commandUtils = new CommandUtils(nLocalPath);
         myCommand = new Command(nLocalPath);
     }
@@ -278,13 +280,13 @@ public class Operation {
                 .map(e -> e + " ")
                 .collect(Collectors.joining());
 
-            fileUtils.writeManifesto(
+            fileOperation.writeManifesto(
                     includeExtraction,
                     jarFiles,
                     author
             );
         } else {
-            fileUtils.writeManifesto(
+            fileOperation.writeManifesto(
                     includeExtraction,
                     "",
                     author

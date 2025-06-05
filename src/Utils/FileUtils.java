@@ -31,13 +31,13 @@ public class FileUtils {
         return localFile;
     }
     public void writeToFile(String lines, String filePath) {
-        try(FileWriter w new FileWriter(getLocalFile().toPath().resolve(filePath).toFile())) {
+        try(FileWriter w = new FileWriter(getLocalFile().toPath().resolve(filePath).toFile())) {
             w.write(lines);
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
-    private String getRunCommand() {
+    public static String getRunCommand() {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" " +
@@ -45,7 +45,7 @@ public class FileUtils {
         }
         return command;
     }
-    private String getJavaCommand(String mainClass) {
+    public static String getJavaCommand(String mainClass) {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
@@ -54,7 +54,7 @@ public class FileUtils {
         }
         return command;
     }
-    private String buildCommand() {
+    public static String buildCommand() {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" \n";
@@ -62,7 +62,7 @@ public class FileUtils {
         return command;
     }
 
-    private void writeSentences(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles,
+    public static void writeSentences(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles,
             String compile, String extractJar, String runJar, String runCommand) throws IOException {
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             writeBuildScript.write(
@@ -87,61 +87,6 @@ public class FileUtils {
                 System.out.println("[Info] change file to executable " + local.getPath());
             }
         }
-    }
-    /**
-     * create the sentences for the build script
-     * @param fileName: path where the build script is created
-     * @param mainClass: main class name
-     * @param extract: true if you want to include the lib files as part of the jar file, false otherwise
-     * @throws IOException: exception while trying to create the build script
-     */
-    public void writeBuildFile(String fileName, String mainClass, boolean extract) throws IOException {
-        String name = getLocalFile().getPath() + File.separator + fileName;
-        FileWriter writeBuildScript = new FileWriter(name);
-        Command myCommand = new Command(getLocalFile().getPath());
-        CommandUtils cUtils = new CommandUtils(getLocalFile().getPath());
-        List<File> fileNames = listFilesFromPath(localPath + File.separator + "src");
-
-        StringBuffer srcFiles = new StringBuffer();
-        srcFiles.append(
-            fileNames
-                .stream()
-                .map(e -> e.getPath())
-                .filter(e -> !e.isEmpty())
-                .map(e -> e + " ")
-                .collect(Collectors.joining())
-        );
-        String
-            libFiles = "",
-            compile = "javac -Werror -Xlint:all -d ." + File.separator + "bin" + File.separator,
-            runJar = "",
-            runCommand = "";
-        libFiles += cUtils.getLibFiles()
-            .stream()
-            .map(e -> e + ";")
-            .collect(Collectors.joining());
-        if(!libFiles.isEmpty()) {
-            compile += " -cp '$libFiles' $srcClases";
-        } else {
-            compile += " $srcClases";
-        }
-        if(!mainClass.isEmpty()) {
-            runJar = getJavaCommand(mainClass);
-            runCommand = getRunCommand();
-        } else {
-            runCommand = buildCommand();
-        }
-        writeSentences(
-                name,
-                writeBuildScript,
-                srcFiles.toString(),
-                libFiles,
-                compile,
-                myCommand.getJarFileCommand(extract, ""),
-                runJar, 
-                runCommand
-        );
-        writeBuildScript.close();
     }
     public String getCleanPath(String filePath) {
         return new File(filePath).toPath().normalize().toString();
