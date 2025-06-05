@@ -1,6 +1,6 @@
 # Java build tool
-- basic build tool for simple java projects
-- build the project with 1 or 3 simple commands
+- Basic build tool for simple java projects
+- Build the project with 1 or 3 simple commands
 - It works on WINDOWS & LINUX
 
 - First build of the project.
@@ -33,21 +33,21 @@
 - [x] create the folder structure of the project.
 - [x] create the run powershell script and executes the project.
 - [x] add cli option to the create build script to allow the user to name the script.
-- [x] List the files that have a modified date more recent than the compiled files, to compile and build the project from the second time and further.
-- Use `lastModified()` that returns a `long` value in milliseconds or 0L if file doesn't exists or when an I/O error occurs.
+- [x] list the files that have a modified date more recent than the compiled files, to compile and build the project from the second time and further.
+> Use `lastModified()` that returns a `long` value in milliseconds or 0L if file doesn't exists or when an I/O error occurs.
 
 # TODO's
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
 - [ ] implement the module aggregation for compile, run, create-jar, execution script
 - [ ] when *powershell* isn't installed use the default **cmd** option.
-- [ ] Add a mode to allow the user the `--watch` option, this option will serve as the live reload option of the compile process.
-- Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
+- [ ] add a mode to allow the user the `--watch` option, this option will serve as the live reload option of the compile process.
+> Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
  
 ------
 
 # How to
 
-- use the `.ps1` script to build the project.
+- Use the `.ps1` script to build the project.
 ```shell
 build.ps1
 
@@ -55,24 +55,23 @@ or
 
 ./build.sh
 ```
->- it will build the project and create the jar file to use for the *.exe* file creation.
->- now you have the jar file to test the project functionality.
+> It will build the project and create the jar file to use for the *.exe* file creation.
+>- Now you have the jar file to test the project functionality.
 
 # Usage
-
-- use the executable
->- This will print the **cli** commands that you can used.
+- Use the executable
+- This will print the **cli** commands that you can used.
 ```console
 javabuild --h
 ```
->- use the jar file to execute the program for the same purpose.
+>- Use the jar file to execute the program for the same purpose.
 ```console
 java -jar JavaBuild.jar --h
 ```
 
 ## Manifesto usage
 
-- when the app have dependencies in *lib* folder you need to specify in the *Manifesto* file if you want to 
+- When the app have dependencies in *lib* folder you need to specify in the *Manifesto* file if you want to 
 include the extraction files of the lib dependency or you need to declara in the *Manifesto* the class path 
 of the lib dependencies
 
@@ -81,66 +80,72 @@ Created-By: Author-Name
 Main-Class: App
 Class-Path: .\lib\dependencyFolder\dependency.jar
 ```
-- when you declare the Class-Path the build operation when trying to create the project *.jar* file, it exclude
+- When you declare the Class-Path the build operation when trying to create the project *.jar* file, it exclude
 the extraction files of the lib dependency.
 
->- if you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
+> If you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
 includes the extraction files of the lib dependency as part of the project *.jar* creation.
 
 ## list project files
 
 - Use this to list the java *class* files inside the given folder.
 ```shell
-javaBuild -ls .\src\
+javaBuild -ls -s .\src\
 ```
 
 ## Crete a project
 
 - Use this to create the structure for the project.
->- You need to provide the author
+- You need to provide the author
 ```shell
 javaBuild -cb Author-Name
 ```
->- As soon you create the project you need to change the manifesto adding the main class.
+- As soon you create the project you need to change the manifesto adding the main class.
 ```shell
 javaBuild --i
 ```
->- This will add the main class value to the manifesto.
+- This will add the main class value to the manifesto.
 
 ## Compile
 
-- to compile the project.
->- `javaBuild --compile`.
->>- it compiles the .java clases into bin.
->>- you can give a folder path to indicate the directory where you want to place the compiled files.
->>- The default folder for the *class* files is **.\bin\**
+- To compile the project.
+> `javaBuild --compile`.
+>- It compiles the .java clases from `src` into `bin`, using the **Java version 23**, by default.
+>- You can change those by providing:
 ```pwsh
-javabuild --compile .\other\source .\other\target
+javabuild --compile -s .\other\source -t .\other\target -r 17
 ```
+> You can use the source, target or release options; or not it doesn't matter.
+>- Also you can use them individually.
 
 ## Create a jar file of the project
 
-- to create a jar file is necessary to include or verify dependencies or libraries in the project.
->- in order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`.
->- use the extracted files to include the library files in the build process of the project *.jar* file.
->>- `javaBuild --extract`.
-
-- now to create the project jar file.
+- To create a jar file is necessary to include or verify dependencies or libraries in the project.
+> In order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`.
+>- Use the extracted files to include the library files in the build process of the project *.jar* file.
 >- `javaBuild --extract`.
->- it also can be created using source folder as parameter:
+
+- Now to create the project jar file.
+- `javaBuild --extract`.
+>- It also can be created using source folder as parameter:
 ```pwsh
 javabuild --extract .\testing\
 ```
->- remember that the manifesto determines the behavior for the build process.
+>- Remember that the manifesto determines the behavior for the build process.
 
 ## Create the build script
 
 - Use this to create the build script for **powershell** in windows and **bash** for linux.
->- Creates the script whit all the command to build the project, except the extraction operation.
->- And at last it executes the project.
+- Creates the script whit all the command to build the project, except the extraction operation.
+- It uses the same commands and writes them in a file.
+> It takes the `src` and `bin` directories as source and target by default, using **Java version 23**.
+>- You can change those by providing:
+
 ```shell
-javaBuild --script
+javaBuild --script -s .\source\ -t .\target\ -r 17
 ```
+> You can use the source, target or release options; or not, it doesn't matter.
+>- Also you can use them individually.
 
 ## Create or modify the manifesto file
 - The manifesto file, is necessary to include or verify if you want to add to the build the extraction of the dependencies or not.
@@ -149,34 +154,36 @@ javaBuild --script
 ## Build the project
 
 - All can be done with only 1 command
->- It combines the commands: *compile* & *create jar* to build the project.
->- The extraction of the jar dependency need to execute manually with: `--extract` and only one time per jar dependency.
->- If you have configured the manifesto the dependency extraction will behave as describe previously.
+- It combines the commands: *compile* & *create jar* to build the project.
+- The extraction of the jar dependency need to execute manually with: `--extract` and only one time per jar dependency.
+- If you have configured the manifesto the dependency extraction will behave as describe previously.
+> It takes the `src` and `bin` directories as source and target by default, using **Java version 23**.
+>- You can change those by providing.
 ```shell
-javaBuild --build
+javaBuild --build -s .\source\ -t .\target\ -r 17
 ```
->>- Also you can give the source folder of the **class** files.
->>- If not *.\bin\* will be use
-```shell
-javaBuild --build -s .\source\ -t .\target\
-```
+> You can use the source, target or release options; or not, it doesn't matter.
+>- Also you can use them individually.
 
 ## Run or execute the project
 
 - Uses the class files and the main class to execute and run the application.
->- it compiles to *.\bin\* folder and executes the project using the .class files.
+> it compiles to *.\bin\* folder and executes the project using the .class files.
 >- you can specify the java class that you want to execute: 
 ```pwsh
 javabuild --run .\src\App.java
 ```
->- you can give also the source directory and target
-> the **target** directory is where the `.class` files are stored.
-> the **source** directory is where the `.java` files are stored.
+- You can give also the source and target or release version at any time.
+> The main class executed can be change by giving the `.java` file.
+>- If you don't give the class to execute the project main class is selected.
+>- You can change those by providing:
 ```pwsh
-javabuild --run .\src\App.java -s .\source\ -t .\target\
+javabuild --run .\src\App.java -s .\source\ -t .\target\ -r 17
 ```
->>- if you don't give the class to execute the main class is selected
->>- additional you can execute CLI command with this method too
+> You can use the source, target or release options; or not it doesn't matter.
+>- Also you can use them individually.
+
+>- Additional you can execute CLI command with this method too
 ```pwsh
 javabuild --run --h
 ```
@@ -184,32 +191,32 @@ javabuild --run --h
 ## Add an external jar dependency
 
 - Used to add a framework or library file type *.jar*.
->- `javabuild --add dependency.jar`
->>- add an external jar file to the lib folder of the project
->- or you can use the directory name
+> `javabuild --add dependency.jar`
+>- Add an external jar file to the lib folder of the project
+>- Or you can use the directory name
 >- `javabuild --add ./folderName`
->>- Only works when the lib file don't contain modules.
+>- Only works when the lib file don't contain modules.
 
 ------
 
 # Additional info
 
 This project use [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild) to build itself.
->- this app uses **powershell** to execute the commands on *WINDOWS*.
->- this app uses **bash** to execute commands on *LINUX*.
->- if you want to use the *CLI* tool you have to create an `.exe` file and place it in system path
->- for **LINUX**
+- This app uses **powershell** to execute the commands on *WINDOWS*.
+- This app uses **bash** to execute commands on *LINUX*.
+- If you want to use the *CLI* tool you have to create an `.exe` file and place it in system path
+- For **LINUX**
 ```bash
 $ echo '#!/usr/bin/java -jar' > myBin
 $ cat my.jar >> myBin
 $ chmod +x myBin
 $ ./myBin
 ```
-- with that you can create an **environment variable** and use it from there.
+- With that you can create an **environment variable** and use it from there.
 
 ------
 
 # Disclaimer
-- this project is for educational purposes.
-- security issues are not taken into account.
+- This project is for educational purposes.
+- Security issues are not taken into account.
 - Use it at your own risk.
