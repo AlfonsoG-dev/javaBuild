@@ -46,27 +46,9 @@ public class Command {
             mainClass = commandUtils.getMainClass(),
             format = commandUtils.compileFormatType(target);
 
-        if(!mainClass.isEmpty() && libFiles.isEmpty()) {
-            compile.append(format);
-            compile.append(srcClases);
-        } else if(!mainClass.isEmpty() && !libFiles.isEmpty()) {
-            String cb = libFiles.substring(0, libFiles.length()-1);
-            cLibFiles.append("'" + cb + "' ");
-            compile.append(format);
-            compile.append(cLibFiles);
-            compile.append(srcClases);
-        } else if(mainClass.isEmpty() && libFiles.isEmpty()) {
-            compile.append(format);
-             compile.append(srcClases);
-        } else if(mainClass.isEmpty() && !libFiles.isEmpty()) {
-            String cb = libFiles.substring(0, libFiles.length()-1);
-            cLibFiles.append("'" + cb + "' " + srcClases);
-            compile.append(format);
-            compile.append(cLibFiles);
-        }
-        if(srcClases.contains(".java")) {
+        if(!srcClases.contains("*.java")) {
             compile = new StringBuffer();
-            compile.append("javac -d .");
+            compile.append("javac -Werror -Xlint:all -d .");
             compile.append(File.separator);
             compile.append(target);
             compile.append(" -cp '" + target + ";");
@@ -74,6 +56,14 @@ public class Command {
                 compile.append(libFiles);
             }
             compile.append("' ");
+            compile.append(srcClases);
+        } else {
+            compile.append(format);
+            if(!libFiles.isEmpty()) {
+                String cb = libFiles.substring(0, libFiles.length()-1);
+                cLibFiles.append("'" + cb + "' ");
+                compile.append(cLibFiles);
+            }
             compile.append(srcClases);
         }
         return compile.toString();

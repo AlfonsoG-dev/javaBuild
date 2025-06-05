@@ -63,9 +63,7 @@ public class Operation {
     public void createFilesOperation(String author) {
         File localFile = new File(localPath);
         System.out.println("[Info] creating files ...");
-        DirectoryStream<Path> files = null;
-        try {
-            files = Files.newDirectoryStream(localFile.toPath());
+        try (DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath())) {
             for(Path p: files) {
                 File f = p.toFile();
                 if(f.getName().equals("src")) {
@@ -77,15 +75,6 @@ public class Operation {
             }
         } catch(IOException err) {
             err.printStackTrace();
-        } finally {
-            if(files != null) {
-                try {
-                    files.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                files = null;
-            }
         }
     }
     /**
@@ -94,6 +83,7 @@ public class Operation {
      * @throws IOException
      */
     public void listProjectFiles(String source) {
+        if(source.isEmpty()) source = "src";
         String dirPath = localPath + File.separator + new File(source).toPath().normalize();
         try {
             File read = new File(dirPath);
@@ -165,20 +155,20 @@ public class Operation {
         jars
             .parallelStream()
             .forEach(e -> {
-            try {
-                boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
-                if(libAlreadyExists == false) {
-                    System.out.println("[Info] extracting jar dependencies ...");
-                    operationUtils.createExtractionFiles(jars);
-                    // the extraction files can be more than 1
-                    executeExtractionCommand(e);
-                } else {
-                    System.out.println("[Info] THERE IS NO DEPENDENCIES TO EXTRACT");
+                try {
+                    boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
+                    if(libAlreadyExists == false) {
+                        System.out.println("[Info] extracting jar dependencies ...");
+                        operationUtils.createExtractionFiles(jars);
+                        // the extraction files can be more than 1
+                        executeExtractionCommand(e);
+                    } else {
+                        System.out.println("[Info] THERE IS NO DEPENDENCIES TO EXTRACT");
+                    }
+                } catch(IOException err) {
+                    err.printStackTrace();
                 }
-            } catch(IOException err) {
-                err.printStackTrace();
-            }
-        });
+            });
     }
     /**
      * Performs create jar operation using the command.
@@ -203,29 +193,20 @@ public class Operation {
      */
     public boolean haveIncludeExtraction() {
         boolean haveInclude = true; 
-        BufferedReader myReader = null;
-        try {
-            File miFile = new File(localPath + File.separator + "Manifesto.txt");
-            if(miFile.exists()) {
-                myReader = new BufferedReader(new FileReader(miFile));
-                while(myReader.ready()) {
-                    String lines = myReader.readLine();
-                    if(lines.contains("Class-Path:")) {
-                        haveInclude = false;
-                    }
+        File f = new File(localPath + File.separator + "Manifesto.txt");
+        if(!f.exists()) {
+            System.err.println("[Error] Manifesto doesn't exists");
+            return false;
+        }
+        try (BufferedReader myReader = new BufferedReader(new FileReader(f))) {
+            while(myReader.ready()) {
+                String lines = myReader.readLine();
+                if(lines.contains("Class-Path:")) {
+                    haveInclude = false;
                 }
             }
         } catch(IOException e) {
             e.printStackTrace();
-        } finally {
-            if(myReader != null) {
-                try {
-                    myReader.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                myReader = null;
-            }
         }
         return haveInclude;
     }
@@ -235,30 +216,21 @@ public class Operation {
      */
     public String getAuthorName() {
         String author = "";
-        BufferedReader myReader = null;
-        try {
-            File miFile = new File(localPath + File.separator + "Manifesto.txt");
-            if(miFile.exists()) {
-                myReader = new BufferedReader(new FileReader(miFile));
-                while(myReader.ready()) {
-                    String lines = myReader.readLine();
-                    if(lines.contains("Created-By:")) {
-                        author = lines.trim().split(":")[1];
-                        break;
-                    }
+        File f = new File(localPath + File.separator + "Manifesto.txt");
+        if(!f.exists()) {
+            System.err.println("[Error] Manifesto doesn't exists");
+            return null;
+        }
+        try (BufferedReader myReader = new BufferedReader(new FileReader(f))){
+            while(myReader.ready()) {
+                String lines = myReader.readLine();
+                if(lines.contains("Created-By:")) {
+                    author = lines.trim().split(":")[1];
+                    break;
                 }
             }
         } catch(IOException e) {
             e.printStackTrace();
-        } finally {
-            if(myReader != null) {
-                try {
-                    myReader.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                myReader = null;
-            }
         }
         return author;
     }

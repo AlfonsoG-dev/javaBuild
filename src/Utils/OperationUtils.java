@@ -55,9 +55,7 @@ public class OperationUtils {
         }
     }
     public void CommandOutputError(InputStream miCmdStream) {
-        BufferedReader miReader = null;
-        try {
-            miReader = new BufferedReader(new InputStreamReader(miCmdStream));
+        try (BufferedReader miReader = new BufferedReader(new InputStreamReader(miCmdStream))) {
             String line = "";
             while(true) {
                 line = miReader.readLine();
@@ -68,21 +66,10 @@ public class OperationUtils {
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(miReader != null) {
-                try {
-                    miReader.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                miReader = null;
-            }
         }
     }
     public void CommandOutput(InputStream miCmdStream) {
-        BufferedReader miReader = null;
-        try {
-            miReader = new BufferedReader(new InputStreamReader(miCmdStream));
+        try (BufferedReader miReader = new BufferedReader(new InputStreamReader(miCmdStream))) {
             String line = "";
             while(true) {
                 line = miReader.readLine();
@@ -93,15 +80,6 @@ public class OperationUtils {
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(miReader != null) {
-                try {
-                    miReader.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                miReader = null;
-            }
         }
     }
     public void createProyectFiles(String author)  {
@@ -163,7 +141,7 @@ public class OperationUtils {
         return name;
     }
     public void createBuildScript(boolean includeExtraction, String fileName) {
-        String mainName = FileUtils.getMainClass(localPath);
+        String mainName = fileOperation.getMainClass(localPath);
         if(!mainName.isEmpty()) {
             mainName = mainName + ".jar";
         }

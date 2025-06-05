@@ -1,6 +1,8 @@
 package Operations;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -89,6 +91,44 @@ public class FileOperation {
         }
         return names;
     }
+
+    /**
+     * main class of the proyect
+     * @param localpath: local path
+     * @return main class file name
+     */
+    public String getMainClass(String localpath) {
+        File miFile = new File(localpath + File.separator + "src");
+        BufferedReader miBufferedReader = null;
+        String mainName = "";
+        try {
+            if(miFile.listFiles() != null) {
+            outter: for(File f: miFile.listFiles()) {
+                    if(f.isFile() && f.getName().contains(".java")) {
+                        miBufferedReader = new BufferedReader(new FileReader(f));
+                        while(miBufferedReader.read() != -1) {
+                            if(miBufferedReader.readLine().contains("public static void main(String[] args)")) {
+                                mainName = f.getName().replace(".java", "");
+                                break outter;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(miBufferedReader != null) {
+                try {
+                    miBufferedReader.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+                miBufferedReader = null;
+            }
+        }
+        return mainName;
+    }
     /**
      * creates the manifesto file for the jar file creation
      * @param fileName: path where the manifesto is created
@@ -99,7 +139,7 @@ public class FileOperation {
         FileWriter writer = null;
         String
             author    = authorName.trim(),
-            mainClass = FileUtils.getMainClass(localPath);
+            mainClass = getMainClass(localPath);
 
         StringBuffer m = new StringBuffer();
 
@@ -170,7 +210,7 @@ public class FileOperation {
             runCommand = FileUtils.buildCommand();
         }
         try(FileWriter w = new FileWriter(localPath + File.separator + fileName)){
-            fileUtils.writeSentences(
+            FileUtils.writeSentences(
                     fileName,
                     w,
                     sourceFiles.toString(),

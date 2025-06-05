@@ -19,15 +19,12 @@ import Operations.Command;
 public class FileUtils {
     private File localFile;
     private String localPath;
+
     public FileUtils(String localPath) {
         this.localPath = localPath;
     }
     public File getLocalFile() {
-        try {
-            localFile = new File(localPath);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        localFile = new File(localPath);
         return localFile;
     }
     public void writeToFile(String lines, String filePath) {
@@ -201,62 +198,14 @@ public class FileUtils {
     }
     public String readFileLines(String path) {
         StringBuffer lines = new StringBuffer();
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(new File(path)));
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
             while(reader.ready()) {
                 lines.append(reader.readLine());
                 lines.append("\n");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(reader != null) {
-                try {
-                    reader.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                reader = null;
-            }
         }
         return lines.toString();
-    }
-    /**
-     * main class of the proyect
-     * @param localpath: local path
-     * @return main class file name
-     */
-    public static String getMainClass(String localpath) {
-        File miFile = new File(localpath + File.separator + "src");
-        BufferedReader miBufferedReader = null;
-        String mainName = "";
-        try {
-            if(miFile.listFiles() != null) {
-            outter: for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java")) {
-                        miBufferedReader = new BufferedReader(new FileReader(f));
-                        while(miBufferedReader.read() != -1) {
-                            if(miBufferedReader.readLine().contains("public static void main(String[] args)")) {
-                                mainName = f.getName().replace(".java", "");
-                                break outter;
-                            }
-                        }
-                    }
-                }
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(miBufferedReader != null) {
-                try {
-                    miBufferedReader.close();
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-                miBufferedReader = null;
-            }
-        }
-        return mainName;
     }
 }

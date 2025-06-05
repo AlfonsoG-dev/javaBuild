@@ -24,7 +24,7 @@ public class CommandUtils {
     }
 
     public String getMainClass() {
-        return FileUtils.getMainClass(localPath);
+        return fileOperation.getMainClass(localPath);
     }
     public String getProjectName() {
         String name = getMainClass();
@@ -133,24 +133,12 @@ public class CommandUtils {
     }
     public String compileFormatType(String target) {
         StringBuffer compile = new StringBuffer();
-        compile.append("javac -Werror -Xlint:all -d ");
-        if(target.isEmpty() && getLibFiles().isEmpty()) {
-            compile.append(".");
-            compile.append(File.separator);
-            compile.append("bin");
-            compile.append(File.separator);
-            compile.append(" ");
-        } else if(target.isEmpty() && !getLibFiles().isEmpty()) {
-            compile.append(".");
-            compile.append(File.separator);
-            compile.append("bin");
-            compile.append(File.separator);
-            compile.append(" -cp ");
-        } else if(!target.isEmpty() && getLibFiles().isEmpty()) {
-            compile.append(target);
-            compile.append(" ");
-        } else if(!target.isEmpty() && !getLibFiles().isEmpty()) {
-            compile.append(target);
+        compile.append("javac -Werror -Xlint:all -d ." + File.separator);
+        if(target.isEmpty()) {
+            target = "bin";
+        }
+        compile.append(target + File.separator + " ");
+        if(!getLibFiles().isEmpty()) {
             compile.append(" -cp ");
         }
         return compile.toString();
@@ -182,16 +170,16 @@ public class CommandUtils {
             source = new File(source).getPath() + File.separator + " .";
         }
 
+        build.append(jarFormat);
+
         switch(jarFormat) {
             case "jar -cfm ":
                 if(!directory.isEmpty()) {
-                    build.append(jarFormat);
                     build.append(mainName);
                     build.append(" Manifesto.txt -C ");
                     build.append(source);
                     build.append(directory);
                 } else if(directory.isEmpty()) {
-                    build.append(jarFormat);
                     build.append(mainName);
                     build.append(" Manifesto.txt -C ");
                     build.append(source);
@@ -200,13 +188,11 @@ public class CommandUtils {
             case "jar -cf ":
                 String jarName = new File(localParent).getName() + ".jar";
                 if(!directory.isEmpty()) {
-                    build.append(jarFormat);
                     build.append(jarName);
                     build.append(" -C ");
                     build.append(source);
                     build.append(directory);
                 } else {
-                    build.append(jarFormat);
                     build.append(jarName);
                     build.append(" -C ");
                     build.append(source);
@@ -214,7 +200,6 @@ public class CommandUtils {
                 break;
             case "jar -cfe ":
                 if(!directory.isEmpty()) {
-                    build.append(jarFormat);
                     build.append(mainName);
                     build.append(" ");
                     build.append(mainClassName);
@@ -222,7 +207,6 @@ public class CommandUtils {
                     build.append(source);
                     build.append(directory);
                 } else {
-                    build.append(jarFormat);
                     build.append(mainName);
                     build.append(" ");
                     build.append(mainClassName);
