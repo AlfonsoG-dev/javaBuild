@@ -29,7 +29,7 @@ public class FileOperation {
     public List<String> listLibFiles() {
         List<String> names = new ArrayList<>();
         try {
-            File lf = new File(localPath + File.separator + "lib");
+            File lf = fileUtils.resolvePaths(localPath, "lib");
             if(lf.listFiles() == null) System.out.println("[Info] No dependencies found");;
             if(lf.listFiles() != null) {
                 Files.newDirectoryStream(lf.toPath())
@@ -51,8 +51,7 @@ public class FileOperation {
      * @return main class file name
      */
     public String getMainClass() {
-        File miFile = new File(localPath + File.separator + "src");
-        File localFile = new File(localPath);
+        File miFile = fileUtils.resolvePaths(localPath, "src");
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
@@ -66,9 +65,6 @@ public class FileOperation {
                                 break outter;
                             }
                         }
-                    } else if (f.isFile() && f.getName().contains(localFile.getParent())) {
-                        mainName = f.getName().replace(".java", "");
-                        break outter;
                     }
                 }
             }
@@ -103,7 +99,7 @@ public class FileOperation {
     }
 
     public boolean haveManifesto() {
-        return new File(localPath + File.separator + "Manifesto.txt").exists();
+        return fileUtils.fileExists(fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath());
     }
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ Info ]: created " + fileName);
@@ -152,7 +148,7 @@ public class FileOperation {
     }
     public boolean extractionDirContainsPath(String libJarPath) throws IOException {
         boolean containsPath = false;
-        File extractionFile = new File(localPath + File.separator + "extractionFiles");
+        File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
         File myFile = new File(libJarPath);
         if(myFile.getParent() != null && extractionFile.listFiles() != null) {
             String jarLibParent = myFile.getParent();

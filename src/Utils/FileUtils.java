@@ -24,6 +24,10 @@ public class FileUtils {
         localFile = new File(localPath);
         return localFile;
     }
+
+    public boolean fileExists(String filePath) {
+        return new File(filePath).exists();
+    }
     public void writeToFile(String lines, String filePath) {
         try(FileWriter w = new FileWriter(getLocalFile().toPath().resolve(filePath).toFile())) {
             w.write(lines);
@@ -33,6 +37,9 @@ public class FileUtils {
     }
     public String getCleanPath(String filePath) {
         return new File(filePath).toPath().normalize().toString();
+    }
+    public File resolvePaths(String root, String children) {
+        return new File(root).toPath().resolve(children).toFile();
     }
     public int countFilesInDirectory(File myDirectory) {
         int count = 0;
@@ -121,7 +128,7 @@ public class FileUtils {
         List<String> names = new ArrayList<>();
         try {
             String c = getCleanPath(dirPath);
-            File f = new File(localPath + File.separator + c);
+            File f = resolvePaths(localPath, c);
             if(f.listFiles() == null)  throw new IOException("Empty directory provided");
             Files.newDirectoryStream(f.toPath())
                 .forEach(e -> {
