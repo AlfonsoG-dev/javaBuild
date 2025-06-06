@@ -70,7 +70,7 @@ public class Operation {
                 if(f.getName().equals("src")) {
                     File n = new File(localPath + File.pathSeparator + "src");
                     if(n.listFiles() == null) {
-                        operationUtils.createProyectFiles(author);
+                        operationUtils.createProjectFiles(author);
                     }
                 }
             }

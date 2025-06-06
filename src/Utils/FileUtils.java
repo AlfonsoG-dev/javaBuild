@@ -133,10 +133,10 @@ public class FileUtils {
         for(String pn: parentNames) {
             String nFileName = new File(pn).toPath().normalize().toFile().getPath();
             File mio = new File(pn);
-            int fileLenght = new File(nFileName).toPath().getNameCount();
-            if(mio.exists() == false && fileLenght > 1) {
+            int fileLength = new File(nFileName).toPath().getNameCount();
+            if(mio.exists() == false && fileLength > 1) {
                 mio.mkdirs();
-            } else if(mio.exists() == false && fileLenght <= 1) {
+            } else if(mio.exists() == false && fileLength <= 1) {
                 mio.mkdir();
             }
             System.out.println("[Info] created " + mio.getPath());

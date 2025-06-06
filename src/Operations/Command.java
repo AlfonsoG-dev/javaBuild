@@ -83,9 +83,9 @@ public class Command {
                 String 
                     jarFileName = e.getName(),
                     jarParent   = e.getParent(),
-                    extracJAR   = "jar -xf " + jarFileName,
+                    extractJAR   = "jar -xf " + jarFileName,
                     deleteJAR   = "rm -r " + jarFileName + "\n";
-                commands.add("cd " + jarParent + " && " + extracJAR + " && " + deleteJAR);
+                commands.add("cd " + jarParent + " && " + extractJAR + " && " + deleteJAR);
             });
         return commands;
     }

@@ -94,7 +94,7 @@ public class FileOperation {
     }
 
     /**
-     * main class of the proyect
+     * main class of the project
      * @return main class file name
      */
     public String getMainClass() {
@@ -150,9 +150,8 @@ public class FileOperation {
     }
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ Info ]: created " + fileName);
-        if(mainClass.isEmpty()) {
-            mainClass = getMainClass();
-        }
+        if(mainClass.isEmpty()) mainClass = getMainClass();
+
         if(fileName.equals(".gitignore")) {
             String ignoreFiles = "";
             ignoreFiles = "**bin" + "\n" +

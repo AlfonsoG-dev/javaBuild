@@ -83,7 +83,7 @@ public class OperationUtils {
             e.printStackTrace();
         }
     }
-    public void createProyectFiles(String author)  {
+    public void createProjectFiles(String author)  {
         try {
             String 
                 mainDirName = new File(localPath).getCanonicalPath(),
@@ -128,7 +128,7 @@ public class OperationUtils {
             );
             isAdded = true;
         } else {
-            System.out.println("[Info] DEPENDENCY ALREADY INSIDE THE PROYECT");
+            System.out.println("[Info] DEPENDENCY ALREADY INSIDE THE PROJECT");
         }
         return isAdded;
     }
