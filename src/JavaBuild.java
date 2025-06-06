@@ -16,14 +16,14 @@ class JavaBuild {
                         break;
                     case "-cb":
                         if((i+1) < args.length) {
-                            op.createProyectOperation();
+                            op.createProjectOperation();
                             op.createFilesOperation(args[i+1]);
                         } else {
                             System.err.println("[Error] no author provide");
                         }
                         break;
                     case "--compile":
-                        op.compileProyectOperation(source, target, release);
+                        op.compileProjectOperation(source, target, release);
                         break;
                     case "--extract":
                         if(haveExtractions) {
@@ -57,22 +57,22 @@ class JavaBuild {
                         break;
                     case "--build":
                         if(haveExtractions) {
-                            op.compileProyectOperation(source, target, release);
+                            op.compileProjectOperation(source, target, release);
                             op.extractJarDependencies();
                             op.createJarOperation(true, target);
                         } else {
-                            op.compileProyectOperation(source, target, release);
+                            op.compileProjectOperation(source, target, release);
                             op.createJarOperation(false, target);
                         }
                         break;
                         case "--scratch":
                         op.deleteDirectory(target);
                         if(haveExtractions) {
-                            op.compileProyectOperation(source, target, release);
+                            op.compileProjectOperation(source, target, release);
                             op.extractJarDependencies();
                             op.createJarOperation(true, target);
                         } else {
-                            op.compileProyectOperation(source, target, release);
+                            op.compileProjectOperation(source, target, release);
                             op.createJarOperation(false, target);
                         }
                         break;
@@ -84,7 +84,7 @@ class JavaBuild {
                         }
                         break;
                     case "--run":
-                        op.compileProyectOperation(source, target, release);
+                        op.compileProjectOperation(source, target, release);
                         if((i+1) < args.length) {
                             boolean 
                                 conditionA = args[i+1].contains("-"),
@@ -101,13 +101,13 @@ class JavaBuild {
                     case "--h":
                         System.out.println("use -ls to list java | jar | class files in the given path with the option -s ./source/");
 
-                        System.out.println("use -cb to create the proyect folder structure");
+                        System.out.println("use -cb to create the project folder structure");
 
                         System.out.println("\t when creating give the author name");
                         System.out.println("\t\t -ls author-name");
                         System.out.println("");
 
-                        System.out.println("use --compile to compile the proyect");
+                        System.out.println("use --compile to compile the project");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler for where the .class files will be store");
                         System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
@@ -116,7 +116,7 @@ class JavaBuild {
                         System.out.println("use --extract to extract the lib jar files");
                         System.out.println("");
 
-                        System.out.println("use --jar to create the proyect jar file");
+                        System.out.println("use --jar to create the project jar file");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .class files are");
                         System.out.println("");
 
@@ -132,13 +132,13 @@ class JavaBuild {
                         System.out.println("\t\t --i -a author-name");
                         System.out.println("");
 
-                        System.out.println("use --build to build the proyect");
+                        System.out.println("use --build to build the project");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
                         System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
                         System.out.println("");
 
-                        System.out.println("use --scratch to build the proyect from scratch");
+                        System.out.println("use --scratch to build the project from scratch");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
                         System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
@@ -149,10 +149,10 @@ class JavaBuild {
                         System.out.println("\t\t --add ./external/file.jar");
                         System.out.println("");
 
-                        System.out.println("use --run to run the proyect without building it");
+                        System.out.println("use --run to run the project without building it");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
-                        System.out.println("\t use -r 23 to tell to the compiler the version of hava you want to use for the release");
+                        System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
                         System.out.println("\t\t the run command also accepts the execution of internal commands");
                         System.out.println("\t\t --run -ls ./src/");
                         break;

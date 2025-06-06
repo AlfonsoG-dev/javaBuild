@@ -39,7 +39,7 @@ public class Operation {
      * creates the folder or directory structure:
      * bin, lib, src, docs, extractionFiles.
      */
-    public void createProyectOperation() {
+    public void createProjectOperation() {
         String[] names = {
             "bin",
             "lib",
@@ -111,7 +111,7 @@ public class Operation {
      * @param target the folder/directory where you want to store the .class files. Its ./bin/ by default.
      * @throws Exception when the compile command gets an error.
      */
-    public void compileProyectOperation(String source, String target, String release) {
+    public void compileProjectOperation(String source, String target, String release) {
         Optional<String> oSource = Optional.ofNullable(source);
         Optional<String> oTarget = Optional.ofNullable(target);
         Optional<String> oRelease = Optional.ofNullable(release);
@@ -141,14 +141,14 @@ public class Operation {
     /**
      * Performs the extraction operation using the extract command.
      * Usually you will extract the .jar files stored in the lib folder. 
-     * @param extracFile the file to extract.
+     * @param extractFile the file to extract.
      * @throws IOException the file doesn't exists
      */
-    public void executeExtractionCommand(String extracFile) throws IOException {
+    public void executeExtractionCommand(String extractFile) throws IOException {
         myCommand.getExtractionsCommand()
             .parallelStream()
             .forEach(p -> {
-                if(!extracFile.isEmpty()) {
+                if(!extractFile.isEmpty()) {
                     System.out.println("[Command] " + p);
                     try {
                         operationUtils.executeCommand(p);
@@ -186,7 +186,7 @@ public class Operation {
     }
     /**
      * Performs create jar operation using the command.
-     * @param includeExtraction boolean valuea that indicates if you add or not to the build the lib file.
+     * @param includeExtraction boolean value that indicates if you add or not to the build the lib file.
      * @param source the folder to include in the build.
      * @throws Exception when creating a jar file gets an error.
      */
@@ -253,7 +253,7 @@ public class Operation {
         return author;
     }
     /**
-     * Heper function that writes in the manifesto the lib .jar dependencies.
+     * Helper function that writes in the manifesto the lib .jar dependencies.
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      * @param author name of the author of the project.
      */
