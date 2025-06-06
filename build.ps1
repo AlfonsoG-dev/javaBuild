@@ -1,7 +1,7 @@
-$srcClases = ".\src\*.\src\Operations\*.\src\Utils\*"
+$srcClases = ".\src\*.java .\src\Operations\*.java .\src\Utils\*.java "
 $libFiles = ""
-$compile = "javac -Werror -Xlint:all -d .\target\ $srcClases"
-$createJar = "jar -cfm JavaBuild.jar Manifesto.txt -C .\bin\ ."
+$compile = "javac -Werror -Xlint:all -d .\bin\ $srcClases"
+$createJar = "jar -cfm JavaBuild.jar Manifesto.txt -C \ ."
 $javaCommand = "java -jar JavaBuild.jar"
 $runCommand = "$compile" + " && " + "$createJar" + " && " +"$javaCommand"
 Invoke-Expression $runCommand 
