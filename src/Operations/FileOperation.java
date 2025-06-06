@@ -28,28 +28,19 @@ public class FileOperation {
 
     public List<String> listLibFiles() {
         List<String> names = new ArrayList<>();
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    File lf = new File(localPath + File.separator + "lib");
-                    if(lf.listFiles() != null) {
-                        Files.newDirectoryStream(lf.toPath())
-                            .forEach(e -> {
-                                File f = e.toFile();
-                                for(File mf: f.listFiles()) {
-                                    names.add(mf.getPath());
-                                }
-                            });
-                    }
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t.start();
         try {
-            t.join();
-        } catch(InterruptedException e) {
+            File lf = new File(localPath + File.separator + "lib");
+            if(lf.listFiles() == null) System.out.println("[Info] No dependencies found");;
+            if(lf.listFiles() != null) {
+                Files.newDirectoryStream(lf.toPath())
+                    .forEach(e -> {
+                        File f = e.toFile();
+                        for(File mf: f.listFiles()) {
+                            names.add(mf.getPath());
+                        }
+                    });
+            }
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return names;
@@ -61,6 +52,7 @@ public class FileOperation {
      */
     public String getMainClass() {
         File miFile = new File(localPath + File.separator + "src");
+        File localFile = new File(localPath);
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
@@ -74,6 +66,9 @@ public class FileOperation {
                                 break outter;
                             }
                         }
+                    } else if (f.isFile() && f.getName().contains(localFile.getParent())) {
+                        mainName = f.getName().replace(".java", "");
+                        break outter;
                     }
                 }
             }
