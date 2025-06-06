@@ -64,7 +64,7 @@ public class CommandUtils {
                         break;
                     }
                 }
-                fileOperation.listSRCDirectories(source)
+                fileUtils.listDirectoriesFromPath(source)
                     .parallelStream()
                     .filter(e -> !e.isEmpty())
                     .forEach(e -> {

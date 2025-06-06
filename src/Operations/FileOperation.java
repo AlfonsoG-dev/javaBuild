@@ -26,44 +26,6 @@ public class FileOperation {
         scriptBuilder = new ScriptBuilder(nLocalPath);
     }
 
-    public List<String> listSRCDirectories(String path) throws IOException {
-        List<String> names = new ArrayList<>();
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    String c = fileUtils.getCleanPath(path);
-                    File lf = new File(localPath + File.separator + c);
-                    if(lf.listFiles() != null) {
-                        Files.newDirectoryStream(lf.toPath())
-                            .forEach(e -> {
-                                File f = e.toFile();
-                                if(f.isDirectory()) {
-                                    names.add(f.getPath() + File.separator);
-                                    if(f.listFiles() != null) {
-                                        try {
-                                            names.addAll(
-                                                    listSRCDirectories(f.getPath())
-                                            );
-                                        } catch(Exception err) {
-                                            err.printStackTrace();
-                                        }
-                                    }
-                                }
-                            });
-                    }
-                } catch(IOException err) {
-                    err.printStackTrace();
-                }
-            }
-        });
-        t.start();
-        try {
-            t.join();
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-        return names;
-    }
     public List<String> listLibFiles() {
         List<String> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
@@ -182,20 +144,15 @@ public class FileOperation {
             fileUtils.writeToFile(mainClassLines, fileName);
         } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
             // write build script lines
-            try {
-                
-                scriptBuilder.writeBuildFile(
-                    fileName,
-                    mainClass,
-                    "src",
-                    "bin",
-                    listSRCDirectories("src"),
-                    listLibFiles(),
-                    includeExtraction
-                );
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
+            scriptBuilder.writeBuildFile(
+                fileName,
+                mainClass,
+                "src",
+                "bin",
+                fileUtils.listDirectoriesFromPath("src"),
+                listLibFiles(),
+                includeExtraction
+            );
         }
     }
     public boolean extractionDirContainsPath(String libJarPath) throws IOException {

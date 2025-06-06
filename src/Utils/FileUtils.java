@@ -117,6 +117,33 @@ public class FileUtils {
         }
         return names;
     }
+    public List<String> listDirectoriesFromPath(String dirPath) {
+        List<String> names = new ArrayList<>();
+        try {
+            String c = getCleanPath(dirPath);
+            File f = new File(localPath + File.separator + c);
+            if(f.listFiles() == null)  throw new IOException("Empty directory provided");
+            Files.newDirectoryStream(f.toPath())
+                .forEach(e -> {
+                    File l = e.toFile();
+                    if(l.isDirectory()) {
+                        names.add(l.getPath() + File.separator);
+                        if(l.listFiles() != null) {
+                            try {
+                                names.addAll(
+                                        listDirectoriesFromPath(l.getPath())
+                                );
+                            } catch(Exception err) {
+                                err.printStackTrace();
+                            }
+                        }
+                    }
+                });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return names;
+    }
     public void createDirectory(String directory) {
         File miFile = new File(directory);
         if(miFile.exists() == false) {
