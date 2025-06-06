@@ -39,8 +39,8 @@ public class CommandUtils {
         String b = "";
         List<String> names = new ArrayList<>();
         try {
-            File srcFile = new File(localPath + File.separator + source);
-            File binFile = new File(localPath + File.separator + target);
+            File srcFile = fileUtils.resolvePaths(localPath, source);
+            File binFile = fileUtils.resolvePaths(localPath, target);
             List<File> targetFiles = fileUtils.listFilesFromPath(binFile.getPath());
             if(srcFile.listFiles() == null) {
                 System.out.println("[Info] " + srcFile.getPath() + " is empty");
@@ -187,7 +187,7 @@ public class CommandUtils {
     protected String manifestoClass() {
         String
             name = "",
-            lines = fileUtils.readFileLines(localPath + File.separator + "Manifesto.txt");
+            lines = fileUtils.readFileLines(fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath());
         for(String l: lines.split("\n")) {
             if(l.contains("Main-Class: ")) {
                 name = l.split(":")[1];

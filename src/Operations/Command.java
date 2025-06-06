@@ -73,7 +73,7 @@ public class Command {
      * @return the list of jar files to extract.
      */
     public List<String> getExtractionsCommand() throws IOException {
-        File extractionFile = new File(localPath + File.separator + "extractionFiles");
+        File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
         List<String> commands = new ArrayList<>();
 
         fileUtils.listFilesFromPath(extractionFile.getPath())
@@ -101,7 +101,7 @@ public class Command {
             command = "",
             directory = "";
 
-        File extractionFile = new File(localPath + File.separator + "extractionFiles");
+        File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
 
         if(extractionFile.listFiles() != null) {
             for(File extractionDir: extractionFile.listFiles()) {

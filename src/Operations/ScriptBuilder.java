@@ -101,7 +101,7 @@ public class ScriptBuilder {
         }
 
         // write lines to file
-        try(FileWriter w = new FileWriter(new File(localPath).toPath().resolve("Manifesto.txt").toFile())) {
+        try(FileWriter w = new FileWriter(fileUtils.resolvePaths(localPath, "Manifesto.txt"))) {
             w.write(m.toString());
         } catch(Exception e) {
             e.printStackTrace();

@@ -210,7 +210,7 @@ public class Operation {
      */
     public boolean haveIncludeExtraction() {
         boolean haveInclude = true; 
-        File f = new File(localPath + File.separator + "Manifesto.txt");
+        File f = fileUtils.resolvePaths(localPath, "Manifesto.txt");
         if(!f.exists()) {
             System.err.println("[Error] Manifesto doesn't exists");
             return false;
@@ -233,7 +233,7 @@ public class Operation {
      */
     public String getAuthorName() {
         String author = "";
-        File f = new File(localPath + File.separator + "Manifesto.txt");
+        File f = fileUtils.resolvePaths(localPath, "Manifesto.txt");
         if(!f.exists()) {
             System.err.println("[Error] Manifesto doesn't exists");
             return null;
