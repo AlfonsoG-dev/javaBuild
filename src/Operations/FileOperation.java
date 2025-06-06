@@ -3,7 +3,6 @@ package Operations;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import java.nio.file.Files;
@@ -20,9 +19,11 @@ public class FileOperation {
 
     private FileUtils fileUtils;
     private String localPath;
+    private ScriptBuilder scriptBuilder;
     public FileOperation(String nLocalPath) {
         localPath = nLocalPath;
         fileUtils = new FileUtils(localPath);
+        scriptBuilder = new ScriptBuilder(nLocalPath);
     }
 
     public List<String> listSRCDirectories(String path) throws IOException {
@@ -94,11 +95,10 @@ public class FileOperation {
 
     /**
      * main class of the proyect
-     * @param localpath: local path
      * @return main class file name
      */
-    public String getMainClass(String localpath) {
-        File miFile = new File(localpath + File.separator + "src");
+    public String getMainClass() {
+        File miFile = new File(localPath + File.separator + "src");
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
@@ -131,7 +131,7 @@ public class FileOperation {
     }
 
     public String getProjectName() {
-        String name = getMainClass(localPath);
+        String name = getMainClass();
         if(name.isEmpty()) {
             try {
             String
@@ -148,102 +148,11 @@ public class FileOperation {
     public boolean haveManifesto() {
         return new File(localPath + File.separator + "Manifesto.txt").exists();
     }
-    /**
-     * creates the manifesto file for the jar file creation
-     * @param fileName: path where the manifesto is created
-     * @param includeExtraction: true if you want the lib files as part of the jar file, false otherwise
-     * @param libFiles: the lib files to include in the build
-     */
-    public void writeManifesto(boolean includeExtraction, String libFiles, String authorName) {
-        String
-            author    = authorName.trim(),
-            mainClass = getMainClass(localPath);
-
-        StringBuffer m = new StringBuffer();
-
-        m.append("Manifest-Version: 1.0");
-        m.append("\n");
-
-        if(!author.isEmpty()) {
-            m.append("Created-By: ");
-            m.append(author);
-            m.append("\n");
-        }
-        if(!mainClass.isEmpty()) {
-            m.append("Main-Class: ");
-            m.append(mainClass);
-            m.append("\n");
-        }
-        if(!libFiles.isEmpty() && !includeExtraction) {
-            m.append("Class-Path: ");
-            m.append(libFiles);
-            m.append("\n");
-        }
-
-        // write lines to file
-        fileUtils.writeToFile(m.toString(), "Manifesto.txt");
-    }
-    /**
-     * create the sentences for the build script
-     * @param fileName: path where the build script is created
-     * @param mainClass: main class name
-     * @param extract: true if you want to include the lib files as part of the jar file, false otherwise
-     * @throws IOException: exception while trying to create the build script
-     */
-    private void writeBuildFile(String fileName, String mainClass, String source, String target, boolean extract) throws IOException {
-        Command myCommand = new Command(localPath);
-        List<String> dirNames = listSRCDirectories(source);
-        List<String> libNames = listLibFiles();
-
-        StringBuffer sourceFiles = new StringBuffer("." + File.separator + source + File.separator + "*.java ");
-        String
-            libFiles = "",
-            compile = "javac -Werror -Xlint:all -d ." + File.separator + target + File.separator,
-            runJar = "",
-            runCommand = "";
-
-        sourceFiles.append(
-                dirNames
-                .parallelStream()
-                .filter(e -> fileUtils.countFilesInDirectory(new File(e)) > 0)
-                .map(e -> e + "*.java ")
-                .collect(Collectors.joining())
-        );
-
-
-        libFiles += libNames
-            .stream()
-            .map(e -> e + ";")
-            .collect(Collectors.joining());
-
-        if(!libFiles.isEmpty()) {
-            compile += " -cp '$libFiles' $srcClases";
-        } else {
-            compile += " $srcClases";
-        }
-        if(!mainClass.isEmpty()) {
-            runJar = FileUtils.getJavaScriptCommand(mainClass);
-            runCommand = FileUtils.getRunScriptCommand();
-        } else {
-            runCommand = FileUtils.getBuildScriptCommand();
-        }
-        try(FileWriter w = new FileWriter(localPath + File.separator + fileName)){
-            FileUtils.writeScript(
-                    fileName,
-                    w,
-                    sourceFiles.toString(),
-                    libFiles,
-                    compile,
-                    myCommand.getJarFileCommand(extract, ""),
-                    runJar,
-                    runCommand
-            );
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ Info ]: created " + fileName);
+        if(mainClass.isEmpty()) {
+            mainClass = getMainClass();
+        }
         if(fileName.equals(".gitignore")) {
             String ignoreFiles = "";
             ignoreFiles = "**bin" + "\n" +
@@ -262,7 +171,8 @@ public class FileOperation {
                 .filter(e -> !e.isEmpty())
                 .map(e -> e + ";")
                 .collect(Collectors.joining());
-            writeManifesto(includeExtraction, libJars, author);
+            scriptBuilder.writeManifesto(libJars, author, mainClass, includeExtraction);
+
         } else if(fileName.equals(mainClass + ".java")) {
             String mainClassLines = "";
             mainClassLines = "class " + mainClass + " {\n" +
@@ -274,12 +184,15 @@ public class FileOperation {
         } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
             // write build script lines
             try {
-                writeBuildFile(
-                        fileName,
-                        mainClass,
-                        "src",
-                        "target",
-                        includeExtraction
+                
+                scriptBuilder.writeBuildFile(
+                    fileName,
+                    mainClass,
+                    "src",
+                    "bin",
+                    listSRCDirectories("src"),
+                    listLibFiles(),
+                    includeExtraction
                 );
             } catch(IOException e) {
                 e.printStackTrace();

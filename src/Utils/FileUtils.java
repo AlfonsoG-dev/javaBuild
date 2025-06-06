@@ -31,57 +31,6 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
-    public static String getRunScriptCommand() {
-        String command = "";
-        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" " +
-                "+ \" && \" +" + "\"$javaCommand\"" + "\n";
-        }
-        return command;
-    }
-    public static String getJavaScriptCommand(String mainClass) {
-        String command = "";
-        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            command = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
-        } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-            command = "java -jar " + mainClass + "\n";
-        }
-        return command;
-    }
-    public static String getBuildScriptCommand() {
-        String command = "";
-        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" \n";
-        }
-        return command;
-    }
-
-    public static void writeScript(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles,
-            String compile, String extractJar, String runJar, String runCommand) throws IOException {
-        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            writeBuildScript.write(
-                    "$srcClases = \"" + srcClases + "\"\n" +
-                    "$libFiles = \"" + libFiles + "\"\n" +
-                    "$compile = \"" + compile + "\"\n" + 
-                    "$createJar = " + "\"" + extractJar + "\"" + "\n" + 
-                    runJar + 
-                    runCommand +
-                    "Invoke-Expression $runCommand \n"
-            );
-        } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-            writeBuildScript.write(
-                    "srcClases=" + "\"" + srcClases + "\"\n" + 
-                    "libFiles=" + "\"" + libFiles + "\"\n" + 
-                    compile + "\n" + 
-                    extractJar + "\n" + 
-                    runJar
-            );
-            File local = new File(filePath);
-            if(local.setExecutable(true)) {
-                System.out.println("[Info] change file to executable " + local.getPath());
-            }
-        }
-    }
     public String getCleanPath(String filePath) {
         return new File(filePath).toPath().normalize().toString();
     }

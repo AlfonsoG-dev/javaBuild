@@ -50,10 +50,11 @@ class JavaBuild {
                         break;
                     case "--i":
                         String author = getCliValues(args, i, "-a");
+                        String runClass = getCliValues(args, i, "--class");
                         if((i+1) < args.length && args[i+1].equals("n")) {
-                            op.createIncludeExtractions(false, author);
+                            op.createIncludeExtractions(false, author, runClass);
                         } else {
-                            op.createIncludeExtractions(true, author);
+                            op.createIncludeExtractions(true, author, runClass);
                         }
                         break;
                     case "--build":

@@ -10,7 +10,6 @@ import java.nio.file.Path;
 
 import java.util.Optional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import Utils.CommandUtils;
 import Utils.FileUtils;
@@ -31,9 +30,9 @@ public class Operation {
         localPath = nLocalPath;
         operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
-        fileOperation = new FileOperation(nLocalPath);
         commandUtils = new CommandUtils(nLocalPath);
         myCommand = new Command(nLocalPath);
+        fileOperation = new FileOperation(nLocalPath);
     }
     /**
      * creates the folder or directory structure:
@@ -257,31 +256,16 @@ public class Operation {
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      * @param author name of the author of the project.
      */
-    public void createIncludeExtractions(boolean includeExtraction, String author) {
+    public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass) {
         System.out.println("[Info] creating manifesto ...");
-        if(author.isEmpty() && !getAuthorName().isEmpty()) {
-            author = getAuthorName();
-        }
-        if(!includeExtraction) {
-            List<String> libJars = commandUtils.getLibFiles();
-            String jarFiles = libJars
-                .parallelStream()
-                .filter(e -> !e.isEmpty())
-                .map(e -> e + " ")
-                .collect(Collectors.joining());
-
-            fileOperation.writeManifesto(
-                    includeExtraction,
-                    jarFiles,
-                    author
-            );
-        } else {
-            fileOperation.writeManifesto(
-                    includeExtraction,
-                    "",
-                    author
-            );
-        }
+        Optional<String> oMainClass = Optional.ofNullable(mainClass);
+        Optional<String> oAuthor = Optional.ofNullable(author);
+        fileOperation.createFiles(
+            oAuthor.orElse(getAuthorName()),
+            "Manifesto.txt",
+            oMainClass.orElse(""),
+            includeExtraction
+        );
     }
     /**
      * Performs the add jar dependency operation.

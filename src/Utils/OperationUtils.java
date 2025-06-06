@@ -14,6 +14,7 @@ import Operations.FileOperation;
 public class OperationUtils {
     private FileOperation fileOperation;
     private String localPath;
+
     public OperationUtils(String nLocalPath) {
         fileOperation = new FileOperation(nLocalPath);
         localPath = nLocalPath;
@@ -141,7 +142,7 @@ public class OperationUtils {
         return name;
     }
     public void createBuildScript(boolean includeExtraction, String fileName) {
-        String mainName = fileOperation.getMainClass(localPath);
+        String mainName = fileOperation.getMainClass();
         if(!mainName.isEmpty()) {
             mainName = mainName + ".jar";
         }
