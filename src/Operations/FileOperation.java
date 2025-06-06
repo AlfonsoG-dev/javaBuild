@@ -155,7 +155,6 @@ public class FileOperation {
      * @param libFiles: the lib files to include in the build
      */
     public void writeManifesto(boolean includeExtraction, String libFiles, String authorName) {
-        FileWriter writer = null;
         String
             author    = authorName.trim(),
             mainClass = getMainClass(localPath);
@@ -245,9 +244,6 @@ public class FileOperation {
     }
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ Info ]: created " + fileName);
-        File
-            localFile = new File(localPath),
-            miFile    = new File(localPath + File.separator + "src");
         if(fileName.equals(".gitignore")) {
             String ignoreFiles = "";
             ignoreFiles = "**bin" + "\n" +

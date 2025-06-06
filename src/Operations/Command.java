@@ -14,12 +14,10 @@ public class Command {
     private String localPath;
     private CommandUtils commandUtils;
     private FileUtils fileUtils;
-    private FileOperation fileOperation;
     public Command(String localPath) {
         this.localPath = localPath;
         commandUtils = new CommandUtils(localPath);
         fileUtils = new FileUtils(localPath);
-        fileOperation = new FileOperation(localPath);
     }
 
     /**
@@ -45,7 +43,6 @@ public class Command {
         );
         String
             srcClases = commandUtils.getSourceFiles(source, target),
-            mainClass = fileOperation.getMainClass(localPath),
             format = commandUtils.compileFormatType(target, release);
 
         if(!srcClases.contains("*.java")) {
