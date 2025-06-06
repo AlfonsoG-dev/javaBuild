@@ -130,11 +130,8 @@ public class Command {
         StringBuffer 
             jarFiles = new StringBuffer(),
             runClass = commandUtils.runClassOption(className);
-        if(source.isEmpty()) {
-            source = "." + File.separator + "bin" + File.separator + ";";
-        } else {
-            source = new File(source).getPath() + File.separator + ";";
-        }
+
+        source = new File(source).getPath() + File.separator + ";";
         jarFiles.append("'");
         jarFiles.append(source);
         jarFiles.append(libJars

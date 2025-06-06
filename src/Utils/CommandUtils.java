@@ -137,11 +137,8 @@ public class CommandUtils {
             localParent = new File(localPath).getCanonicalPath(),
             jarFormat = jarTypeFormat(mainName, directory),
             mainClassName = fileOperation.getProjectName();
-        if(source.isEmpty()) {
-            source = "." + File.separator + "bin" + File.separator + " .";
-        } else {
-            source = new File(source).getPath() + File.separator + " .";
-        }
+
+        source = new File(source).getPath() + File.separator + " .";
 
         build.append(jarFormat);
 

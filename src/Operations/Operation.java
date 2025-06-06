@@ -8,6 +8,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,8 @@ public class Operation {
     private Command myCommand;
     private FileUtils fileUtils;
     private FileOperation fileOperation;
-    public Operation(String nLocalPath){
+
+    public Operation(String nLocalPath) {
         localPath = nLocalPath;
         operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
@@ -83,8 +85,8 @@ public class Operation {
      * @throws IOException
      */
     public void listProjectFiles(String source) {
-        if(source.isEmpty()) source = "src";
-        String dirPath = localPath + File.separator + new File(source).toPath().normalize();
+        Optional<String> oSource = Optional.ofNullable(source);
+        String dirPath = localPath + new File(oSource.orElse("src")).toPath().normalize();
         try {
             File read = new File(dirPath);
             if(read.isFile()) {
@@ -110,18 +112,14 @@ public class Operation {
      * @throws Exception when the compile command gets an error.
      */
     public void compileProyectOperation(String source, String target, String release) {
-        if(source.isEmpty()) source = "src";
-        if(target.isEmpty()) target = "bin";
-        int javaVersion = 0;
-        if(release.isEmpty()){
-            javaVersion = Integer.parseInt(System.getProperty("java.specification.version"));
-        } else {
-            javaVersion = Integer.parseInt(release);
-        }
+        Optional<String> oSource = Optional.ofNullable(source);
+        Optional<String> oTarget = Optional.ofNullable(target);
+        Optional<String> oRelease = Optional.ofNullable(release);
+
         String compileCommand = myCommand.getCompileCommand(
-                source,
-                target,
-                javaVersion
+                oSource.orElse("src"),
+                oTarget.orElse("bin"),
+                Integer.parseInt(oRelease.orElse(System.getProperty("java.specification.version")))
         );
         try {
             System.out.println("[Command] " + compileCommand);
@@ -184,8 +182,12 @@ public class Operation {
      * @throws Exception when creating a jar file gets an error.
      */
     public void createJarOperation(boolean includeExtraction, String source) {
+        Optional<String> oSource = Optional.ofNullable(source);
         try {
-            String command = myCommand.getJarFileCommand(includeExtraction, source);
+            String command = myCommand.getJarFileCommand(
+                    includeExtraction,
+                    oSource.orElse("." + File.separator + "bin")
+            );
             System.out.println("[Command] " + command);
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
@@ -303,10 +305,12 @@ public class Operation {
      * @throws Exception while trying to execute run operation.
      */
     public void runAppOperation(String className, String source) {
+        Optional<String> oSource = Optional.ofNullable(source);
+
         String command = myCommand.getRunCommand(
                 commandUtils.getLibFiles(),
                 className,
-                source
+                oSource.orElse("." + File.separator + "bin")
         );
         try {
             System.out.println("[Command] " + command);

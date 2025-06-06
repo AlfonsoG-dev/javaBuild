@@ -149,7 +149,7 @@ class JavaBuild {
         }
     }
     private static String getCliValues(String[] args, int i, String option) {
-        String b = "";
+        String b = null;
         for(int j=i; j<args.length; ++j) {
             if(args[j].equals(option) && (j+1) < args.length) {
                 b = args[j+1];

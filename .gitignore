@@ -1,8 +1,7 @@
-**bin/
-**lib/
+**bin
+**lib
 **extractionFiles
-**Session.vim
 **Manifesto.txt
+**Session.vim
 **.jar
 **.exe
-**.vscode
