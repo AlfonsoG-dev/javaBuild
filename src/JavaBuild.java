@@ -10,6 +10,7 @@ class JavaBuild {
                 String source = getCliValues(args, i, "-s");
                 String target = getCliValues(args, i, "-t");
                 String release = getCliValues(args, i, "-r");
+                String toDelete = getCliValues(args, i, "-d");
                 switch(args[i]) {
                     case "-ls":
                         op.listProjectFiles(source);
@@ -65,8 +66,8 @@ class JavaBuild {
                             op.createJarOperation(false, target);
                         }
                         break;
-                        case "--scratch":
-                        op.deleteDirectory(target);
+                    case "--scratch":
+                        op.deleteDirectory(toDelete);
                         if(haveExtractions) {
                             op.compileProjectOperation(source, target, release);
                             op.extractJarDependencies();
@@ -139,6 +140,8 @@ class JavaBuild {
                         System.out.println("");
 
                         System.out.println("use --scratch to build the project from scratch");
+                        System.out.println("\t use -d ./delete/ to delete where the `.class` are, and build from scratch");
+                        System.out.println("\t\t don't use this option with the others unless you want to get an error");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
                         System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
