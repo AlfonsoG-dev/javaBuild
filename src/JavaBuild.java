@@ -65,7 +65,16 @@ class JavaBuild {
                             op.createJarOperation(false, target);
                         }
                         break;
-                    case "--scratch":
+                        case "--scratch":
+                        op.deleteDirectory(target);
+                        if(haveExtractions) {
+                            op.compileProyectOperation(source, target, release);
+                            op.extractJarDependencies();
+                            op.createJarOperation(true, target);
+                        } else {
+                            op.compileProyectOperation(source, target, release);
+                            op.createJarOperation(false, target);
+                        }
                         break;
                     case "--add":
                         if((i+1) < args.length) {
@@ -130,6 +139,10 @@ class JavaBuild {
                         System.out.println("");
 
                         System.out.println("use --scratch to build the proyect from scratch");
+                        System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
+                        System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
+                        System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
+                        System.out.println("");
 
                         System.out.println("use --add to include an external jar as a dependency");
                         System.out.println("\t you need to give the external jar file/dir path");

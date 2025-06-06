@@ -129,6 +129,15 @@ public class Operation {
             e.printStackTrace();
         }
     }
+    public void deleteDirectory(String dirPath) {
+        Optional<String> oDirPath = Optional.ofNullable(dirPath);
+        try {
+            System.out.println("[Info] deleting directory...");
+            operationUtils.executeCommand("rm -r " + oDirPath.orElse("bin"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Performs the extraction operation using the extract command.
      * Usually you will extract the .jar files stored in the lib folder. 
