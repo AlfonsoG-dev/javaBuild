@@ -34,7 +34,7 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
-    public static String getRunCommand() {
+    public static String getRunScriptCommand() {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" " +
@@ -42,7 +42,7 @@ public class FileUtils {
         }
         return command;
     }
-    public static String getJavaCommand(String mainClass) {
+    public static String getJavaScriptCommand(String mainClass) {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
@@ -51,7 +51,7 @@ public class FileUtils {
         }
         return command;
     }
-    public static String buildCommand() {
+    public static String getBuildScriptCommand() {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" \n";
@@ -59,7 +59,7 @@ public class FileUtils {
         return command;
     }
 
-    public static void writeSentences(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles,
+    public static void writeScript(String filePath, FileWriter writeBuildScript, String srcClases, String libFiles,
             String compile, String extractJar, String runJar, String runCommand) throws IOException {
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             writeBuildScript.write(

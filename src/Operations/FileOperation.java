@@ -223,13 +223,13 @@ public class FileOperation {
             compile += " $srcClases";
         }
         if(!mainClass.isEmpty()) {
-            runJar = FileUtils.getJavaCommand(mainClass);
-            runCommand = FileUtils.getRunCommand();
+            runJar = FileUtils.getJavaScriptCommand(mainClass);
+            runCommand = FileUtils.getRunScriptCommand();
         } else {
-            runCommand = FileUtils.buildCommand();
+            runCommand = FileUtils.getBuildScriptCommand();
         }
         try(FileWriter w = new FileWriter(localPath + File.separator + fileName)){
-            FileUtils.writeSentences(
+            FileUtils.writeScript(
                     fileName,
                     w,
                     sourceFiles.toString(),
