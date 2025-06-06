@@ -129,6 +129,25 @@ public class FileOperation {
         }
         return mainName;
     }
+
+    public String getProjectName() {
+        String name = getMainClass(localPath);
+        if(name.isEmpty()) {
+            try {
+            String
+                localParent = new File(localPath).getCanonicalPath(),
+                localName = new File(localParent).getName();
+            name = localName;
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return name;
+    }
+
+    public boolean haveManifesto() {
+        return new File(localPath + File.separator + "Manifesto.txt").exists();
+    }
     /**
      * creates the manifesto file for the jar file creation
      * @param fileName: path where the manifesto is created

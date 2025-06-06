@@ -17,30 +17,14 @@ public class CommandUtils {
     private String localPath;
     private FileUtils fileUtils;
     private FileOperation fileOperation;
+
     public CommandUtils(String localPath) {
         this.localPath = localPath;
         fileOperation = new FileOperation(localPath);
         fileUtils = new FileUtils(localPath);
     }
 
-    public String getMainClass() {
-        return fileOperation.getMainClass(localPath);
-    }
-    public String getProjectName() {
-        String name = getMainClass();
-        if(name.isEmpty()) {
-            try {
-            String
-                localParent = new File(localPath).getCanonicalPath(),
-                localName = new File(localParent).getName();
-            name = localName;
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return name;
-    }
-    public boolean recompile(Path filePath, Path source, Path target) {
+    public boolean recompileFiles(Path filePath, Path source, Path target) {
         boolean shouldRecompile = true;
         try {
             Path relative = source.relativize(filePath);
@@ -54,7 +38,7 @@ public class CommandUtils {
         }
         return shouldRecompile;
     }
-    public String getSrcClases(String source, String target) {
+    public String getSourceFiles(String source, String target) {
         String b = "";
         List<String> names = new ArrayList<>();
         try {
@@ -68,7 +52,7 @@ public class CommandUtils {
                 fileUtils.listFilesFromPath(srcFile.toString())
                     .stream()
                     .map(f -> f.toPath())
-                    .filter(p -> recompile(p, srcFile.toPath(), binFile.toPath()))
+                    .filter(p -> recompileFiles(p, srcFile.toPath(), binFile.toPath()))
                     .forEach(e -> {
                         names.add(e + " ");
                     });
@@ -119,18 +103,6 @@ public class CommandUtils {
             });
         return names;
     }
-    private boolean haveManifesto() {
-        boolean exists = false;
-        try {
-            File miFile = new File(localPath + File.separator + "Manifesto.txt");
-            if(miFile.exists()) {
-                exists = true;
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return exists;
-    }
     public String compileFormatType(String target, int release) {
         StringBuffer compile = new StringBuffer();
         compile.append("javac --release " + release + " -Werror -Xlint:all -d ." + File.separator);
@@ -146,13 +118,14 @@ public class CommandUtils {
     private String jarTypeFormat(String mainName, String directory) throws IOException {
         StringBuffer jarFormat = new StringBuffer();
         jarFormat.append("jar");
-        if(haveManifesto()) {
+        boolean presentManifesto = fileOperation.haveManifesto();
+        if(presentManifesto) {
             jarFormat.append(" -cfm ");
         }
-        if(!haveManifesto() && mainName.isEmpty()) {
+        if(!presentManifesto && mainName.isEmpty()) {
             jarFormat.append(" -cf ");
         }
-        if(!haveManifesto() && !mainName.isEmpty()) {
+        if(!presentManifesto && !mainName.isEmpty()) {
             jarFormat.append(" -cfe ");
         }
         return jarFormat.toString();
@@ -160,10 +133,10 @@ public class CommandUtils {
     public String jarTypeUnion(String directory, String source) throws IOException {
         StringBuffer build = new StringBuffer();
         String 
-            mainName = getProjectName() + ".jar",
+            mainName = fileOperation.getProjectName() + ".jar",
             localParent = new File(localPath).getCanonicalPath(),
             jarFormat = jarTypeFormat(mainName, directory),
-            mainClassName = getProjectName();
+            mainClassName = fileOperation.getProjectName();
         if(source.isEmpty()) {
             source = "." + File.separator + "bin" + File.separator + " .";
         } else {
@@ -231,7 +204,7 @@ public class CommandUtils {
     public StringBuffer runClassOption(String className) {
         StringBuffer runClass = new StringBuffer();
         String
-            name = " ." + File.separator + "src" + File.separator + getProjectName() + ".java",
+            name = " ." + File.separator + "src" + File.separator + fileOperation.getProjectName() + ".java",
             mainName = !manifestoClass().isEmpty() ?
             manifestoClass() : name;
         
