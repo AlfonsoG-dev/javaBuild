@@ -26,7 +26,7 @@ public class OperationUtils {
             String localFULL = new File(localPath).getCanonicalPath();
             File local = new File(localFULL);
             if(command.isEmpty()) {
-                throw new Exception("[Error] cannot execute an empty command: ");
+                command = "echo [Error] cannot execute an empty command";
             }
             if(System.getProperty("os.name").toLowerCase().contains("windows")) {
                 builder.command("pwsh", "-NoProfile", "-Command", command);
