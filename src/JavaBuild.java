@@ -92,12 +92,12 @@ class JavaBuild {
                                 conditionA = args[i+1].contains("-"),
                                 conditionB = args[i+1].contains("--");
                             if(!(conditionA || conditionB)) {
-                                op.runAppOperation(args[i+1], source);
+                                op.runAppOperation(args[i+1], target);
                             } else {
-                                op.runAppOperation("", source);
+                                op.runAppOperation("", target);
                             }
                         } else {
-                            op.runAppOperation("", source);
+                            op.runAppOperation("", target);
                         }
                         break;
                     case "--h":

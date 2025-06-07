@@ -126,9 +126,9 @@ public class Command {
         String command  = "";
         StringBuffer 
             jarFiles = new StringBuffer(),
-            runClass = commandUtils.runClassOption(className);
+            runClass = commandUtils.runClassOption(className, source);
 
-        source = new File(source).getPath() + File.separator + ";";
+        source = fileUtils.resolvePaths(localPath, source) + ";";
         jarFiles.append("'");
         jarFiles.append(source);
         jarFiles.append(libJars

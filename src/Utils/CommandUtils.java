@@ -61,7 +61,7 @@ public class CommandUtils {
                     if(f.isFile() && f.getName().contains(".java")) {
                         names.add(".");
                         names.add(File.separator);
-                        names.add("src");
+                        names.add(source);
                         names.add(File.separator);
                         names.add("*.java ");
                         break;
@@ -198,10 +198,10 @@ public class CommandUtils {
         }
         return name;
     }
-    public StringBuffer runClassOption(String className) {
+    public StringBuffer runClassOption(String className, String source) {
         StringBuffer runClass = new StringBuffer();
         String
-            name = " ." + File.separator + "src" + File.separator + fileOperation.getProjectName() + ".java",
+            name = " ." + File.separator + source + File.separator + fileOperation.getProjectName() + ".java",
             mainName = !manifestoClass().isEmpty() ?
             manifestoClass() : name;
         
