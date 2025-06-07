@@ -4,7 +4,10 @@ import Operations.FileOperation;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.nio.file.Files;
 import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -129,11 +132,11 @@ public class CommandUtils {
     }
     public String jarTypeUnion(String directory, String source) throws IOException {
         StringBuffer build = new StringBuffer();
-        String 
-            mainName = fileOperation.getProjectName() + ".jar",
-            localParent = new File(localPath).getCanonicalPath(),
-            jarFormat = jarTypeFormat(mainName, directory),
-            mainClassName = fileOperation.getProjectName();
+
+        String mainName      = fileOperation.getProjectName() + ".jar";
+        String localParent   = new File(localPath).getCanonicalPath();
+        String jarFormat     = jarTypeFormat(mainName, directory);
+        String mainClassName = fileOperation.getProjectName();
 
         source = new File(source).getPath() + File.separator + " .";
 

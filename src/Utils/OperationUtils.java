@@ -85,9 +85,9 @@ public class OperationUtils {
     }
     public void createProjectFiles(String author)  {
         try {
-            String 
-                mainDirName = new File(localPath).getCanonicalPath(),
-                mainClass = new File(mainDirName).getName();
+            String mainDirName = new File(localPath).getCanonicalPath();
+            String mainClass   = new File(mainDirName).getName();
+
             fileOperation.createFiles(author, ".gitignore", "", false);
             fileOperation.createFiles(author, "Manifesto.txt", mainClass, false);
             fileOperation.createFiles(author, mainClass + ".java", mainClass, false);
