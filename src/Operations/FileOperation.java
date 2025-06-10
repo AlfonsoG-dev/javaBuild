@@ -132,7 +132,8 @@ public class FileOperation {
                 "        System.out.println(\"Hello from " + mainClass + "\");" + "\n" +
                 "    }\n" + 
                 "}";
-            fileUtils.writeToFile(mainClassLines, fileName);
+            String targetSource = fileUtils.resolvePaths(localPath, "src").getPath();
+            fileUtils.writeToFile(mainClassLines, fileUtils.resolvePaths(targetSource, fileName).getPath());
         } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
             // write build script lines
             scriptBuilder.writeBuildFile(

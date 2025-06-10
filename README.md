@@ -76,6 +76,7 @@ include the extraction files of the lib dependency or you need to declara in the
 of the lib dependencies
 
 ```text
+Manifest-Version: 1.0
 Created-By: Author-Name
 Main-Class: App
 Class-Path: .\lib\dependencyFolder\dependency.jar
@@ -88,9 +89,9 @@ includes the extraction files of the lib dependency as part of the project *.jar
 
 ## list project files
 
-- Use this to list the java *class* files inside the given folder.
+- Use this to list the java `.class` or `.java` files inside the giving directory.
 ```shell
-javaBuild -ls -s .\src\
+javaBuild -ls .\directory\
 ```
 
 ## Crete a project
@@ -98,7 +99,18 @@ javaBuild -ls -s .\src\
 - Use this to create the structure for the project.
 - You need to provide the author
 ```shell
+javaBuild -cb
+```
+> You can provide the author name
+```shell
 javaBuild -cb Author-Name
+```
+> Remember that the name of the directory where you are is the Name of the main class.
+>- If the parent directory is `.\basic\` the main class file will be: `basic.java` and the main class declaration.
+```java
+public class basic {
+    ...
+}
 ```
 - As soon you create the project you need to change the manifesto adding the main class.
 ```shell
@@ -126,30 +138,33 @@ javabuild --compile -s .\other\source -t .\other\target -r 17
 >- `javaBuild --extract`.
 
 - Now to create the project jar file.
-- `javaBuild --extract`.
->- It also can be created using source folder as parameter:
+- `javaBuild --jar`.
+> It also can be created using source folder as parameter.
+>- If you don't provide an argument it takes default value of `bin`
 ```pwsh
-javabuild --extract .\testing\
+javabuild --jar -s .\testing\
 ```
->- Remember that the manifesto determines the behavior for the build process.
+- Remember that the manifesto determines the behavior for the build process.
 
 ## Create the build script
 
 - Use this to create the build script for **powershell** in windows and **bash** for linux.
 - Creates the script whit all the command to build the project, except the extraction operation.
 - It uses the same commands and writes them in a file.
-> It takes the `src` and `bin` directories as source and target by default, using **Java version 23**.
+> It takes the `script_name` and `bin`.
 >- You can change those by providing:
 
 ```shell
-javaBuild --script -s .\source\ -t .\target\ -r 17
+javaBuild --script script_name -s .\source\
 ```
-> You can use the source, target or release options; or not, it doesn't matter.
 >- Also you can use them individually.
 
 ## Create or modify the manifesto file
 - The manifesto file, is necessary to include or verify if you want to add to the build the extraction of the dependencies or not.
->- To include the extraction files of a dependency: `javabuild --i` otherwise `javabuild --i n` 
+> To include the extraction files of a dependency: `javabuild --i` otherwise `javabuild --i n` 
+> To change the author of the `Manifesto`: `javabuild --i -a Author-Name`
+> To change the main class: `javabuild --i --class App`
+
 
 ## Build the project
 
@@ -164,6 +179,12 @@ javaBuild --build -s .\source\ -t .\target\ -r 17
 ```
 > You can use the source, target or release options; or not, it doesn't matter.
 >- Also you can use them individually.
+
+- There is also the option to build from scratch, it deletes the `.class` directory to get a fresh compilation of the `.java` files.
+```sh
+javaBuild --scratch
+```
+> You can provide the same arguments as in the build command.
 
 ## Run or execute the project
 
