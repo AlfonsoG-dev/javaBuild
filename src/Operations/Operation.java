@@ -188,7 +188,7 @@ public class Operation {
         try {
             String command = myCommand.getJarFileCommand(
                     includeExtraction,
-                    Optional.ofNullable(source).orElse("." + File.separator + "bin")
+                    Optional.ofNullable(source).orElse("bin")
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
