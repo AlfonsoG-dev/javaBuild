@@ -13,14 +13,19 @@ class JavaBuild {
                 String toDelete = getCliValues(args, i, "-d");
                 switch(args[i]) {
                     case "-ls":
-                        op.listProjectFiles(source);
+                        if((i+1) < args.length) {
+                            op.listProjectFiles(args[i+1]);
+                        } else {
+                            op.listProjectFiles(null);
+                        }
                         break;
                     case "-cb":
                         if((i+1) < args.length) {
                             op.createProjectOperation();
                             op.createFilesOperation(args[i+1]);
                         } else {
-                            System.err.println("[Error] no author provide");
+                            op.createProjectOperation();
+                            op.createFilesOperation(null);
                         }
                         break;
                     case "--compile":
@@ -43,18 +48,18 @@ class JavaBuild {
                         break;
                     case "--script":
                         if((i+1)<args.length) {
-                            op.buildScript(haveExtractions, args[i+1]);
+                            op.buildScript(haveExtractions, args[i+1], source);
                         } else {
-                            op.buildScript(haveExtractions, "build");
+                            op.buildScript(haveExtractions, "build", source);
                         }
                         break;
                     case "--i":
                         String author = getCliValues(args, i, "-a");
                         String runClass = getCliValues(args, i, "--class");
                         if((i+1) < args.length && args[i+1].equals("n")) {
-                            op.createIncludeExtractions(false, author, runClass);
+                            op.createIncludeExtractions(false, author, runClass, source);
                         } else {
-                            op.createIncludeExtractions(true, author, runClass);
+                            op.createIncludeExtractions(true, author, runClass, source);
                         }
                         break;
                     case "--build":

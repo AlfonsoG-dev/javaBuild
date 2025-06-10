@@ -50,8 +50,8 @@ public class FileOperation {
      * main class of the project
      * @return main class file name
      */
-    public String getMainClass() {
-        File miFile = fileUtils.resolvePaths(localPath, "src");
+    public String getMainClass(String source) {
+        File miFile = fileUtils.resolvePaths(localPath, source);
         BufferedReader miBufferedReader = null;
         String mainName = "";
         try {
@@ -83,8 +83,8 @@ public class FileOperation {
         return mainName;
     }
 
-    public String getProjectName() {
-        String name = getMainClass();
+    public String getProjectName(String source) {
+        String name = getMainClass(source);
         if(name.isEmpty()) {
             try {
             String
@@ -103,7 +103,7 @@ public class FileOperation {
     }
     public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
         System.out.println("[ Info ]: created " + fileName);
-        if(mainClass.isEmpty()) mainClass = getMainClass();
+        if(mainClass.isEmpty()) mainClass = getMainClass("src");
 
         if(fileName.equals(".gitignore")) {
             String ignoreFiles = "";

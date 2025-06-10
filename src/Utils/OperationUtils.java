@@ -143,8 +143,8 @@ public class OperationUtils {
         }
         return name;
     }
-    public void createBuildScript(boolean includeExtraction, String fileName) {
-        String mainName = fileOperation.getMainClass();
+    public void createBuildScript(boolean includeExtraction, String fileName, String source) {
+        String mainName = fileOperation.getMainClass(source);
         if(!mainName.isEmpty()) {
             mainName = mainName + ".jar";
         }

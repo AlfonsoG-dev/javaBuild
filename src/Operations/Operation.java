@@ -46,14 +46,36 @@ public class Operation {
             "docs",
             "extractionFiles"
         };
-        System.out.println("[Info] Creating the project structure ...");
-
+        System.out.println("[Info] Creating project ...");
         for(String n: names) {
-            File f = new File(localPath + File.separator + n);
+            File f = fileUtils.resolvePaths(localPath, n);
             if(!f.exists() && f.mkdir()) {
                 System.out.println("[Info] Created " + f.getPath());
             }
         }
+    }
+
+    /**
+     * Helper function that allow to get the author name of the manifesto file.
+     * @throws IOException
+     */
+    public String getAuthorName() {
+        String author = null;
+        File f = fileUtils.resolvePaths(localPath, "Manifesto.txt");
+        if(f.exists()) {
+            try (BufferedReader myReader = new BufferedReader(new FileReader(f))){
+                while(myReader.ready()) {
+                    String lines = myReader.readLine();
+                    if(lines.contains("Created-By:")) {
+                        author = lines.trim().split(":")[1];
+                        break;
+                    }
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return Optional.ofNullable(author).orElse("System-Owner");
     }
     /**
      * creates the initial files needed in at the start:
@@ -63,6 +85,11 @@ public class Operation {
      */
     public void createFilesOperation(String author) {
         File localFile = new File(localPath);
+        Optional<String> oAuthor = Optional.ofNullable(author);
+        oAuthor.ifPresentOrElse(
+                value -> System.out.println("[Info] Using Author name " + value),
+                () -> System.out.println("[Info] No author provided, now using " + getAuthorName())
+        );
         System.out.println("[Info] creating files ...");
         try (DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath())) {
             for(Path p: files) {
@@ -70,7 +97,7 @@ public class Operation {
                 if(f.getName().equals("src")) {
                     File n = new File(localPath + File.pathSeparator + "src");
                     if(n.listFiles() == null) {
-                        operationUtils.createProjectFiles(author);
+                        operationUtils.createProjectFiles(oAuthor.orElse(getAuthorName()));
                     }
                 }
             }
@@ -85,6 +112,12 @@ public class Operation {
      */
     public void listProjectFiles(String source) {
         try {
+            Optional<String> oSource = Optional.ofNullable(source);
+            oSource.ifPresentOrElse(
+                    value -> System.out.println("[Info] Printing files of " + source),
+                    () -> System.out.println("[Info] No souce provided, now list files of src")
+            );
+
             File read = fileUtils.resolvePaths(localPath, Optional.ofNullable(source).orElse("src"));
             if(read.isFile()) {
                 System.out.println("[Info] Only directory types are allow but here you have it°!");
@@ -220,40 +253,17 @@ public class Operation {
         return haveInclude;
     }
     /**
-     * Helper function that allow to get the author name of the manifesto file.
-     * @throws IOException
-     */
-    public String getAuthorName() {
-        String author = "";
-        File f = fileUtils.resolvePaths(localPath, "Manifesto.txt");
-        if(!f.exists()) {
-            System.err.println("[Error] Manifesto doesn't exists");
-            return null;
-        }
-        try (BufferedReader myReader = new BufferedReader(new FileReader(f))){
-            while(myReader.ready()) {
-                String lines = myReader.readLine();
-                if(lines.contains("Created-By:")) {
-                    author = lines.trim().split(":")[1];
-                    break;
-                }
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return author;
-    }
-    /**
      * Helper function that writes in the manifesto the lib .jar dependencies.
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      * @param author name of the author of the project.
      */
-    public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass) {
+    public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass, String source) {
+        Optional<String> oSource = Optional.ofNullable(source);
         System.out.println("[Info] creating manifesto ...");
         fileOperation.createFiles(
             Optional.ofNullable(author).orElse(getAuthorName()),
             "Manifesto.txt",
-            Optional.ofNullable(mainClass).orElse(""),
+            Optional.ofNullable(mainClass).orElse(fileOperation.getMainClass(oSource.orElse("src"))),
             includeExtraction
         );
     }
@@ -278,8 +288,12 @@ public class Operation {
      * <br><b>Post: </b> If the OS is windows creates a *.ps1* script, otherwise creates a *.sh* script.
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      */
-    public void buildScript(boolean includeExtraction, String fileName) {
-        operationUtils.createBuildScript(includeExtraction, fileName);
+    public void buildScript(boolean includeExtraction, String fileName, String source) {
+        operationUtils.createBuildScript(
+                includeExtraction,
+                fileName,
+                Optional.ofNullable(source).orElse("src")
+        );
     }
     /**
      * Performs the run operation using the compile or *.class* folder path.

@@ -133,10 +133,10 @@ public class CommandUtils {
     public String jarTypeUnion(String directory, String source) throws IOException {
         StringBuffer build = new StringBuffer();
 
-        String mainName      = fileOperation.getProjectName() + ".jar";
+        String mainName      = fileOperation.getProjectName(source) + ".jar";
         String localParent   = new File(localPath).getCanonicalPath();
         String jarFormat     = jarTypeFormat(mainName, directory);
-        String mainClassName = fileOperation.getProjectName();
+        String mainClassName = fileOperation.getProjectName(source);
 
         source = fileUtils.resolvePaths(localPath, source).getPath() + File.separator + " .";
 
@@ -201,7 +201,7 @@ public class CommandUtils {
     }
     public StringBuffer runClassOption(String className, String source) {
         StringBuffer runClass = new StringBuffer();
-        String name = source + File.separator + fileOperation.getProjectName() + ".java";
+        String name = source + File.separator + fileOperation.getProjectName(source) + ".java";
         String mainName = Optional.of(manifestoClass()).orElse(name);
 
         if(className.isEmpty()) {
