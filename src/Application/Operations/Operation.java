@@ -1,4 +1,4 @@
-package Operations;
+package Application.Operations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.List;
 
-import Utils.CommandUtils;
-import Utils.FileUtils;
-import Utils.OperationUtils;
+import Application.Utils.CommandUtils;
+import Application.Utils.FileUtils;
+import Application.Utils.OperationUtils;
 
 /**
  * Its the perform class of the java command

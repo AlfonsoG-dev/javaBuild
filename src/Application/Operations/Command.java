@@ -1,4 +1,4 @@
-package Operations;
+package Application.Operations;
 
 import java.util.Optional;
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import java.io.File;
 import java.io.IOException;
 
-import Utils.CommandUtils;
-import Utils.FileUtils;
+import Application.Utils.CommandUtils;
+import Application.Utils.FileUtils;
 public class Command {
 
     private String localPath;
