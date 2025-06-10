@@ -84,15 +84,14 @@ public class Operation {
      * @throws IOException
      */
     public void listProjectFiles(String source) {
-        String dirPath = localPath + new File(Optional.of(source).orElse("src")).toPath().normalize();
         try {
-            File read = new File(dirPath);
+            File read = fileUtils.resolvePaths(localPath, Optional.ofNullable(source).orElse("src"));
             if(read.isFile()) {
                 System.out.println("[Info] Only directory types are allow but here you have it°!");
                 System.out.println(read.getPath());
             }
             if(read.isDirectory()) {
-                fileUtils.listFilesFromDirectory(Files.newDirectoryStream(new File(dirPath).toPath()))
+                fileUtils.listFilesFromDirectory(Files.newDirectoryStream(read.toPath()))
                     .stream()
                     .map(e -> e.getPath())
                     .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
@@ -128,7 +127,7 @@ public class Operation {
     public void deleteDirectory(String dirPath) {
         try {
             System.out.println("[Info] deleting directory...");
-            operationUtils.executeCommand("rm -r " + Optional.of(dirPath).orElse("bin"));
+            operationUtils.executeCommand("rm -r " + Optional.ofNullable(dirPath).orElse("bin"));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -252,9 +251,9 @@ public class Operation {
     public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass) {
         System.out.println("[Info] creating manifesto ...");
         fileOperation.createFiles(
-            Optional.of(author).orElse(getAuthorName()),
+            Optional.ofNullable(author).orElse(getAuthorName()),
             "Manifesto.txt",
-            Optional.of(mainClass).orElse(""),
+            Optional.ofNullable(mainClass).orElse(""),
             includeExtraction
         );
     }
@@ -293,7 +292,7 @@ public class Operation {
         String command = myCommand.getRunCommand(
                 commandUtils.getLibFiles(),
                 className,
-                Optional.of(source).orElse("." + File.separator + "bin")
+                Optional.ofNullable(source).orElse("." + File.separator + "bin")
         );
         try {
             System.out.println("[Info] running ... ");
