@@ -85,14 +85,18 @@ public class OperationUtils {
             e.printStackTrace();
         }
     }
-    public void createProjectFiles(String author)  {
+    public void createProjectFiles(String author, String source, String target)  {
         try {
             String mainDirName = new File(localPath).getCanonicalPath();
             String mainClass   = new File(mainDirName).getName();
-
-            fileOperation.createFiles(author, ".gitignore", "", false);
-            fileOperation.createFiles(author, "Manifesto.txt", mainClass, false);
-            fileOperation.createFiles(author, mainClass + ".java", mainClass, false);
+            String[] files = {
+                ".gitignore",
+                "Manifesto.txt",
+                mainClass + ".java"
+            };
+            for(String f: files) {
+                fileOperation.createFiles(author, f, mainClass, source, target, false);
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -143,7 +147,7 @@ public class OperationUtils {
         }
         return name;
     }
-    public void createBuildScript(boolean includeExtraction, String fileName, String source) {
+    public void createBuildScript(boolean extract, String fileName, String source, String target) {
         String mainName = fileOperation.getMainClass(source);
         if(!mainName.isEmpty()) {
             mainName = mainName + ".jar";
@@ -152,7 +156,9 @@ public class OperationUtils {
                 "",
                 getBuildFileName(fileName),
                 mainName,
-                includeExtraction
+                source,
+                target,
+                extract
         );
         System.out.println("[Info] Adding build script ...");
     }

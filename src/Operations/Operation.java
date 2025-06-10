@@ -83,21 +83,27 @@ public class Operation {
      *  @param author its the name of the author for the Manifesto file.
      *  @throws IOException
      */
-    public void createFilesOperation(String author) {
+    public void createFilesOperation(String author, String source, String target) {
         File localFile = new File(localPath);
         Optional<String> oAuthor = Optional.ofNullable(author);
         oAuthor.ifPresentOrElse(
                 value -> System.out.println("[Info] Using Author name " + value),
                 () -> System.out.println("[Info] No author provided, now using " + getAuthorName())
         );
+        String oSource = Optional.ofNullable(source).orElse("src");
+        String oTarget = Optional.ofNullable(target).orElse("bin");
         System.out.println("[Info] creating files ...");
         try (DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath())) {
             for(Path p: files) {
                 File f = p.toFile();
-                if(f.getName().equals("src")) {
-                    File n = fileUtils.resolvePaths(localPath, "src");
+                if(f.getName().equals(oSource)) {
+                    File n = fileUtils.resolvePaths(localPath, oSource);
                     if(n.listFiles() == null) {
-                        operationUtils.createProjectFiles(oAuthor.orElse(getAuthorName()));
+                        operationUtils.createProjectFiles(
+                                oAuthor.orElse(getAuthorName()),
+                                oSource,
+                                target
+                        );
                     }
                 }
             }
@@ -118,7 +124,7 @@ public class Operation {
                     () -> System.out.println("[Info] No source provided, now list files of src")
             );
 
-            File read = fileUtils.resolvePaths(localPath, Optional.ofNullable(source).orElse("src"));
+            File read = fileUtils.resolvePaths(localPath, oSource.orElse("src"));
             if(read.isFile()) {
                 System.out.println("[Info] Only directory types are allow but here you have it°!");
                 System.out.println(read.getPath());
@@ -130,7 +136,8 @@ public class Operation {
                     .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
                     .forEach(e -> {
                         System.out.println(e);
-                    });
+                    }
+                );
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -245,13 +252,16 @@ public class Operation {
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      * @param author name of the author of the project.
      */
-    public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass, String source) {
-        Optional<String> oSource = Optional.ofNullable(source);
+    public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass, String source, String target) {
+        String oSource = Optional.ofNullable(source).orElse("src");
         System.out.println("[Info] creating manifesto ...");
+
         fileOperation.createFiles(
             Optional.ofNullable(author).orElse(getAuthorName()),
             "Manifesto.txt",
-            Optional.ofNullable(mainClass).orElse(fileOperation.getMainClass(oSource.orElse("src"))),
+            Optional.ofNullable(mainClass).orElse(fileOperation.getMainClass(oSource)),
+            oSource,
+            Optional.ofNullable(target).orElse("bin"),
             includeExtraction
         );
     }
@@ -276,11 +286,12 @@ public class Operation {
      * <br><b>Post: </b> If the OS is windows creates a *.ps1* script, otherwise creates a *.sh* script.
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      */
-    public void buildScript(boolean includeExtraction, String fileName, String source) {
+    public void buildScript(boolean includeExtraction, String fileName, String source, String target) {
         operationUtils.createBuildScript(
                 includeExtraction,
                 fileName,
-                Optional.ofNullable(source).orElse("src")
+                Optional.ofNullable(source).orElse("src"),
+                Optional.ofNullable(target).orElse("bin")
         );
     }
     /**

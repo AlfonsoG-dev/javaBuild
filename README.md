@@ -151,11 +151,11 @@ javabuild --jar -s .\testing\
 - Use this to create the build script for **powershell** in windows and **bash** for linux.
 - Creates the script whit all the command to build the project, except the extraction operation.
 - It uses the same commands and writes them in a file.
-> It takes the `script_name` and `bin`.
+> It takes the `script_name` and `directory of java files` and `directory of class files`.
 >- You can change those by providing:
 
 ```shell
-javaBuild --script script_name -s .\source\
+javaBuild --script script_name -s .\source\ -t .\target\
 ```
 >- Also you can use them individually.
 

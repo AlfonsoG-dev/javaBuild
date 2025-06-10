@@ -22,10 +22,10 @@ class JavaBuild {
                     case "-cb":
                         if((i+1) < args.length) {
                             op.createProjectOperation();
-                            op.createFilesOperation(args[i+1]);
+                            op.createFilesOperation(args[i+1], source, target);
                         } else {
                             op.createProjectOperation();
-                            op.createFilesOperation(null);
+                            op.createFilesOperation(null, source, target);
                         }
                         break;
                     case "--compile":
@@ -47,19 +47,19 @@ class JavaBuild {
                         }
                         break;
                     case "--script":
-                        if((i+1)<args.length) {
-                            op.buildScript(haveExtractions, args[i+1], source);
+                        if((i+1)<args.length && !args[i+1].contains("-")) {
+                            op.buildScript(haveExtractions, args[i+1], source, target);
                         } else {
-                            op.buildScript(haveExtractions, "build", source);
+                            op.buildScript(haveExtractions, "build", source, target);
                         }
                         break;
                     case "--i":
                         String author = getCliValues(args, i, "-a");
                         String runClass = getCliValues(args, i, "--class");
                         if((i+1) < args.length && args[i+1].equals("n")) {
-                            op.createIncludeExtractions(false, author, runClass, source);
+                            op.createIncludeExtractions(false, author, runClass, source, target);
                         } else {
-                            op.createIncludeExtractions(true, author, runClass, source);
+                            op.createIncludeExtractions(true, author, runClass, source, target);
                         }
                         break;
                     case "--build":
@@ -129,7 +129,9 @@ class JavaBuild {
 
                         System.out.println("use --script to create the build script");
                         System.out.println("\t give the script name --script java-build");
-                        System.out.println("\t if leave empty it will set the name to build");
+                        System.out.println("\t\t if leave empty it will set the name to build");
+                        System.out.println("\t use -s to set the directory of `.java` files");
+                        System.out.println("\t use -t to set the directory of `.class` files");
                         System.out.println("");
 
                         System.out.println("use --i to include lib jar files as part of the build");

@@ -101,9 +101,10 @@ public class FileOperation {
     public boolean haveManifesto() {
         return fileUtils.fileExists(fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath());
     }
-    public void createFiles(String author, String fileName, String mainClass, boolean includeExtraction) {
+    public void createFiles(String author, String fileName, String mainClass, String source, String target, boolean extract) {
         System.out.println("[ Info ]: created " + fileName);
-        if(mainClass.isEmpty()) mainClass = getMainClass("src");
+
+        if(mainClass.isEmpty()) mainClass = getMainClass(source);
 
         if(fileName.equals(".gitignore")) {
             String ignoreFiles = "";
@@ -123,7 +124,7 @@ public class FileOperation {
                 .filter(e -> !e.isEmpty())
                 .map(e -> e + ";")
                 .collect(Collectors.joining());
-            scriptBuilder.writeManifesto(libJars, author, mainClass, includeExtraction);
+            scriptBuilder.writeManifesto(libJars, author, mainClass, extract);
 
         } else if(fileName.equals(mainClass + ".java")) {
             String mainClassLines = "";
@@ -132,18 +133,18 @@ public class FileOperation {
                 "        System.out.println(\"Hello from " + mainClass + "\");" + "\n" +
                 "    }\n" + 
                 "}";
-            String targetSource = fileUtils.resolvePaths(localPath, "src").getPath();
+            String targetSource = fileUtils.resolvePaths(localPath, source).getPath();
             fileUtils.writeToFile(mainClassLines, fileUtils.resolvePaths(targetSource, fileName).getPath());
         } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
             // write build script lines
             scriptBuilder.writeBuildFile(
                 fileName,
                 mainClass,
-                "src",
-                "bin",
-                fileUtils.listDirectoriesFromPath("src"),
+                source,
+                target,
+                fileUtils.listDirectoriesFromPath(source),
                 listLibFiles(),
-                includeExtraction
+                extract
             );
         }
     }
