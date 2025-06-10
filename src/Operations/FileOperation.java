@@ -143,7 +143,7 @@ public class FileOperation {
                 source,
                 target,
                 fileUtils.listDirectoriesFromPath(source),
-                listLibFiles(),
+                listLibFiles().stream().filter(p -> p.contains(".jar")).toList(),
                 extract
             );
         }
