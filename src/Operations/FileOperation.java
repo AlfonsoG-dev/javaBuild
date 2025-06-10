@@ -45,6 +45,16 @@ public class FileOperation {
         }
         return names;
     }
+    public List<String> listSourceDirs(String source) {
+        List<String> filteredNames = new ArrayList<>();
+        List<String> dirNames = fileUtils.listDirectoriesFromPath(source);
+        dirNames.
+            stream()
+            .filter(n -> fileUtils.countFilesInDirectory(new File(n)) > 0)
+            .forEach(System.out::println);
+
+        return filteredNames;
+    }
 
     /**
      * main class of the project

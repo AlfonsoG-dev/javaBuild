@@ -107,7 +107,11 @@ public class ScriptBuilder {
     List<String> libNames, boolean extract) {
         Command myCommand = new Command(localPath);
 
-        StringBuffer sourceFiles = new StringBuffer("." + File.separator + source + File.separator + "*.java ");
+        StringBuffer sourceFiles = new StringBuffer();
+        File sourceDir = fileUtils.resolvePaths(localPath, source);
+        if(fileUtils.countFilesInDirectory(sourceDir) > 0) {
+            sourceFiles.append(sourceDir + File.separator + "*.java ");
+        }
         String
             libFiles = "",
             compile = "javac -Werror -Xlint:all -d ." + File.separator + target + File.separator,
