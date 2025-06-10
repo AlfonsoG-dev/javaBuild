@@ -112,10 +112,10 @@ public class Operation {
     public void compileProjectOperation(String source, String target, String release) {
 
         String compileCommand = myCommand.getCompileCommand(
-                Optional.of(source).orElse("src"),
-                Optional.of(target).orElse("bin"),
+                Optional.ofNullable(source).orElse("src"),
+                Optional.ofNullable(target).orElse("bin"),
                 Integer.parseInt(
-                    Optional.of(release).orElse(System.getProperty("java.specification.version"))
+                    Optional.ofNullable(release).orElse(System.getProperty("java.specification.version"))
                 )
         );
         try {
@@ -188,7 +188,7 @@ public class Operation {
         try {
             String command = myCommand.getJarFileCommand(
                     includeExtraction,
-                    Optional.of(source).orElse("." + File.separator + "bin")
+                    Optional.ofNullable(source).orElse("." + File.separator + "bin")
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);

@@ -156,7 +156,7 @@ public class ScriptBuilder {
                     sourceFiles.toString(),
                     libFiles,
                     compile,
-                    myCommand.getJarFileCommand(extract, ""),
+                    myCommand.getJarFileCommand(extract, target),
                     runJar,
                     runCommand
             );

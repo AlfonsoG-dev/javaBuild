@@ -132,13 +132,14 @@ public class CommandUtils {
     }
     public String jarTypeUnion(String directory, String source) throws IOException {
         StringBuffer build = new StringBuffer();
+        System.out.println("source: " + source + " directory: " + directory);
 
         String mainName      = fileOperation.getProjectName() + ".jar";
         String localParent   = new File(localPath).getCanonicalPath();
         String jarFormat     = jarTypeFormat(mainName, directory);
         String mainClassName = fileOperation.getProjectName();
 
-        source = new File(source).getPath() + File.separator + " .";
+        source = fileUtils.resolvePaths(localPath, source).getPath() + File.separator + " .";
 
         build.append(jarFormat);
 
