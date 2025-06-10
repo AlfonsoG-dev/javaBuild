@@ -115,18 +115,18 @@ public class CommandUtils {
         }
         return compile.toString();
     }
-    private String jarTypeFormat(String mainName, String directory) throws IOException {
+    private String jarTypeFormat(String mainName, String directory) {
         StringBuffer jarFormat = new StringBuffer();
-        jarFormat.append("jar");
+        jarFormat.append("jar -c");
         boolean presentManifesto = fileOperation.haveManifesto();
         if(presentManifesto) {
-            jarFormat.append(" -cfm ");
+            jarFormat.append("fm ");
         }
         if(!presentManifesto && mainName.isEmpty()) {
-            jarFormat.append(" -cf ");
+            jarFormat.append("f ");
         }
         if(!presentManifesto && !mainName.isEmpty()) {
-            jarFormat.append(" -cfe ");
+            jarFormat.append("fe ");
         }
         return jarFormat.toString();
     }
@@ -149,7 +149,7 @@ public class CommandUtils {
                     build.append(" Manifesto.txt -C ");
                     build.append(source);
                     build.append(directory);
-                } else if(directory.isEmpty()) {
+                } else {
                     build.append(mainName);
                     build.append(" Manifesto.txt -C ");
                     build.append(source);
@@ -188,9 +188,10 @@ public class CommandUtils {
         return build.toString();
     }
     protected String manifestoClass() {
-        String
-            name = "",
-            lines = fileUtils.readFileLines(fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath());
+        String name = "";
+        String lines = fileUtils.readFileLines(
+                fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath()
+        );
         for(String l: lines.split("\n")) {
             if(l.contains("Main-Class: ")) {
                 name = l.split(":")[1];
@@ -200,10 +201,8 @@ public class CommandUtils {
     }
     public StringBuffer runClassOption(String className, String source) {
         StringBuffer runClass = new StringBuffer();
-        String
-            name = source + File.separator + fileOperation.getProjectName() + ".java",
-            mainName = !manifestoClass().isEmpty() ?
-            manifestoClass() : name;
+        String name = source + File.separator + fileOperation.getProjectName() + ".java";
+        String mainName = Optional.of(manifestoClass()).orElse(name);
 
         if(className.isEmpty()) {
             runClass.append(mainName);

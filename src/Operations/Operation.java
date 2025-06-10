@@ -84,8 +84,7 @@ public class Operation {
      * @throws IOException
      */
     public void listProjectFiles(String source) {
-        Optional<String> oSource = Optional.ofNullable(source);
-        String dirPath = localPath + new File(oSource.orElse("src")).toPath().normalize();
+        String dirPath = localPath + new File(Optional.of(source).orElse("src")).toPath().normalize();
         try {
             File read = new File(dirPath);
             if(read.isFile()) {
@@ -111,14 +110,13 @@ public class Operation {
      * @throws Exception when the compile command gets an error.
      */
     public void compileProjectOperation(String source, String target, String release) {
-        Optional<String> oSource = Optional.ofNullable(source);
-        Optional<String> oTarget = Optional.ofNullable(target);
-        Optional<String> oRelease = Optional.ofNullable(release);
 
         String compileCommand = myCommand.getCompileCommand(
-                oSource.orElse("src"),
-                oTarget.orElse("bin"),
-                Integer.parseInt(oRelease.orElse(System.getProperty("java.specification.version")))
+                Optional.of(source).orElse("src"),
+                Optional.of(target).orElse("bin"),
+                Integer.parseInt(
+                    Optional.of(release).orElse(System.getProperty("java.specification.version"))
+                )
         );
         try {
             System.out.println("[Info] compile ...");
@@ -128,10 +126,9 @@ public class Operation {
         }
     }
     public void deleteDirectory(String dirPath) {
-        Optional<String> oDirPath = Optional.ofNullable(dirPath);
         try {
             System.out.println("[Info] deleting directory...");
-            operationUtils.executeCommand("rm -r " + oDirPath.orElse("bin"));
+            operationUtils.executeCommand("rm -r " + Optional.of(dirPath).orElse("bin"));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -188,11 +185,10 @@ public class Operation {
      * @throws Exception when creating a jar file gets an error.
      */
     public void createJarOperation(boolean includeExtraction, String source) {
-        Optional<String> oSource = Optional.ofNullable(source);
         try {
             String command = myCommand.getJarFileCommand(
                     includeExtraction,
-                    oSource.orElse("." + File.separator + "bin")
+                    Optional.of(source).orElse("." + File.separator + "bin")
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
@@ -255,12 +251,10 @@ public class Operation {
      */
     public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass) {
         System.out.println("[Info] creating manifesto ...");
-        Optional<String> oMainClass = Optional.ofNullable(mainClass);
-        Optional<String> oAuthor = Optional.ofNullable(author);
         fileOperation.createFiles(
-            oAuthor.orElse(getAuthorName()),
+            Optional.of(author).orElse(getAuthorName()),
             "Manifesto.txt",
-            oMainClass.orElse(""),
+            Optional.of(mainClass).orElse(""),
             includeExtraction
         );
     }
@@ -295,12 +289,11 @@ public class Operation {
      * @throws Exception while trying to execute run operation.
      */
     public void runAppOperation(String className, String source) {
-        Optional<String> oSource = Optional.ofNullable(source);
 
         String command = myCommand.getRunCommand(
                 commandUtils.getLibFiles(),
                 className,
-                oSource.orElse("." + File.separator + "bin")
+                Optional.of(source).orElse("." + File.separator + "bin")
         );
         try {
             System.out.println("[Info] running ... ");
