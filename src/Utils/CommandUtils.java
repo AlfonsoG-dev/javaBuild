@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class CommandUtils {
@@ -38,7 +39,7 @@ public class CommandUtils {
         }
         return shouldRecompile;
     }
-    public String getSourceFiles(String source, String target) {
+    public Optional<String> getSourceFiles(String source, String target) {
         String b = "";
         List<String> names = new ArrayList<>();
         try {
@@ -80,13 +81,12 @@ public class CommandUtils {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        if(names.isEmpty()) {
-            System.out.println("[ERROR] empty src list of files");
+        if(names.size() > 0) {
+            b += names
+                .parallelStream()
+                .collect(Collectors.joining());
         }
-        b += names
-            .parallelStream()
-            .collect(Collectors.joining());
-        return b;
+        return Optional.of(b);
     }
 
     public List<String> getLibFiles() {
@@ -201,13 +201,11 @@ public class CommandUtils {
     public StringBuffer runClassOption(String className, String source) {
         StringBuffer runClass = new StringBuffer();
         String
-            name = " ." + File.separator + source + File.separator + fileOperation.getProjectName() + ".java",
+            name = source + File.separator + fileOperation.getProjectName() + ".java",
             mainName = !manifestoClass().isEmpty() ?
             manifestoClass() : name;
-        
+
         if(className.isEmpty()) {
-            runClass.append(mainName);
-        } else if(className.equals(mainName)) {
             runClass.append(mainName);
         } else {
             runClass.append(" " + className);

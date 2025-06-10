@@ -84,35 +84,21 @@ public class FileUtils {
     }
     public List<File> listFilesFromPath(String filePath) {
         List<File> names = new ArrayList<>();
-        try {
-            File miFile = new File(filePath);
-            if(miFile.exists() && miFile.isFile()) {
-                names.add(miFile);
-            } else if(miFile.listFiles() != null) {
-                names.addAll(
-                        getDirectoryFiles(
-                            Files.newDirectoryStream(miFile.toPath())
-                        )
-                );
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return names;
-    }
-    public List<File> listFilesFromDirectory(DirectoryStream<Path> files) {
-        List<File> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
             public void run() {
-                for(Path p: files) {
-                    File f = p.toFile();
-                    if(f.isFile()) {
-                        names.add(f);
-                    } else if (f.isDirectory()){
+                try {
+                    File miFile = new File(filePath);
+                    if(miFile.exists() && miFile.isFile()) {
+                        names.add(miFile);
+                    } else if(miFile.listFiles() != null) {
                         names.addAll(
-                                listFilesFromPath(f.getPath())
-                        );
+                                getDirectoryFiles(
+                                    Files.newDirectoryStream(miFile.toPath())
+                                    )
+                                );
                     }
+                } catch(IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -121,6 +107,20 @@ public class FileUtils {
             t.join();
         } catch(InterruptedException e) {
             e.printStackTrace();
+        }
+        return names;
+    }
+    public List<File> listFilesFromDirectory(DirectoryStream<Path> files) {
+        List<File> names = new ArrayList<>();
+        for(Path p: files) {
+            File f = p.toFile();
+            if(f.isFile()) {
+                names.add(f);
+            } else if (f.isDirectory()){
+                names.addAll(
+                        listFilesFromPath(f.getPath())
+                );
+            }
         }
         return names;
     }

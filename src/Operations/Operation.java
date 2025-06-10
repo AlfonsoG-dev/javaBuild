@@ -121,7 +121,6 @@ public class Operation {
                 Integer.parseInt(oRelease.orElse(System.getProperty("java.specification.version")))
         );
         try {
-            System.out.println("[Command] " + compileCommand);
             System.out.println("[Info] compile ...");
             operationUtils.executeCommand(compileCommand);
         } catch(Exception e) {
@@ -148,7 +147,6 @@ public class Operation {
             .parallelStream()
             .forEach(p -> {
                 if(!extractFile.isEmpty()) {
-                    System.out.println("[Command] " + p);
                     try {
                         operationUtils.executeCommand(p);
                     } catch(Exception err) {
@@ -196,7 +194,6 @@ public class Operation {
                     includeExtraction,
                     oSource.orElse("." + File.separator + "bin")
             );
-            System.out.println("[Command] " + command);
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
         } catch(Exception e) {
@@ -306,7 +303,6 @@ public class Operation {
                 oSource.orElse("." + File.separator + "bin")
         );
         try {
-            System.out.println("[Command] " + command);
             System.out.println("[Info] running ... ");
             operationUtils.executeCommand(command);
         } catch(Exception e) {

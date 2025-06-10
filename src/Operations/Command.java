@@ -1,5 +1,6 @@
 package Operations;
 
+import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -41,9 +42,16 @@ public class Command {
                 .map(e -> e + ";")
                 .collect(Collectors.joining())
         );
-        String
-            srcClases = commandUtils.getSourceFiles(source, target),
-            format = commandUtils.compileFormatType(target, release);
+        String format = commandUtils.compileFormatType(target, release);
+        String srcClases = "";
+
+        Optional<String> oSource = commandUtils.getSourceFiles(source, target);
+        if(oSource.get().isEmpty()) {
+            System.out.println("[Info] No modified files to compile");
+            return null;
+        } else {
+            srcClases = oSource.get();
+        }
 
         if(!srcClases.contains("*.java")) {
             compile = new StringBuffer();
@@ -128,18 +136,18 @@ public class Command {
             jarFiles = new StringBuffer(),
             runClass = commandUtils.runClassOption(className, source);
 
-        source = fileUtils.resolvePaths(localPath, source) + ";";
-        jarFiles.append("'");
-        jarFiles.append(source);
-        jarFiles.append(libJars
-                .parallelStream()
-                .filter(e -> !e.isEmpty())
-                .map(e -> e + ";")
-                .collect(Collectors.joining())
-        );
         if(jarFiles.isEmpty()) {
-            command = "java -d " + source + runClass;
+            command = "java -cp " + source + runClass;
         } else {
+            jarFiles.append("'");
+            jarFiles.append(source);
+            jarFiles.append(";");
+            jarFiles.append(libJars
+                    .parallelStream()
+                    .filter(e -> !e.isEmpty())
+                    .map(e -> e + ";")
+                    .collect(Collectors.joining())
+            );
             String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
             command = "java -cp " + cleanLibs + runClass;
         }

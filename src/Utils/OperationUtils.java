@@ -25,9 +25,11 @@ public class OperationUtils {
             ProcessBuilder builder = new ProcessBuilder();
             String localFULL = new File(localPath).getCanonicalPath();
             File local = new File(localFULL);
-            if(command.isEmpty()) {
-                command = "echo [Error] cannot execute an empty command";
-            }
+            if(command == null || command.isEmpty()) {
+                System.out.println("[Warnning] Empty command");
+                command = "echo Happy-Day";
+            } 
+            System.out.println("[Command] " + command);
             if(System.getProperty("os.name").toLowerCase().contains("windows")) {
                 builder.command("pwsh", "-NoProfile", "-Command", command);
             } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
@@ -63,7 +65,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[Error] " + line);
+                System.err.println(line);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -77,7 +79,7 @@ public class OperationUtils {
                 if(line == null) {
                     break;
                 }
-                System.out.println("[Info] " + line);
+                System.out.println(line);
             }
         } catch(Exception e) {
             e.printStackTrace();
