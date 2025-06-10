@@ -3,7 +3,6 @@ package Operations;
 import Utils.FileUtils;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.List;
@@ -44,36 +43,30 @@ public class ScriptBuilder {
         return command;
     }
 
-    public static void writeScript(String filePath, String srcClases, String libFiles,
+    public String getScriptLines(String srcClases, String libFiles,
             String compile, String extractJar, String runJar, String runCommand) {
-                
-        try (FileWriter w = new FileWriter(new File(filePath))) {
-            if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-                w.write(
-                        "$srcClases = \"" + srcClases + "\"\n" +
-                        "$libFiles = \"" + libFiles + "\"\n" +
-                        "$compile = \"" + compile + "\"\n" + 
-                        "$createJar = " + "\"" + extractJar + "\"" + "\n" + 
-                        runJar + 
-                        runCommand +
-                        "Invoke-Expression $runCommand \n"
-                );
-            } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-                w.write(
-                        "srcClases=" + "\"" + srcClases + "\"\n" + 
-                        "libFiles=" + "\"" + libFiles + "\"\n" + 
-                        compile + "\n" + 
-                        extractJar + "\n" + 
-                        runJar
-                );
-                File local = new File(filePath);
-                if(local.setExecutable(true)) {
-                    System.out.println("[Info] change file to executable " + local.getPath());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        
+        StringBuffer sb = new StringBuffer();
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            sb.append(
+                "$srcClases = \"" + srcClases + "\"\n" +
+                "$libFiles = \"" + libFiles + "\"\n" +
+                "$compile = \"" + compile + "\"\n" + 
+                "$createJar = " + "\"" + extractJar + "\"" + "\n" + 
+                runJar + 
+                runCommand +
+                "Invoke-Expression $runCommand \n"
+            );
+        } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
+            sb.append(
+                "srcClases=" + "\"" + srcClases + "\"\n" + 
+                "libFiles=" + "\"" + libFiles + "\"\n" + 
+                compile + "\n" + 
+                extractJar + "\n" + 
+                runJar
+            );
         }
+        return sb.toString();
     }
 
     public void writeManifesto(String libFiles, String authorName, String mainClass, boolean extract) {
@@ -101,11 +94,7 @@ public class ScriptBuilder {
         }
 
         // write lines to file
-        try(FileWriter w = new FileWriter(fileUtils.resolvePaths(localPath, "Manifesto.txt"))) {
-            w.write(m.toString());
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        fileUtils.writeToFile(m.toString(), fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath());
     }
     /**
      * create the sentences for the build script
@@ -151,8 +140,7 @@ public class ScriptBuilder {
             runCommand = getBuildScriptCommand();
         }
         try {
-            writeScript(
-                    fileName,
+            String lines = getScriptLines(
                     sourceFiles.toString(),
                     libFiles,
                     compile,
@@ -160,6 +148,12 @@ public class ScriptBuilder {
                     runJar,
                     runCommand
             );
+
+            File buildFile = fileUtils.resolvePaths(localPath, fileName);
+            fileUtils.writeToFile(lines, buildFile.getPath());
+            if(buildFile.setExecutable(true)) {
+                System.out.println("[Info] change file to executable " + buildFile.getPath());
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }

@@ -5,7 +5,6 @@ import Operations.FileOperation;
 import java.io.File;
 import java.io.IOException;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.Optional;
@@ -26,60 +25,50 @@ public class CommandUtils {
     }
 
     public boolean recompileFiles(Path filePath, Path source, Path target) {
-        boolean shouldRecompile = true;
-        try {
-            Path relative = source.relativize(filePath);
-            Path classFilePath = target.resolve(relative.toString().replace(".java", ".class"));
+        Path relative = source.relativize(filePath);
+        Path classFilePath = target.resolve(relative.toString().replace(".java", ".class"));
 
-            File javaFile = filePath.toFile();
-            File classFile = classFilePath.toFile();
-            shouldRecompile = !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return shouldRecompile;
+        File javaFile = filePath.toFile();
+        File classFile = classFilePath.toFile();
+        return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
     }
     public Optional<String> getSourceFiles(String source, String target) {
         String b = "";
         List<String> names = new ArrayList<>();
-        try {
-            File srcFile = fileUtils.resolvePaths(localPath, source);
-            File binFile = fileUtils.resolvePaths(localPath, target);
-            List<File> targetFiles = fileUtils.listFilesFromPath(binFile.getPath());
-            if(srcFile.listFiles() == null) {
-                System.out.println("[Info] " + srcFile.getPath() + " is empty");
-            }
-            if(binFile.exists() && targetFiles.size() > 0) {
-                fileUtils.listFilesFromPath(srcFile.toString())
-                    .stream()
-                    .map(f -> f.toPath())
-                    .filter(p -> recompileFiles(p, srcFile.toPath(), binFile.toPath()))
-                    .forEach(e -> {
-                        names.add(e + " ");
-                    });
-            } else if(binFile.exists() && targetFiles.size() == 0 || !binFile.exists()) {
-                for(File f: srcFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java")) {
-                        names.add(".");
-                        names.add(File.separator);
-                        names.add(source);
-                        names.add(File.separator);
-                        names.add("*.java ");
-                        break;
-                    }
-                }
-                fileUtils.listDirectoriesFromPath(source)
-                    .parallelStream()
-                    .filter(e -> !e.isEmpty())
-                    .forEach(e -> {
-                        int countFiles = fileUtils.countFilesInDirectory(new File(e));
-                        if(countFiles > 0) {
-                            names.add(e + "*.java ");
-                        }
+        File srcFile = fileUtils.resolvePaths(localPath, source);
+        File binFile = fileUtils.resolvePaths(localPath, target);
+        List<File> targetFiles = fileUtils.listFilesFromPath(binFile.getPath());
+        if(srcFile.listFiles() == null) {
+            System.out.println("[Info] " + srcFile.getPath() + " is empty");
+        }
+        if(binFile.exists() && targetFiles.size() > 0) {
+            fileUtils.listFilesFromPath(srcFile.toString())
+                .stream()
+                .map(f -> f.toPath())
+                .filter(p -> recompileFiles(p, srcFile.toPath(), binFile.toPath()))
+                .forEach(e -> {
+                    names.add(e + " ");
                 });
+        } else if(binFile.exists() && targetFiles.size() == 0 || !binFile.exists()) {
+            for(File f: srcFile.listFiles()) {
+                if(f.isFile() && f.getName().contains(".java")) {
+                    names.add(".");
+                    names.add(File.separator);
+                    names.add(source);
+                    names.add(File.separator);
+                    names.add("*.java ");
+                    break;
+                }
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+            fileUtils.listDirectoriesFromPath(source)
+                .parallelStream()
+                .filter(e -> !e.isEmpty())
+                .forEach(e -> {
+                    int countFiles = fileUtils.countFilesInDirectory(new File(e));
+                    if(countFiles > 0) {
+                        names.add(e + "*.java ");
+                    }
+            });
         }
         if(names.size() > 0) {
             b += names

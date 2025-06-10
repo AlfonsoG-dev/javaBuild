@@ -28,20 +28,20 @@ public class FileOperation {
 
     public List<String> listLibFiles() {
         List<String> names = new ArrayList<>();
-        try {
-            File lf = fileUtils.resolvePaths(localPath, "lib");
-            if(lf.listFiles() == null) System.out.println("[Info] No dependencies found");;
-            if(lf.listFiles() != null) {
+        File lf = fileUtils.resolvePaths(localPath, "lib");
+        if(lf.listFiles() == null) System.out.println("[Info] No dependencies found");;
+        if(lf.listFiles() != null) {
+            try {
                 Files.newDirectoryStream(lf.toPath())
                     .forEach(e -> {
                         File f = e.toFile();
                         for(File mf: f.listFiles()) {
                             names.add(mf.getPath());
                         }
-                    });
+                });
+            } catch(IOException e) {
+                e.printStackTrace();
             }
-        } catch(IOException e) {
-            e.printStackTrace();
         }
         return names;
     }

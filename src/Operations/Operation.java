@@ -95,7 +95,7 @@ public class Operation {
             for(Path p: files) {
                 File f = p.toFile();
                 if(f.getName().equals("src")) {
-                    File n = new File(localPath + File.pathSeparator + "src");
+                    File n = fileUtils.resolvePaths(localPath, "src");
                     if(n.listFiles() == null) {
                         operationUtils.createProjectFiles(oAuthor.orElse(getAuthorName()));
                     }
@@ -115,7 +115,7 @@ public class Operation {
             Optional<String> oSource = Optional.ofNullable(source);
             oSource.ifPresentOrElse(
                     value -> System.out.println("[Info] Printing files of " + source),
-                    () -> System.out.println("[Info] No souce provided, now list files of src")
+                    () -> System.out.println("[Info] No source provided, now list files of src")
             );
 
             File read = fileUtils.resolvePaths(localPath, Optional.ofNullable(source).orElse("src"));
@@ -150,20 +150,12 @@ public class Operation {
                     Optional.ofNullable(release).orElse(System.getProperty("java.specification.version"))
                 )
         );
-        try {
-            System.out.println("[Info] compile ...");
-            operationUtils.executeCommand(compileCommand);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("[Info] compile ...");
+        operationUtils.executeCommand(compileCommand);
     }
     public void deleteDirectory(String dirPath) {
-        try {
-            System.out.println("[Info] deleting directory...");
-            operationUtils.executeCommand("rm -r " + Optional.ofNullable(dirPath).orElse("bin"));
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("[Info] deleting directory...");
+        operationUtils.executeCommand("rm -r " + Optional.ofNullable(dirPath).orElse("bin"));
     }
     /**
      * Performs the extraction operation using the extract command.
@@ -176,11 +168,7 @@ public class Operation {
             .parallelStream()
             .forEach(p -> {
                 if(!extractFile.isEmpty()) {
-                    try {
-                        operationUtils.executeCommand(p);
-                    } catch(Exception err) {
-                        err.printStackTrace();
-                    }
+                    operationUtils.executeCommand(p);
                 } else {
                     System.out.println("[Info] NO EXTRACTION FILES");
                 }
@@ -308,12 +296,8 @@ public class Operation {
                 className,
                 Optional.ofNullable(source).orElse("." + File.separator + "bin")
         );
-        try {
-            System.out.println("[Info] running ... ");
-            operationUtils.executeCommand(command);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("[Info] running ... ");
+        operationUtils.executeCommand(command);
 
     }
 }

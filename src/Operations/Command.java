@@ -37,7 +37,7 @@ public class Command {
         // lib files
         libFiles.append(
                 libJars
-                .stream()
+                .parallelStream()
                 .filter(e -> !e.isEmpty())
                 .map(e -> e + ";")
                 .collect(Collectors.joining())
