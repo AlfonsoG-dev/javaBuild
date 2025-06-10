@@ -14,6 +14,7 @@ import java.util.List;
 import Application.Utils.CommandUtils;
 import Application.Utils.FileUtils;
 import Application.Utils.OperationUtils;
+import Application.Builders.CommandBuilder;
 
 /**
  * Its the perform class of the java command
@@ -22,7 +23,7 @@ public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
     private CommandUtils commandUtils;
-    private Command myCommand;
+    private CommandBuilder cBuilder;
     private FileUtils fileUtils;
     private FileOperation fileOperation;
 
@@ -31,7 +32,7 @@ public class Operation {
         operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
         commandUtils = new CommandUtils(nLocalPath);
-        myCommand = new Command(nLocalPath);
+        cBuilder = new CommandBuilder(nLocalPath);
         fileOperation = new FileOperation(nLocalPath);
     }
     /**
@@ -150,7 +151,7 @@ public class Operation {
      */
     public void compileProjectOperation(String source, String target, String release) {
 
-        String compileCommand = myCommand.getCompileCommand(
+        String compileCommand = cBuilder.getCompileCommand(
                 Optional.ofNullable(source).orElse("src"),
                 Optional.ofNullable(target).orElse("bin"),
                 Integer.parseInt(
@@ -171,7 +172,7 @@ public class Operation {
      * @throws IOException the file doesn't exists
      */
     public void executeExtractionCommand(String extractFile) throws IOException {
-        myCommand.getExtractionsCommand()
+        cBuilder.getExtractionsCommand()
             .parallelStream()
             .forEach(p -> {
                 if(!extractFile.isEmpty()) {
@@ -213,7 +214,7 @@ public class Operation {
      */
     public void createJarOperation(boolean includeExtraction, String source) {
         try {
-            String command = myCommand.getJarFileCommand(
+            String command = cBuilder.getJarFileCommand(
                     includeExtraction,
                     Optional.ofNullable(source).orElse("bin")
             );
@@ -302,7 +303,7 @@ public class Operation {
      */
     public void runAppOperation(String className, String source) {
 
-        String command = myCommand.getRunCommand(
+        String command = cBuilder.getRunCommand(
                 commandUtils.getLibFiles(),
                 className,
                 Optional.ofNullable(source).orElse("." + File.separator + "bin")

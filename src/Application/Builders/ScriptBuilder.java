@@ -1,4 +1,4 @@
-package Application.Operations;
+package Application.Builders;
 
 import Application.Utils.FileUtils;
 
@@ -105,7 +105,7 @@ public class ScriptBuilder {
      */
     public void writeBuildFile(String fileName, String mainClass, String source, String target, List<String> dirNames,
     List<String> libNames, boolean extract) {
-        Command myCommand = new Command(localPath);
+        CommandBuilder cBuilder = new CommandBuilder(localPath);
 
         StringBuffer sourceFiles = new StringBuffer();
         File sourceDir = fileUtils.resolvePaths(localPath, source);
@@ -148,7 +148,7 @@ public class ScriptBuilder {
                     sourceFiles.toString(),
                     libFiles,
                     compile,
-                    myCommand.getJarFileCommand(extract, target),
+                    cBuilder.getJarFileCommand(extract, target),
                     runJar,
                     runCommand
             );

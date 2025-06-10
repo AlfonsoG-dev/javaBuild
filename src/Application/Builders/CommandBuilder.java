@@ -1,4 +1,4 @@
-package Application.Operations;
+package Application.Builders;
 
 import java.util.Optional;
 import java.util.List;
@@ -10,12 +10,12 @@ import java.io.IOException;
 
 import Application.Utils.CommandUtils;
 import Application.Utils.FileUtils;
-public class Command {
+public class CommandBuilder {
 
     private String localPath;
     private CommandUtils commandUtils;
     private FileUtils fileUtils;
-    public Command(String localPath) {
+    public CommandBuilder(String localPath) {
         this.localPath = localPath;
         commandUtils = new CommandUtils(localPath);
         fileUtils = new FileUtils(localPath);
