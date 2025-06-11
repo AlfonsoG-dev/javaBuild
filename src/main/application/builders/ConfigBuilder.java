@@ -37,7 +37,11 @@ public class ConfigBuilder {
             String[] lines = fUtils.readFileLines(configFile.getPath()).split("\n");
             for(String l: lines) {
                 String[] nameValue = l.split(":");
-                config.put(nameValue[0].trim(), nameValue[1].trim());
+                String val = nameValue[0].trim();
+                if(val.contains("Source-Path") || val.contains("Class-Path") || val.contains("Main-Class")) {
+                    val = val.replace("\\", File.separator);
+                }
+                config.put(val, nameValue[1].trim());
             }
         }
 

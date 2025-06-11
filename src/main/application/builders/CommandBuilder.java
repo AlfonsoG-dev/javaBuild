@@ -63,9 +63,9 @@ public class CommandBuilder {
             compile.append("javac --release " + release + " -Werror -Xlint:all -d .");
             compile.append(File.separator);
             compile.append(target);
-            compile.append(" -cp '" + target + ";");
+            compile.append(" -cp '" + target);
             if(!libFiles.isEmpty()) {
-                compile.append(libFiles);
+                compile.append(";" + libFiles);
             }
             compile.append("' ");
             compile.append(srcClases);
