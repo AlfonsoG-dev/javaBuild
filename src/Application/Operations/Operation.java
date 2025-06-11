@@ -99,8 +99,8 @@ public class Operation {
                 value -> System.out.println("[Info] Using Author name " + value),
                 () -> System.out.println("[Info] No author provided, now using " + getAuthorName())
         );
-        String oSource = Optional.ofNullable(source).orElse("src");
-        String oTarget = Optional.ofNullable(target).orElse("bin");
+        String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
+        String oTarget = Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"));
         System.out.println("[Info] creating files ...");
         try (DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath())) {
             for(Path p: files) {
@@ -221,11 +221,12 @@ public class Operation {
      * @param source the folder to include in the build.
      * @throws Exception when creating a jar file gets an error.
      */
-    public void createJarOperation(boolean includeExtraction, String source) {
+    public void createJarOperation(boolean includeExtraction, String source, String target) {
         try {
             String command = cBuilder.getJarFileCommand(
                     includeExtraction,
-                    Optional.ofNullable(source).orElse(getConfigData().get("Class-Path"))
+                    Optional.ofNullable(source).orElse(getConfigData().get("Class-Path")),
+                    Optional.ofNullable(target).orElse(getConfigData().get("Source-Path"))
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
@@ -263,7 +264,7 @@ public class Operation {
      * @param author name of the author of the project.
      */
     public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass, String source, String target) {
-        String oSource = Optional.ofNullable(source).orElse("src");
+        String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
         System.out.println("[Info] creating manifesto ...");
 
         fileOperation.createFiles(
@@ -310,12 +311,13 @@ public class Operation {
      * @param source the *.class* folder path. By default its *./bin/*
      * @throws Exception while trying to execute run operation.
      */
-    public void runAppOperation(String className, String source) {
+    public void runAppOperation(String className, String source, String target) {
 
         String command = cBuilder.getRunCommand(
                 commandUtils.getLibFiles(),
-                className,
-                Optional.ofNullable(source).orElse(getConfigData().get("Class-Path"))
+                Optional.ofNullable(className).orElse(" " + getConfigData().get("Main-Class")),
+                Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
+                Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))
         );
         System.out.println("[Info] running ... ");
         operationUtils.executeCommand(command);

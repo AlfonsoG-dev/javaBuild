@@ -104,7 +104,7 @@ public class CommandBuilder {
      * @param source where the lib files are.
      * @return the jar command for the build process.
      */
-    public String getJarFileCommand(boolean includeExtraction, String source) throws IOException {
+    public String getJarFileCommand(boolean includeExtraction, String source, String target) throws IOException {
         String
             command = "",
             directory = "";
@@ -117,9 +117,9 @@ public class CommandBuilder {
             }
         } 
         if(includeExtraction) {
-            command = commandUtils.jarTypeUnion(directory, source);
+            command = commandUtils.jarTypeUnion(directory, source, target);
         } else {
-            command = commandUtils.jarTypeUnion("", source);
+            command = commandUtils.jarTypeUnion("", source, target);
         }
         return command;
     }
@@ -130,17 +130,16 @@ public class CommandBuilder {
      * @param source the source folder of the .class files.
      * @return the run or execute command.
      */
-    public String getRunCommand(List<String> libJars, String className, String source) {
+    public String getRunCommand(List<String> libJars, String className, String source, String target) {
         String command  = "";
-        StringBuffer 
-            jarFiles = new StringBuffer(),
-            runClass = commandUtils.runClassOption(className, source);
+        StringBuffer jarFiles = new StringBuffer();
+        String runClass = commandUtils.runClassOption(className, source);
 
         if(jarFiles.isEmpty()) {
-            command = "java -cp " + source + runClass;
+            command = "java -cp " + target + runClass;
         } else {
             jarFiles.append("'");
-            jarFiles.append(source);
+            jarFiles.append(target);
             jarFiles.append(";");
             jarFiles.append(libJars
                     .parallelStream()

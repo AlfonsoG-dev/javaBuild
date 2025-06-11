@@ -104,28 +104,32 @@ public class CommandUtils {
         }
         return compile.toString();
     }
-    private String jarTypeFormat(String mainName, String directory) {
+    private String jarTypeFormat(String jarFileName, String directory) {
         StringBuffer jarFormat = new StringBuffer();
         jarFormat.append("jar -c");
         boolean presentManifesto = fileOperation.haveManifesto();
         if(presentManifesto) {
             jarFormat.append("fm ");
         }
-        if(!presentManifesto && mainName.isEmpty()) {
+        if(!presentManifesto && jarFileName.isEmpty()) {
             jarFormat.append("f ");
         }
-        if(!presentManifesto && !mainName.isEmpty()) {
+        if(!presentManifesto && !jarFileName.isEmpty()) {
             jarFormat.append("fe ");
         }
         return jarFormat.toString();
     }
-    public String jarTypeUnion(String directory, String source) throws IOException {
+    /**
+     * @param source: directory where .class files are
+     * @param target: directory where .java files are, this will serve to find the mainClass
+     */
+    public String jarTypeUnion(String directory, String source, String target) throws IOException {
         StringBuffer build = new StringBuffer();
 
-        String mainName      = fileOperation.getProjectName(source) + ".jar";
+        String jarFileName      = fileOperation.getProjectName(target) + ".jar";
         String localParent   = new File(localPath).getCanonicalPath();
-        String jarFormat     = jarTypeFormat(mainName, directory);
-        String mainClassName = fileOperation.getProjectName(source);
+        String jarFormat     = jarTypeFormat(jarFileName, directory);
+        String mainClassName = fileOperation.getProjectName(target);
 
         source = fileUtils.resolvePaths(localPath, source).getPath() + File.separator + " .";
 
@@ -134,12 +138,12 @@ public class CommandUtils {
         switch(jarFormat) {
             case "jar -cfm ":
                 if(!directory.isEmpty()) {
-                    build.append(mainName);
+                    build.append(jarFileName);
                     build.append(" Manifesto.txt -C ");
                     build.append(source);
                     build.append(directory);
                 } else {
-                    build.append(mainName);
+                    build.append(jarFileName);
                     build.append(" Manifesto.txt -C ");
                     build.append(source);
                 }
@@ -159,14 +163,14 @@ public class CommandUtils {
                 break;
             case "jar -cfe ":
                 if(!directory.isEmpty()) {
-                    build.append(mainName);
+                    build.append(jarFileName);
                     build.append(" ");
                     build.append(mainClassName);
                     build.append(" -C ");
                     build.append(source);
                     build.append(directory);
                 } else {
-                    build.append(mainName);
+                    build.append(jarFileName);
                     build.append(" ");
                     build.append(mainClassName);
                     build.append(" -C ");
@@ -188,16 +192,11 @@ public class CommandUtils {
         }
         return name;
     }
-    public StringBuffer runClassOption(String className, String source) {
+    public String runClassOption(String className, String source) {
         StringBuffer runClass = new StringBuffer();
         String name = source + File.separator + fileOperation.getProjectName(source) + ".java";
-        String mainName = Optional.of(manifestoClass()).orElse(name);
+        String mainName = Optional.of(className).orElse(name);
 
-        if(className.isEmpty()) {
-            runClass.append(mainName);
-        } else {
-            runClass.append(" " + className);
-        }
-        return runClass;
+        return mainName;
     }
 }

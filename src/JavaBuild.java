@@ -10,7 +10,6 @@ class JavaBuild {
                 String source = getCliValues(args, i, "-s");
                 String target = getCliValues(args, i, "-t");
                 String release = getCliValues(args, i, "-r");
-                String toDelete = getCliValues(args, i, "-d");
                 switch(args[i]) {
                     case "-ls":
                         if((i+1) < args.length) {
@@ -41,9 +40,9 @@ class JavaBuild {
                         break;
                     case "--jar":
                         if(haveExtractions) {
-                            op.createJarOperation(true, source);
+                            op.createJarOperation(true, target, source);
                         } else {
-                            op.createJarOperation(false, source);
+                            op.createJarOperation(false, target, source);
                         }
                         break;
                     case "--script":
@@ -66,21 +65,21 @@ class JavaBuild {
                         if(haveExtractions) {
                             op.compileProjectOperation(source, target, release);
                             op.extractJarDependencies();
-                            op.createJarOperation(true, target);
+                            op.createJarOperation(true, target, source);
                         } else {
                             op.compileProjectOperation(source, target, release);
-                            op.createJarOperation(false, target);
+                            op.createJarOperation(true, target, source);
                         }
                         break;
                     case "--scratch":
-                        op.deleteDirectory(toDelete);
+                        op.deleteDirectory(target);
                         if(haveExtractions) {
                             op.compileProjectOperation(source, target, release);
                             op.extractJarDependencies();
-                            op.createJarOperation(true, target);
+                            op.createJarOperation(true, target, source);
                         } else {
                             op.compileProjectOperation(source, target, release);
-                            op.createJarOperation(false, target);
+                            op.createJarOperation(true, target, source);
                         }
                         break;
                     case "--add":
@@ -97,12 +96,12 @@ class JavaBuild {
                                 conditionA = args[i+1].contains("-"),
                                 conditionB = args[i+1].contains("--");
                             if(!(conditionA || conditionB)) {
-                                op.runAppOperation(args[i+1], target);
+                                op.runAppOperation(args[i+1], source, target);
                             } else {
-                                op.runAppOperation("", target);
+                                op.runAppOperation(null, source, target);
                             }
                         } else {
-                            op.runAppOperation("", target);
+                            op.runAppOperation(null, source, target);
                         }
                         break;
                     case "--h":
