@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import main.application.utils.CommandUtils;
 import main.application.utils.FileUtils;
 import main.application.builders.ScriptBuilder;
 public class FileOperation {
@@ -21,9 +20,16 @@ public class FileOperation {
     private FileUtils fileUtils;
     private String localPath;
     private ScriptBuilder scriptBuilder;
+
     public FileOperation(String nLocalPath) {
         localPath = nLocalPath;
-        fileUtils = new FileUtils(localPath);
+        this.fileUtils = new FileUtils(nLocalPath);
+        scriptBuilder = new ScriptBuilder(nLocalPath);
+    }
+
+    public FileOperation(String nLocalPath, FileUtils fileUtils) {
+        localPath = nLocalPath;
+        this.fileUtils = fileUtils;
         scriptBuilder = new ScriptBuilder(nLocalPath);
     }
 
@@ -129,7 +135,8 @@ public class FileOperation {
             fileUtils.writeToFile(ignoreFiles, fileName);
         } else if(fileName.equals("Manifesto.txt")) {
             String libJars = "";
-            List<String> jars = new CommandUtils(localPath).getLibFiles();
+            List<String> jars = listLibFiles().stream().filter(p -> p.contains(".jar")).toList();
+;
             libJars += jars
                 .parallelStream()
                 .filter(e -> !e.isEmpty())

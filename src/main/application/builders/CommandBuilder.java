@@ -20,6 +20,11 @@ public class CommandBuilder {
         commandUtils = new CommandUtils(localPath);
         fileUtils = new FileUtils(localPath);
     }
+    public CommandBuilder(String localPath, CommandUtils commandUtils, FileUtils fileUtils) {
+        this.localPath = localPath;
+        this.commandUtils = commandUtils;
+        this.fileUtils = fileUtils;
+    }
 
     /**
      * create the compile command using lib files and src files to build.

@@ -33,12 +33,13 @@ public class Operation {
 
     public Operation(String nLocalPath) {
         localPath = nLocalPath;
-        operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
-        configBuilder = new ConfigBuilder(localPath, fileUtils, fileOperation);
         commandUtils = new CommandUtils(nLocalPath);
-        cBuilder = new CommandBuilder(nLocalPath);
-        fileOperation = new FileOperation(nLocalPath);
+
+        fileOperation = new FileOperation(nLocalPath, fileUtils);
+        cBuilder = new CommandBuilder(nLocalPath, commandUtils, fileUtils);
+        operationUtils = new OperationUtils(localPath, fileOperation);
+        configBuilder = new ConfigBuilder(localPath, fileUtils, fileOperation);
     }
     private HashMap<String, String> getConfigData() {
         return configBuilder.getConfigValues();
@@ -201,7 +202,7 @@ public class Operation {
             .parallelStream()
             .forEach(e -> {
                 try {
-                    boolean libAlreadyExists = new FileOperation(localPath).extractionDirContainsPath(e);
+                    boolean libAlreadyExists = fileOperation.extractionDirContainsPath(e);
                     if(libAlreadyExists == false) {
                         System.out.println("[Info] extracting jar dependencies ...");
                         operationUtils.createExtractionFiles(jars);

@@ -25,11 +25,19 @@ public class CommandUtils {
     }
 
     public boolean recompileFiles(Path filePath, Path source, Path target) {
-        Path relative = source.relativize(filePath);
-        Path classFilePath = target.resolve(relative.toString().replace(".java", ".class"));
+        String relative = "";
+        String classFilePath = "";
+        if(source.getNameCount() > 2) {
+            String sourceParent = source.getParent().getParent().toString();
+            relative = filePath.toString().replace(sourceParent, "");
+            classFilePath = target.toString() + relative.replace(".java", ".class");
+        } else {
+            relative = source.relativize(filePath).toString();
+            classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
+        } 
 
         File javaFile = filePath.toFile();
-        File classFile = classFilePath.toFile();
+        File classFile = new File(classFilePath);
         return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
     }
     public Optional<String> getSourceFiles(String source, String target) {

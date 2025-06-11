@@ -17,7 +17,7 @@ public class ConfigBuilder {
     public ConfigBuilder(String localPath, FileUtils fUtils, FileOperation fOperation) {
         this.localPath = localPath;
         this.fUtils = fUtils;
-        fOperation = fOperation;
+        this.fOperation = fOperation;
     }
     public HashMap<String, String> getConfigValues() {
         HashMap<String, String> config = new HashMap<>();

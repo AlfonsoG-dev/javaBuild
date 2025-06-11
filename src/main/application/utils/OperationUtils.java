@@ -15,8 +15,8 @@ public class OperationUtils {
     private FileOperation fileOperation;
     private String localPath;
 
-    public OperationUtils(String nLocalPath) {
-        fileOperation = new FileOperation(nLocalPath);
+    public OperationUtils(String nLocalPath, FileOperation fileOperation) {
+        this.fileOperation = fileOperation;
         localPath = nLocalPath;
     }
     public void executeCommand(String command) {
