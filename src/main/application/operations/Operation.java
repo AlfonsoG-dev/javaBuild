@@ -1,4 +1,4 @@
-package Application.Operations;
+package main.application.operations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,11 +12,11 @@ import java.util.Optional;
 import java.util.List;
 import java.util.HashMap;
 
-import Application.Utils.CommandUtils;
-import Application.Utils.FileUtils;
-import Application.Utils.OperationUtils;
-import Application.Builders.CommandBuilder;
-import Application.Builders.ConfigBuilder;
+import main.application.utils.CommandUtils;
+import main.application.utils.FileUtils;
+import main.application.utils.OperationUtils;
+import main.application.builders.CommandBuilder;
+import main.application.builders.ConfigBuilder;
 
 /**
  * Its the perform class of the java command

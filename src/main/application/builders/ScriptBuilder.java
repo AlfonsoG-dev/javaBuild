@@ -1,6 +1,6 @@
-package Application.Builders;
+package main.application.builders;
 
-import Application.Utils.FileUtils;
+import main.application.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

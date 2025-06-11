@@ -1,7 +1,7 @@
-package Application.Builders;
+package main.application.builders;
 
-import Application.Utils.FileUtils;
-import Application.Operations.FileOperation;
+import main.application.utils.FileUtils;
+import main.application.operations.FileOperation;
 
 import java.io.File;
 

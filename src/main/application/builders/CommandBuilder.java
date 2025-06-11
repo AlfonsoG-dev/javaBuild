@@ -1,4 +1,4 @@
-package Application.Builders;
+package main.application.builders;
 
 import java.util.Optional;
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import java.io.File;
 import java.io.IOException;
 
-import Application.Utils.CommandUtils;
-import Application.Utils.FileUtils;
+import main.application.utils.CommandUtils;
+import main.application.utils.FileUtils;
 public class CommandBuilder {
 
     private String localPath;

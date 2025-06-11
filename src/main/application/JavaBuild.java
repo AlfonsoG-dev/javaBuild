@@ -1,6 +1,6 @@
 import java.io.File;
 
-import Application.Operations.Operation;
+import main.application.operations.Operation;
 class JavaBuild {
     public static void main(String[] args) {
         try {

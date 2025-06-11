@@ -1,6 +1,6 @@
-package Application.Utils;
+package main.application.utils;
 
-import Application.Operations.FileOperation;
+import main.application.operations.FileOperation;
 
 import java.io.File;
 import java.io.IOException;
