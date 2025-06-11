@@ -28,9 +28,14 @@ public class CommandUtils {
         String relative = "";
         String classFilePath = "";
         if(source.getNameCount() > 2) {
-            String sourceParent = source.getParent().getParent().toString();
-            relative = filePath.toString().replace(sourceParent, "");
-            classFilePath = target.toString() + relative.replace(".java", ".class");
+            if(filePath.toString().contains(fileOperation.getMainClass(source.toString()) + ".java")) {
+                relative = source.relativize(filePath).toString();
+                classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
+            } else {
+                String sourceParent = source.getParent().getParent().toString();
+                relative = filePath.toString().replace(sourceParent, "");
+                classFilePath = target.toString() + relative.replace(".java", ".class");
+            }
         } else {
             relative = source.relativize(filePath).toString();
             classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
