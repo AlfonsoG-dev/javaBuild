@@ -69,7 +69,6 @@ javabuild --h
 ```console
 java -jar JavaBuild.jar --h
 ```
-
 ## Config file
 - When using the project the folder structure is `src`, `bin`, etc.
 > Use config file to change those fields.
@@ -80,13 +79,10 @@ Main-Class: MainClassName
 Libraries: 
 ```
 - For now the `Libraries` field isn't useful.
-
 ## Manifesto usage
-
 - When the app have dependencies in *lib* folder you need to specify in the *Manifesto* file if you want to 
 include the extraction files of the lib dependency or you need to declara in the *Manifesto* the class path 
 of the lib dependencies
-
 ```text
 Manifest-Version: 1.0
 Created-By: Author-Name
@@ -98,6 +94,9 @@ the extraction files of the lib dependency.
 
 > If you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
 includes the extraction files of the lib dependency as part of the project *.jar* creation.
+<h1 style="color:red;text-align:center">
+If you modifi `Main-Class` in config you also need to change it in the Manifesto, otherwise it will load a wrong class when creating the project `.jar` file.
+</h1>
 
 ## list project files
 
@@ -106,7 +105,7 @@ includes the extraction files of the lib dependency as part of the project *.jar
 javaBuild -ls .\directory\
 ```
 
-## Crete a project
+## Create a project
 
 - Use this to create the structure for the project.
 - You need to provide the author
