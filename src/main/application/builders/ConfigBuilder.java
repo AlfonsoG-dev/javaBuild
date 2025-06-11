@@ -5,6 +5,9 @@ import main.application.operations.FileOperation;
 
 import java.io.File;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.util.Optional;
 import java.util.HashMap;
 
@@ -44,7 +47,7 @@ public class ConfigBuilder {
 
                 if(name.contains("Source-Path") || name.contains("Class-Path") || name.contains("Main-Class")) {
                     // for linux replace back-slash to slash
-                    name = name.replace("\\", File.separator);
+                    val = Paths.get(val).normalize().toString();
                 }
                 config.put(name, val);
             }
