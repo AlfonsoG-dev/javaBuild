@@ -35,6 +35,7 @@
 - [x] add cli option to the create build script to allow the user to name the script.
 - [x] list the files that have a modified date more recent than the compiled files, to compile and build the project from the second time and further.
 > Use `lastModified()` that returns a `long` value in milliseconds or 0L if file doesn't exists or when an I/O error occurs.
+- [x] use config files for build process
 
 # TODO's
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
@@ -68,6 +69,17 @@ javabuild --h
 ```console
 java -jar JavaBuild.jar --h
 ```
+
+## Config file
+- When using the project the folder structure is `src`, `bin`, etc.
+> Use config file to change those fields.
+```txt
+Source-Path: source/directory/name
+Class-Path: class/directory/name
+Main-Class: MainClassName
+Libraries: 
+```
+- For now the `Libraries` field isn't useful.
 
 ## Manifesto usage
 

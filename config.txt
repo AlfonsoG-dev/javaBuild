@@ -1,0 +1,4 @@
+Source-Path: src
+Class-Path: bin
+Main-Class: JavaBuild
+Libraries: 

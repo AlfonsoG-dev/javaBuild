@@ -10,11 +10,13 @@ import java.nio.file.Path;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.HashMap;
 
 import Application.Utils.CommandUtils;
 import Application.Utils.FileUtils;
 import Application.Utils.OperationUtils;
 import Application.Builders.CommandBuilder;
+import Application.Builders.ConfigBuilder;
 
 /**
  * Its the perform class of the java command
@@ -24,6 +26,8 @@ public class Operation {
     private OperationUtils operationUtils;
     private CommandUtils commandUtils;
     private CommandBuilder cBuilder;
+    private ConfigBuilder configBuilder;
+
     private FileUtils fileUtils;
     private FileOperation fileOperation;
 
@@ -31,9 +35,13 @@ public class Operation {
         localPath = nLocalPath;
         operationUtils = new OperationUtils(localPath);
         fileUtils = new FileUtils(localPath);
+        configBuilder = new ConfigBuilder(localPath, fileUtils, fileOperation);
         commandUtils = new CommandUtils(nLocalPath);
         cBuilder = new CommandBuilder(nLocalPath);
         fileOperation = new FileOperation(nLocalPath);
+    }
+    private HashMap<String, String> getConfigData() {
+        return configBuilder.getConfigValues();
     }
     /**
      * creates the folder or directory structure:
@@ -122,10 +130,9 @@ public class Operation {
             Optional<String> oSource = Optional.ofNullable(source);
             oSource.ifPresentOrElse(
                     value -> System.out.println("[Info] Printing files of " + source),
-                    () -> System.out.println("[Info] No source provided, now list files of src")
+                    () -> System.out.println("[Info] No source provided, using default value")
             );
-
-            File read = fileUtils.resolvePaths(localPath, oSource.orElse("src"));
+            File read = fileUtils.resolvePaths(localPath, oSource.orElse(getConfigData().get("Source-Path")));
             if(read.isFile()) {
                 System.out.println("[Info] Only directory types are allow but here you have it°!");
                 System.out.println(read.getPath());
@@ -152,8 +159,8 @@ public class Operation {
     public void compileProjectOperation(String source, String target, String release) {
 
         String compileCommand = cBuilder.getCompileCommand(
-                Optional.ofNullable(source).orElse("src"),
-                Optional.ofNullable(target).orElse("bin"),
+                Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
+                Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
                 Integer.parseInt(
                     Optional.ofNullable(release).orElse(System.getProperty("java.specification.version"))
                 )
@@ -163,7 +170,9 @@ public class Operation {
     }
     public void deleteDirectory(String dirPath) {
         System.out.println("[Info] deleting directory...");
-        operationUtils.executeCommand("rm -r " + Optional.ofNullable(dirPath).orElse("bin"));
+        operationUtils.executeCommand(
+            "rm -r " + Optional.ofNullable(dirPath).orElse(getConfigData().get("Class-Path"))
+        );
     }
     /**
      * Performs the extraction operation using the extract command.
@@ -216,7 +225,7 @@ public class Operation {
         try {
             String command = cBuilder.getJarFileCommand(
                     includeExtraction,
-                    Optional.ofNullable(source).orElse("bin")
+                    Optional.ofNullable(source).orElse(getConfigData().get("Class-Path"))
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
@@ -260,9 +269,9 @@ public class Operation {
         fileOperation.createFiles(
             Optional.ofNullable(author).orElse(getAuthorName()),
             "Manifesto.txt",
-            Optional.ofNullable(mainClass).orElse(fileOperation.getMainClass(oSource)),
+            Optional.ofNullable(mainClass).orElse(getConfigData().get("Main-Class")),
             oSource,
-            Optional.ofNullable(target).orElse("bin"),
+            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
             includeExtraction
         );
     }
@@ -291,8 +300,8 @@ public class Operation {
         operationUtils.createBuildScript(
                 includeExtraction,
                 fileName,
-                Optional.ofNullable(source).orElse("src"),
-                Optional.ofNullable(target).orElse("bin")
+                Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
+                Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))
         );
     }
     /**
@@ -306,7 +315,7 @@ public class Operation {
         String command = cBuilder.getRunCommand(
                 commandUtils.getLibFiles(),
                 className,
-                Optional.ofNullable(source).orElse("." + File.separator + "bin")
+                Optional.ofNullable(source).orElse(getConfigData().get("Class-Path"))
         );
         System.out.println("[Info] running ... ");
         operationUtils.executeCommand(command);
