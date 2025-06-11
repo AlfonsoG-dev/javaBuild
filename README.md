@@ -94,8 +94,8 @@ the extraction files of the lib dependency.
 
 > If you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
 includes the extraction files of the lib dependency as part of the project *.jar* creation.
-<h1 style="color:red;text-align:center">
-If you modifi `Main-Class` in config you also need to change it in the Manifesto, otherwise it will load a wrong class when creating the project `.jar` file.
+<h1 style="text-align:center">
+If you modify `Main-Class` in config you also need to change it in the Manifesto, otherwise it will load a wrong class when creating the project `.jar` file.
 </h1>
 
 ## list project files
