@@ -35,13 +35,18 @@ public class ConfigBuilder {
             }
         } else {
             String[] lines = fUtils.readFileLines(configFile.getPath()).split("\n");
-            for(String l: lines) {
-                String[] nameValue = l.split(":");
-                String val = nameValue[0].trim();
-                if(val.contains("Source-Path") || val.contains("Class-Path") || val.contains("Main-Class")) {
-                    val = val.replace("\\", File.separator);
+            for(String l : lines) {
+                String[] nameValue = l.split(":", 2);
+                if(nameValue.length < 2) continue;
+
+                String name = nameValue[0].trim();
+                String val = nameValue[1].trim();
+
+                if(name.contains("Source-Path") || name.contains("Class-Path") || name.contains("Main-Class")) {
+                    // for linux replace back-slash to slash
+                    name = name.replace("\\", File.separator);
                 }
-                config.put(val, nameValue[1].trim());
+                config.put(name, val);
             }
         }
 
