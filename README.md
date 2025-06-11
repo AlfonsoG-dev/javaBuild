@@ -43,6 +43,9 @@
 - [ ] when *powershell* isn't installed use the default **cmd** option.
 - [ ] add a mode to allow the user the `--watch` option, this option will serve as the live reload option of the compile process.
 > Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
+- [ ] Add option to create the config file.
+- [ ] Evaluate project generation using config file.
+- [ ] when using config file, changing any value will modify subsequently manifesto file.
  
 ------
 
