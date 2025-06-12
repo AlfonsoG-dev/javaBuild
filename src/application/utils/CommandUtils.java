@@ -35,7 +35,8 @@ public class CommandUtils {
     public boolean recompileFiles(Path filePath, Path source, Path target) {
         String relative = "";
         String classFilePath = "";
-        if(source.getNameCount() >= 2) {
+        source = source.normalize();
+        if(source.getNameCount() > 2) {
             if(filePath.toString().contains(fileOperation.getMainClass(source.toString()) + ".java")) {
                 relative = source.relativize(filePath).toString();
                 classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
