@@ -249,6 +249,29 @@ $ ./myBin
 ```
 - With that you can create an **environment variable** and use it from there.
 
+To create an **environment variable**.
+- create a folder where you put the binary file.
+```sh
+mkdir -p ${HOME}/bin
+```
+- Move the binary to that path
+```sh
+mv myBin ~/bin
+```
+- Make the binary file executable.
+```sh
+cd ~/bin
+chmod 755 myBin
+```
+- Add the binary file to the path
+```sh
+export PATH="${HOME}/bin:${PATH}"
+```
+- Verify the binary file is in your path
+```sh
+command -v myBin
+```
+
 ------
 
 # Disclaimer
