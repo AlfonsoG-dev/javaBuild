@@ -74,7 +74,7 @@ public class CommandUtils {
                 }
             }
             fileUtils.listDirectoriesFromPath(source)
-                .parallelStream()
+                .stream()
                 .filter(e -> !e.isEmpty())
                 .forEach(e -> {
                     int countFiles = fileUtils.countFilesInDirectory(new File(e));
@@ -85,7 +85,7 @@ public class CommandUtils {
         }
         if(names.size() > 0) {
             b += names
-                .parallelStream()
+                .stream()
                 .collect(Collectors.joining());
         }
         return Optional.of(b);

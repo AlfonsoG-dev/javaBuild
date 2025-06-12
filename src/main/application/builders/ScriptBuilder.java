@@ -120,7 +120,7 @@ public class ScriptBuilder {
 
         sourceFiles.append(
                 dirNames
-                .parallelStream()
+                .stream()
                 .filter(e -> fileUtils.countFilesInDirectory(new File(e)) > 0)
                 .map(e -> e + "*.java ")
                 .collect(Collectors.joining())

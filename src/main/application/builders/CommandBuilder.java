@@ -90,7 +90,7 @@ public class CommandBuilder {
         List<String> commands = new ArrayList<>();
 
         fileUtils.listFilesFromPath(extractionFile.getPath())
-            .parallelStream()
+            .stream()
             .filter(e -> e.getName().contains(".jar"))
             .forEach(e -> {
                 String 

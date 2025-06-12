@@ -207,7 +207,7 @@ public class FileOperation {
                 );
             } else if(sf.isDirectory()) {
                 fileUtils.listFilesFromPath(sourceFilePath)
-                    .parallelStream()
+                    .stream()
                     .forEach(e -> {
                         try {
                             String n = fileUtils.createTargetFromParentPath(
