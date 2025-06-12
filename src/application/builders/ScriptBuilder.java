@@ -1,12 +1,12 @@
-package main.application.builders;
-
-import main.application.utils.FileUtils;
+package builders;
 
 import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import utils.FileUtils;
 
 public class ScriptBuilder {
 

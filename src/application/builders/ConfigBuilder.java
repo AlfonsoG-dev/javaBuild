@@ -1,11 +1,9 @@
-package main.application.builders;
+package builders;
 
-import main.application.utils.FileUtils;
-import main.application.operations.FileOperation;
+import operations.FileOperation;
+import utils.FileUtils;
 
 import java.io.File;
-
-import java.nio.file.Path;
 
 import java.util.HashMap;
 

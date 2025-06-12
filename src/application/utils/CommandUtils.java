@@ -1,6 +1,6 @@
-package main.application.utils;
+package utils;
 
-import main.application.operations.FileOperation;
+import operations.FileOperation;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,16 +23,24 @@ public class CommandUtils {
         fileOperation = new FileOperation(localPath);
         fileUtils = new FileUtils(localPath);
     }
+    public Path parentFromNesting(Path source) {
+        Path p = null;
+        int n = source.getNameCount();
+        for(int i=n; i > 0; --i) {
+            p = source.getParent();
+        }
+        return p;
+    }
 
     public boolean recompileFiles(Path filePath, Path source, Path target) {
         String relative = "";
         String classFilePath = "";
-        if(source.getNameCount() > 2) {
+        if(source.getNameCount() >= 2) {
             if(filePath.toString().contains(fileOperation.getMainClass(source.toString()) + ".java")) {
                 relative = source.relativize(filePath).toString();
                 classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
             } else {
-                String sourceParent = source.getParent().getParent().toString();
+                String sourceParent = parentFromNesting(source).toString();
                 relative = filePath.toString().replace(sourceParent, "");
                 classFilePath = target.toString() + relative.replace(".java", ".class");
             }

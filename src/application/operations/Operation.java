@@ -1,4 +1,4 @@
-package main.application.operations;
+package operations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,11 +12,11 @@ import java.util.Optional;
 import java.util.List;
 import java.util.HashMap;
 
-import main.application.utils.CommandUtils;
-import main.application.utils.FileUtils;
-import main.application.utils.OperationUtils;
-import main.application.builders.CommandBuilder;
-import main.application.builders.ConfigBuilder;
+import utils.CommandUtils;
+import utils.OperationUtils;
+import utils.FileUtils;
+import builders.CommandBuilder;
+import builders.ConfigBuilder;
 
 /**
  * Its the perform class of the java command
@@ -112,7 +112,7 @@ public class Operation {
                         operationUtils.createProjectFiles(
                                 oAuthor.orElse(getAuthorName()),
                                 oSource,
-                                target
+                                oTarget
                         );
                     }
                 }
@@ -130,7 +130,7 @@ public class Operation {
         try {
             Optional<String> oSource = Optional.ofNullable(source);
             oSource.ifPresentOrElse(
-                    value -> System.out.println("[Info] Printing files of " + source),
+                    value -> System.out.println("[Info] Printing files of " + value),
                     () -> System.out.println("[Info] No source provided, using default value")
             );
             File read = fileUtils.resolvePaths(localPath, oSource.orElse(getConfigData().get("Source-Path")));

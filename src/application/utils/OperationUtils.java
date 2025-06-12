@@ -1,4 +1,4 @@
-package main.application.utils;
+package utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.lang.Process;
 
 import java.util.List;
 
-import main.application.operations.FileOperation;
+import operations.FileOperation;
 
 public class OperationUtils {
     private FileOperation fileOperation;
