@@ -46,6 +46,7 @@
 - [ ] Add option to create the config file.
 - [ ] Evaluate project generation using config file.
 - [ ] when using config file, changing any value will modify subsequently manifesto file.
+- [ ] use thread to list files, directories, for now only define the thread and invoke itself in the same method, later include logic to use those methods in parallel with other tasks.
  
 ------
 

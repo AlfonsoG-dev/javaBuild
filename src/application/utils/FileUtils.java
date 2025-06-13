@@ -75,7 +75,9 @@ public class FileUtils {
             }
         });
         t.start();
+        // TODO: start other Threads or other operations
         try {
+            //TODO: join the threads or operations.
             t.join();
         } catch(InterruptedException e) {
             e.printStackTrace();
@@ -103,7 +105,14 @@ public class FileUtils {
             }
         });
         t.start();
+        /**
+         * TODO: start other threads or other operations.
+         * - After t.start() you can execute or invoke other operations that runs in parallel with the thread operations.
+         * - You need to return the thread to join it in the method that invokes this parallel method.
+         */
         try {
+            // TODO: join the threads or operations
+            // this part should be declare in the method that invokes this parallel method. 
             t.join();
         } catch(InterruptedException e) {
             e.printStackTrace();
