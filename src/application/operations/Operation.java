@@ -64,15 +64,21 @@ public class Operation {
             }
         }
     }
-    public void createConfigFile(String source) {
+    public void createConfigFile(String source, String target) {
         Optional<String> oSource = Optional.ofNullable(source);
+        Optional<String> oTarget = Optional.ofNullable(target);
 
         oSource.ifPresentOrElse(
             value -> System.out.println("[Info] Using source path " + value),
             () -> System.out.println("[Warning] No source path provided, now using default value src")
         );
 
-        configBuilder.writeConfigFile(oSource.orElse("src"));
+        oTarget.ifPresentOrElse(
+            value -> System.out.println("[Info] Using class path " + value),
+            () -> System.out.println("[Warning] No class path provided, now using default value bin")
+        );
+
+        configBuilder.writeConfigFile(oSource.orElse("src"), oTarget.orElse("bin"));
     }
 
     /**

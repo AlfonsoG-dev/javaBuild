@@ -58,11 +58,12 @@ public class ConfigBuilder {
 
         return config;
     }
-    public void writeConfigFile(String source) {
+    public void writeConfigFile(String source, String target) {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
             String mainClass = fOperation.getProjectName(source);
-            String lines = "Source-Path: " + source + "\nClass-Path: bin\n" + "Main-Class: " + mainClass.trim() + "\nLibraries: ";
+            String lines = "Source-Path: " + source + "\nClass-Path: " + target + "\nMain-Class: " + mainClass.trim() + "\nLibraries: ";
+            System.out.println(lines);
             w.write(lines);
         } catch (Exception e) {
             e.printStackTrace();

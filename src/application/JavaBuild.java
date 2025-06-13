@@ -62,7 +62,7 @@ class JavaBuild {
                         }
                         break;
                     case "--config":
-                        op.createConfigFile(source);
+                        op.createConfigFile(source, target);
                         break;
                     case "--build":
                         if(haveExtractions) {
