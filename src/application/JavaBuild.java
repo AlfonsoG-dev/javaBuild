@@ -61,6 +61,9 @@ class JavaBuild {
                             op.createIncludeExtractions(true, author, runClass, source, target);
                         }
                         break;
+                    case "--config":
+                        op.createConfigFile(source);
+                        break;
                     case "--build":
                         if(haveExtractions) {
                             op.compileProjectOperation(source, target, release);
@@ -106,8 +109,10 @@ class JavaBuild {
                         break;
                     case "--h":
                         System.out.println("use -ls to list java | jar | class files in the given path with the option -s ./source/");
+                        System.out.println("");
 
                         System.out.println("use -cb to create the project folder structure");
+                        System.out.println("");
 
                         System.out.println("\t when creating give the author name");
                         System.out.println("\t\t -ls author-name");
@@ -140,6 +145,11 @@ class JavaBuild {
                         System.out.println("\t\t --i -a author-name");
                         System.out.println("");
 
+                        System.out.println("use --config to create the project config file");
+                        System.out.println("\t use -s to provide the source path to the config");
+                        System.out.println("\t\t You can later modify directly from your text editor");
+                        System.out.println("");
+
                         System.out.println("use --build to build the project");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
@@ -165,9 +175,11 @@ class JavaBuild {
                         System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
                         System.out.println("\t\t the run command also accepts the execution of internal commands");
                         System.out.println("\t\t --run -ls ./src/");
+                        System.out.println("");
                         break;
                     default: 
                         System.out.println("use --h for help");
+                        System.out.println("");
                         break outter;
                 }
             }
