@@ -50,9 +50,9 @@ public class Operation {
      */
     public void createProjectOperation() {
         String[] names = {
-            "bin",
+            getConfigData().get("Class-Path"),
             "lib",
-            "src",
+            getConfigData().get("Source-Path"),
             "docs",
             "extractionFiles"
         };
@@ -63,6 +63,16 @@ public class Operation {
                 System.out.println("[Info] Created " + f.getPath());
             }
         }
+    }
+    public void createConfigFile(String source) {
+        Optional<String> oSource = Optional.ofNullable(source);
+
+        oSource.ifPresentOrElse(
+            value -> System.out.println("[Info] Using source path " + value),
+            () -> System.out.println("[Warning] No source path provided, now using default value src")
+        );
+
+        configBuilder.writeConfigFile(oSource.orElse("src"));
     }
 
     /**
