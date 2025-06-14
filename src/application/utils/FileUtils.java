@@ -135,22 +135,11 @@ public class FileUtils {
             String c = getCleanPath(dirPath);
             File f = resolvePaths(localPath, c);
             if(f.listFiles() == null)  throw new IOException("Empty directory provided");
-            Files.newDirectoryStream(f.toPath())
-                .forEach(e -> {
-                    File l = e.toFile();
-                    if(l.isDirectory()) {
-                        names.add(l.getPath() + File.separator);
-                        if(l.listFiles() != null) {
-                            try {
-                                names.addAll(
-                                        listDirectoriesFromPath(l.getPath())
-                                );
-                            } catch(Exception err) {
-                                err.printStackTrace();
-                            }
-                        }
-                    }
-                });
+            names.addAll(Files.walk(Paths.get(dirPath), FileVisitOption.FOLLOW_LINKS)
+                .map(p -> p.toFile())
+                .filter(p -> p.isDirectory())
+                .map(p -> p.getPath() + File.separator)
+                .toList());
         } catch (IOException e) {
             e.printStackTrace();
         }

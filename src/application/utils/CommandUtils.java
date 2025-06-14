@@ -65,8 +65,6 @@ public class CommandUtils {
         if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
            for(File f: srcFile.listFiles()) {
                if(f.isFile() && f.getName().contains(".java")) {
-                   names.add(".");
-                   names.add(File.separator);
                    names.add(source);
                    names.add(File.separator);
                    names.add("*.java ");
