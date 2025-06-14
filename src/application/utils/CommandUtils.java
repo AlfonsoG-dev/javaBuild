@@ -86,7 +86,7 @@ public class CommandUtils {
                 .map(f -> f.toPath())
                 .filter(p -> recompileFiles(p, srcFile.toPath(), binFile.toPath()))
                 .forEach(e -> {
-                    names.add(e + " ");
+                    names.add(e.normalize() + " ");
                 });
         } 
         if(names.size() > 0) {
