@@ -143,29 +143,25 @@ public class Operation {
      * @throws IOException
      */
     public void listProjectFiles(String source) {
-        try {
-            Optional<String> oSource = Optional.ofNullable(source);
-            oSource.ifPresentOrElse(
-                    value -> System.out.println("[Info] Printing files of " + value),
-                    () -> System.out.println("[Info] No source provided, using default value")
+        Optional<String> oSource = Optional.ofNullable(source);
+        oSource.ifPresentOrElse(
+                value -> System.out.println("[Info] Printing files of " + value),
+                () -> System.out.println("[Info] No source provided, using default value")
+        );
+        File read = fileUtils.resolvePaths(localPath, oSource.orElse(getConfigData().get("Source-Path")));
+        if(read.isFile()) {
+            System.out.println("[Info] Only directory types are allow but here you have it°!");
+            System.out.println(read.getPath());
+        }
+        if(read.isDirectory()) {
+            fileUtils.listFilesFromDirectory(read.toPath())
+                .stream()
+                .map(e -> e.getPath())
+                .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
+                .forEach(e -> {
+                    System.out.println(e);
+                }
             );
-            File read = fileUtils.resolvePaths(localPath, oSource.orElse(getConfigData().get("Source-Path")));
-            if(read.isFile()) {
-                System.out.println("[Info] Only directory types are allow but here you have it°!");
-                System.out.println(read.getPath());
-            }
-            if(read.isDirectory()) {
-                fileUtils.listFilesFromDirectory(Files.newDirectoryStream(read.toPath()))
-                    .stream()
-                    .map(e -> e.getPath())
-                    .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
-                    .forEach(e -> {
-                        System.out.println(e);
-                    }
-                );
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
         }
     }
     /**

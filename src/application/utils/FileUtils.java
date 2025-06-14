@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.BufferedReader;
 
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -89,16 +91,11 @@ public class FileUtils {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
-                    File miFile = new File(filePath);
-                    if(miFile.exists() && miFile.isFile()) {
-                        names.add(miFile);
-                    } else if(miFile.listFiles() != null) {
-                        names.addAll(
-                                getDirectoryFiles(
-                                    Files.newDirectoryStream(miFile.toPath())
-                                    )
-                                );
-                    }
+                    names.addAll(Files.walk(Paths.get(filePath), FileVisitOption.FOLLOW_LINKS)
+                        .map(p -> p.toFile())
+                        .filter(f -> f.isFile())
+                        .toList()
+                    );
                 } catch(IOException e) {
                     e.printStackTrace();
                 }
@@ -119,19 +116,18 @@ public class FileUtils {
         }
         return names;
     }
-    public List<File> listFilesFromDirectory(DirectoryStream<Path> files) {
+    public List<File> listFilesFromDirectory(Path directory) {
         List<File> names = new ArrayList<>();
-        for(Path p: files) {
-            File f = p.toFile();
-            if(f.isFile()) {
-                names.add(f);
-            } else if (f.isDirectory()){
-                names.addAll(
-                        listFilesFromPath(f.getPath())
-                );
-            }
+        try {
+            names.addAll(Files.walk(directory, FileVisitOption.FOLLOW_LINKS)
+                .map(p -> p.toFile())
+                .filter(f -> f.isFile())
+                .toList());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return names;
+
+        return null;
     }
     public List<String> listDirectoriesFromPath(String dirPath) {
         List<String> names = new ArrayList<>();
