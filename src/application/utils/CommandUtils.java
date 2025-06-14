@@ -55,7 +55,7 @@ public class CommandUtils {
         return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
     }
     public Optional<String> getSourceFiles(String source, String target) {
-        String b = "";
+        String b = null;
         List<String> names = new ArrayList<>();
         File srcFile = fileUtils.resolvePaths(localPath, source);
         File binFile = fileUtils.resolvePaths(localPath, target);
@@ -63,14 +63,6 @@ public class CommandUtils {
             System.out.println("[Info] " + srcFile.getPath() + " is empty");
         }
         if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
-           for(File f: srcFile.listFiles()) {
-               if(f.isFile() && f.getName().contains(".java")) {
-                   names.add(source);
-                   names.add(File.separator);
-                   names.add("*.java ");
-                   break;
-               }
-           }
            fileUtils.listDirectoriesFromPath(source)
                .stream()
                .filter(e -> !e.isEmpty())
@@ -90,11 +82,12 @@ public class CommandUtils {
                 });
         } 
         if(names.size() > 0) {
-            b += names
-                .stream()
-                .collect(Collectors.joining());
+            b = names
+            .stream()
+            .collect(Collectors.joining());
         }
-        return Optional.of(b);
+        System.out.println("sources: " + b );
+        return Optional.ofNullable(b);
     }
 
     public List<String> getLibFiles() {
