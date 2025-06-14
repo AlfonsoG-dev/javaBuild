@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
 
-import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -54,38 +53,6 @@ public class FileUtils {
         }
         return count;
     }
-    public List<File> getDirectoryFiles(DirectoryStream<Path> misFiles) {
-        List<File> names = new ArrayList<>();
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                for(Path p: misFiles) {
-                    File f = p.toFile();
-                    try {
-                        if(f.exists() && f.isFile()) {
-                            names.add(f);
-                        } else if(f.isDirectory()) {
-                            names.addAll(
-                                    getDirectoryFiles(
-                                        Files.newDirectoryStream(f.toPath())
-                                    )
-                            );
-                        }
-                    } catch(IOException err) {
-                        err.printStackTrace();
-                    }
-                }
-            }
-        });
-        t.start();
-        // TODO: start other Threads or other operations
-        try {
-            //TODO: join the threads or operations.
-            t.join();
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-        return names;
-    }
     public List<File> listFilesFromPath(String filePath) {
         List<File> names = new ArrayList<>();
         Thread t = new Thread(new Runnable() {
@@ -122,7 +89,8 @@ public class FileUtils {
             names.addAll(Files.walk(directory, FileVisitOption.FOLLOW_LINKS)
                 .map(p -> p.toFile())
                 .filter(f -> f.isFile())
-                .toList());
+                .toList()
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,17 +107,12 @@ public class FileUtils {
                 .map(p -> p.toFile())
                 .filter(p -> p.isDirectory())
                 .map(p -> p.getPath() + File.separator)
-                .toList());
+                .toList()
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
         return names;
-    }
-    public void createDirectory(String directory) {
-        File miFile = new File(directory);
-        if(miFile.exists() == false) {
-            miFile.mkdir();
-        }
     }
     public String createTargetFromParentPath(String parentFile, String dirs) {
         String parentName = new File(parentFile).getParent();
