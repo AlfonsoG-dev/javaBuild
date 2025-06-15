@@ -154,7 +154,7 @@ public class Operation {
             System.out.println(read.getPath());
         }
         if(read.isDirectory()) {
-            fileUtils.listFilesFromDirectory(read.toPath())
+            fileUtils.listFilesFromPath(read.getPath())
                 .stream()
                 .map(e -> e.getPath())
                 .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))

@@ -83,20 +83,6 @@ public class FileUtils {
         }
         return names;
     }
-    public List<File> listFilesFromDirectory(Path directory) {
-        List<File> names = new ArrayList<>();
-        try {
-            names.addAll(Files.walk(directory, FileVisitOption.FOLLOW_LINKS)
-                .map(p -> p.toFile())
-                .filter(f -> f.isFile())
-                .toList()
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
     public List<String> listDirectoriesFromPath(String dirPath) {
         List<String> names = new ArrayList<>();
         try {
