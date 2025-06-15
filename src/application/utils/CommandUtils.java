@@ -61,6 +61,7 @@ public class CommandUtils {
         File binFile = fileUtils.resolvePaths(localPath, target);
         if(srcFile.listFiles() == null) {
             System.out.println("[Info] " + srcFile.getPath() + " is empty");
+            return Optional.ofNullable(b);
         }
         if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
            fileUtils.listDirectoriesFromPath(source)
@@ -86,7 +87,6 @@ public class CommandUtils {
             .stream()
             .collect(Collectors.joining());
         }
-        System.out.println("sources: " + b );
         return Optional.ofNullable(b);
     }
 

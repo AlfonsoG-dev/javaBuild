@@ -51,7 +51,7 @@ public class CommandBuilder {
         String srcClases = "";
 
         Optional<String> oSource = commandUtils.getSourceFiles(source, target);
-        if(oSource.get() != null) {
+        if(oSource.isEmpty()) {
             System.out.println("[Info] No modified files to compile");
             return null;
         } else {
