@@ -8,10 +8,13 @@ import java.io.BufferedReader;
 
 import java.nio.file.FileVisitOption;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import java.util.concurrent.Callable;
 
 public class FileUtils {
     private File localFile;
@@ -41,46 +44,30 @@ public class FileUtils {
     public File resolvePaths(String root, String children) {
         return new File(root).toPath().resolve(children).toFile();
     }
-    public int countFilesInDirectory(File myDirectory) {
-        int count = 0;
-        if(myDirectory.listFiles() != null) {
-            for(File f: myDirectory.listFiles()) {
-                if(f.isFile()) {
-                    ++count;
-                }
-            }
-        }
-        return count;
+    public int countFiles(File f) {
+        File[] files = f.listFiles();
+        return (files != null) ? files.length : 0;
     }
-    public List<File> listFilesFromPath(String filePath) {
-        List<File> names = new ArrayList<>();
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    names.addAll(Files.walk(Paths.get(filePath), FileVisitOption.FOLLOW_LINKS)
-                        .map(p -> p.toFile())
-                        .filter(f -> f.isFile())
-                        .toList()
-                    );
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t.start();
-        /**
-         * TODO: start other threads or other operations.
-         * - After t.start() you can execute or invoke other operations that runs in parallel with the thread operations.
-         * - You need to return the thread to join it in the method that invokes this parallel method.
-         */
+    private List<Path> listFiles(String filePath) {
+        List<Path> result = new ArrayList<>();
         try {
-            // TODO: join the threads or operations
-            // this part should be declare in the method that invokes this parallel method. 
-            t.join();
-        } catch(InterruptedException e) {
+            result = Files.walk(Paths.get(filePath), FileVisitOption.FOLLOW_LINKS)
+                .filter(Files::isRegularFile)
+                .toList();
+
+        } catch(Exception e) {
             e.printStackTrace();
         }
-        return names;
+        return result;
+
+    }
+    public Callable<List<File>> listFilesFromPath(String filePath) {
+        return new Callable<List<File>>() {
+            @Override
+            public List<File> call() {
+                return listFiles(filePath).stream().map(p -> p.toFile()).toList();
+            }
+        };
     }
     public List<String> listDirectoriesFromPath(String dirPath) {
         List<String> names = new ArrayList<>();
