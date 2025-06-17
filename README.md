@@ -36,17 +36,17 @@
 - [x] list the files that have a modified date more recent than the compiled files, to compile and build the project from the second time and further.
 > Use `lastModified()` that returns a `long` value in milliseconds or 0L if file doesn't exists or when an I/O error occurs.
 - [x] use config files for build process
+- [x] use thread like operation to list files, directories, for now only define the thread and invoke itself in the same method, later include logic to use those methods in parallel with other tasks.
+- [x] Add option to create the config file.
 
 # TODO's
-- [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX*
-- [ ] implement the module aggregation for compile, run, create-jar, execution script
+- [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX* `issue #6`
+- [ ] implement the module aggregation like `C#` `LINQ` for unify in a single process (compile, run, create-jar)
 - [ ] when *powershell* isn't installed use the default **cmd** option.
 - [ ] add a mode to allow the user the `--watch` option, this option will serve as the live reload option of the compile process.
 > Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
-- [ ] Add option to create the config file.
 - [ ] Evaluate project generation using config file.
 - [ ] when using config file, changing any value will modify subsequently manifesto file.
-- [ ] use thread to list files, directories, for now only define the thread and invoke itself in the same method, later include logic to use those methods in parallel with other tasks.
  
 ------
 
