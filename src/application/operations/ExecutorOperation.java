@@ -1,6 +1,6 @@
 package operations;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -10,13 +10,13 @@ import java.util.concurrent.FutureTask;
 
 public class ExecutorOperation {
     
-    public List<File> executeConcurrentCallableList(Callable<List<File>> task) {
-        List<File> result = null;
-        FutureTask<List<File>> future = new FutureTask<>(task);
+    public<T> List<T> executeConcurrentCallableList(Callable<List<T>> task) {
+        List<T> result = new ArrayList<>();
+        FutureTask<List<T>> future = new FutureTask<>(task);
+        System.out.println("[Info] Starting computation");
         try(ExecutorService executor = Executors.newCachedThreadPool()) {
             executor.submit(future);
-            System.out.println("[Info] Starting computation");
-            result = future.get();
+            result.addAll(future.get());
             System.out.println("[Info] Waiting to get the results...");
         } catch (InterruptedException | ExecutionException e) {
             Thread.currentThread().interrupt();
