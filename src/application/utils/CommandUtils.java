@@ -35,18 +35,6 @@ public class CommandUtils {
         return p;
     }
 
-    private boolean validateContent(File f) {
-        boolean isValid = false;
-        if(f.isDirectory() && f.listFiles() != null) {
-            for(File v: f.listFiles()) {
-                if(v.isFile() && v.getName().contains(".java")) {
-                    isValid = true;
-                    break;
-                }
-            }
-        }
-        return isValid;
-    }
     public boolean recompileFiles(Path filePath, Path source, Path target) {
         String relative = "";
         String classFilePath = "";
@@ -79,11 +67,7 @@ public class CommandUtils {
             return Optional.ofNullable(b);
         }
         if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
-            names.addAll(executor.executeConcurrentCallableList(fileUtils.listDirectoryNames(source))
-                .stream()
-                .map(n -> new File(n))
-                .filter(n -> validateContent(n))
-                .map(n -> n.getPath() + File.separator + "*.java ").toList());
+            names.addAll(fileOperation.listSourceDirs(source));
        } else if(binFile.exists() && binFile.listFiles() != null || binFile.listFiles().length == 0) {
             executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(srcFile.toString()))
                 .stream()
