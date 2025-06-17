@@ -1,6 +1,7 @@
 package utils;
 
 import operations.FileOperation;
+import operations.ExecutorOperation;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +18,13 @@ public class CommandUtils {
     private String localPath;
     private FileUtils fileUtils;
     private FileOperation fileOperation;
+    private ExecutorOperation executor;
 
     public CommandUtils(String localPath) {
         this.localPath = localPath;
         fileOperation = new FileOperation(localPath);
         fileUtils = new FileUtils(localPath);
+        executor = new ExecutorOperation();
     }
     public Path parentFromNesting(Path source) {
         Path p = null;
@@ -68,13 +71,13 @@ public class CommandUtils {
                .stream()
                .filter(e -> !e.isEmpty())
                .forEach(e -> {
-                   int countFiles = fileUtils.countFilesInDirectory(new File(e));
+                   int countFiles = fileUtils.countFiles(new File(e));
                    if(countFiles > 0) {
                        names.add(e + "*.java ");
                    }
            });
        } else if(binFile.exists() && binFile.listFiles() != null || binFile.listFiles().length == 0) {
-            fileUtils.listFilesFromPath(srcFile.toString())
+            executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(srcFile.toString()))
                 .stream()
                 .map(f -> f.toPath())
                 .filter(p -> recompileFiles(p, srcFile.toPath(), binFile.toPath()))

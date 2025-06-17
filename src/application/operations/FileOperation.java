@@ -20,11 +20,13 @@ public class FileOperation {
     private FileUtils fileUtils;
     private String localPath;
     private ScriptBuilder scriptBuilder;
+    private ExecutorOperation executor;
 
     public FileOperation(String nLocalPath) {
         localPath = nLocalPath;
         this.fileUtils = new FileUtils(nLocalPath);
         scriptBuilder = new ScriptBuilder(nLocalPath);
+        executor = new ExecutorOperation();
     }
 
     public FileOperation(String nLocalPath, FileUtils fileUtils) {
@@ -196,7 +198,7 @@ public class FileOperation {
                         )
                 );
             } else if(sf.isDirectory()) {
-                fileUtils.listFilesFromPath(sourceFilePath)
+                executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(sourceFilePath))
                     .stream()
                     .forEach(e -> {
                         try {

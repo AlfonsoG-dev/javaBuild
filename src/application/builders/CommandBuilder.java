@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import operations.ExecutorOperation;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -15,10 +17,12 @@ public class CommandBuilder {
     private String localPath;
     private CommandUtils commandUtils;
     private FileUtils fileUtils;
+    private ExecutorOperation executorOperation;
     public CommandBuilder(String localPath) {
         this.localPath = localPath;
         commandUtils = new CommandUtils(localPath);
         fileUtils = new FileUtils(localPath);
+        executorOperation = new ExecutorOperation();
     }
     public CommandBuilder(String localPath, CommandUtils commandUtils, FileUtils fileUtils) {
         this.localPath = localPath;
@@ -90,7 +94,7 @@ public class CommandBuilder {
         File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
         List<String> commands = new ArrayList<>();
 
-        fileUtils.listFilesFromPath(extractionFile.getPath())
+        executorOperation.executeConcurrentCallableList(fileUtils.listFilesFromPath(extractionFile.getPath()))
             .stream()
             .filter(e -> e.getName().contains(".jar"))
             .forEach(e -> {

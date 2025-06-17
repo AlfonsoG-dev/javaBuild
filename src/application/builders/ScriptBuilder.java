@@ -109,7 +109,7 @@ public class ScriptBuilder {
 
         StringBuffer sourceFiles = new StringBuffer();
         File sourceDir = fileUtils.resolvePaths(localPath, source);
-        if(fileUtils.countFilesInDirectory(sourceDir) > 0) {
+        if(fileUtils.countFiles(sourceDir) > 0) {
             sourceFiles.append(sourceDir + File.separator + "*.java ");
         }
         String
@@ -121,7 +121,7 @@ public class ScriptBuilder {
         sourceFiles.append(
                 dirNames
                 .stream()
-                .filter(e -> fileUtils.countFilesInDirectory(new File(e)) > 0)
+                .filter(e -> fileUtils.countFiles(new File(e)) > 0)
                 .map(e -> e + "*.java ")
                 .collect(Collectors.joining())
         );

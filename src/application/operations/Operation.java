@@ -30,11 +30,13 @@ public class Operation {
 
     private FileUtils fileUtils;
     private FileOperation fileOperation;
+    private ExecutorOperation executor;
 
     public Operation(String nLocalPath) {
         localPath = nLocalPath;
         fileUtils = new FileUtils(localPath);
         commandUtils = new CommandUtils(nLocalPath);
+        executor = new ExecutorOperation();
 
         fileOperation = new FileOperation(nLocalPath, fileUtils);
         cBuilder = new CommandBuilder(nLocalPath, commandUtils, fileUtils);
@@ -154,7 +156,7 @@ public class Operation {
             System.out.println(read.getPath());
         }
         if(read.isDirectory()) {
-            fileUtils.listFilesFromPath(read.getPath())
+            executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(read.getPath()))
                 .stream()
                 .map(e -> e.getPath())
                 .filter(e -> e.contains(".java") || e.contains(".jar") || e.contains(".class"))
