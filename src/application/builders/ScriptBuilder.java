@@ -121,8 +121,6 @@ public class ScriptBuilder {
         sourceFiles.append(
                 dirNames
                 .stream()
-                .filter(e -> fileUtils.countFiles(new File(e)) > 0)
-                .map(e -> e + "*.java ")
                 .collect(Collectors.joining())
         );
 
