@@ -69,23 +69,28 @@ public class FileUtils {
             }
         };
     }
-    public List<String> listDirectoriesFromPath(String dirPath) {
-        List<String> names = new ArrayList<>();
+
+    public List<File> getDirectoryNames(String dirPath) {
+        List<File> names = new ArrayList<>();
         try {
-            String c = getCleanPath(dirPath);
-            File f = resolvePaths(localPath, c);
-            if(f.listFiles() == null)  throw new IOException("Empty directory provided");
-            names.addAll(Files.walk(Paths.get(dirPath), FileVisitOption.FOLLOW_LINKS)
+            names = Files.walk(Paths.get(dirPath), FileVisitOption.FOLLOW_LINKS)
                 .map(p -> p.toFile())
-                .filter(p -> p.isDirectory())
-                .map(p -> p.getPath() + File.separator)
-                .toList()
-            );
-        } catch (IOException e) {
+                .filter(p -> p.isDirectory() && countFiles(p) > 0)
+                .toList();
+        } catch(Exception e) {
             e.printStackTrace();
         }
         return names;
     }
+    public Callable<List<String>> listDirectoryNames(String filePath) {
+        return new Callable<List<String>>() {
+            @Override
+            public List<String> call() {
+                return getDirectoryNames(filePath).stream().map(p -> p.getPath()).toList();
+            }
+        };
+    }
+
     public String createTargetFromParentPath(String parentFile, String dirs) {
         String parentName = new File(parentFile).getParent();
         String targetNames = dirs.replace(parentName, "");
