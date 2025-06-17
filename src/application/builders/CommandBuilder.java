@@ -17,17 +17,18 @@ public class CommandBuilder {
     private String localPath;
     private CommandUtils commandUtils;
     private FileUtils fileUtils;
-    private ExecutorOperation executorOperation;
+    private ExecutorOperation executor;
     public CommandBuilder(String localPath) {
         this.localPath = localPath;
         commandUtils = new CommandUtils(localPath);
         fileUtils = new FileUtils(localPath);
-        executorOperation = new ExecutorOperation();
+        executor = new ExecutorOperation();
     }
     public CommandBuilder(String localPath, CommandUtils commandUtils, FileUtils fileUtils) {
         this.localPath = localPath;
         this.commandUtils = commandUtils;
         this.fileUtils = fileUtils;
+        executor = new ExecutorOperation();
     }
 
     /**
@@ -94,7 +95,7 @@ public class CommandBuilder {
         File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
         List<String> commands = new ArrayList<>();
 
-        executorOperation.executeConcurrentCallableList(fileUtils.listFilesFromPath(extractionFile.getPath()))
+        executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(extractionFile.getPath()))
             .stream()
             .filter(e -> e.getName().contains(".jar"))
             .forEach(e -> {
