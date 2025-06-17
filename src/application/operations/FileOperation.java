@@ -140,7 +140,6 @@ public class FileOperation {
         } else if(fileName.equals("Manifesto.txt")) {
             String libJars = "";
             List<String> jars = listLibFiles().stream().filter(p -> p.contains(".jar")).toList();
-;
             libJars += jars
                 .parallelStream()
                 .filter(e -> !e.isEmpty())

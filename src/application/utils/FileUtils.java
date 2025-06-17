@@ -83,7 +83,7 @@ public class FileUtils {
         };
     }
 
-    public List<File> getDirectoryNames(String dirPath) {
+    private List<File> getDirectoryNames(String dirPath) {
         List<File> names = new ArrayList<>();
         try {
             names = Files.walk(Paths.get(dirPath), FileVisitOption.FOLLOW_LINKS)
