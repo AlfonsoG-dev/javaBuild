@@ -48,6 +48,19 @@ public class FileUtils {
         File[] files = f.listFiles();
         return (files != null) ? files.length : 0;
     }
+
+    public boolean validateContent(File f) {
+        boolean isValid = false;
+        if(f.isDirectory() && f.listFiles() != null) {
+            for(File v: f.listFiles()) {
+                if(v.isFile() && v.getName().contains(".java")) {
+                    isValid = true;
+                    break;
+                }
+            }
+        }
+        return isValid;
+    }
     private List<Path> listFiles(String filePath) {
         List<Path> result = new ArrayList<>();
         try {
