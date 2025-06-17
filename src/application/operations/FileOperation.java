@@ -33,6 +33,18 @@ public class FileOperation {
         localPath = nLocalPath;
         this.fileUtils = fileUtils;
         scriptBuilder = new ScriptBuilder(nLocalPath);
+        executor = new ExecutorOperation();
+    }
+    public List<String> listSourceDirs(String source) {
+        List<String> names = new ArrayList<>();
+        names.addAll(executor.executeConcurrentCallableList(fileUtils.listDirectoryNames(source))
+            .stream()
+            .map(n -> new File(n))
+            .filter(n -> fileUtils.validateContent(n))
+            .map(n -> n.getPath() + File.separator + "*.java ")
+            .toList()
+        );
+        return names;
     }
 
     public List<String> listLibFiles() {
@@ -152,7 +164,7 @@ public class FileOperation {
                 mainClass,
                 source,
                 target,
-                executor.executeConcurrentCallableList(fileUtils.listDirectoryNames(source)),
+                listSourceDirs(source),
                 listLibFiles().stream().filter(p -> p.contains(".jar")).toList(),
                 extract
             );
