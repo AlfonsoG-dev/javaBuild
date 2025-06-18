@@ -32,6 +32,7 @@ public class FileUtils {
         return new File(filePath).exists();
     }
     public void writeToFile(String lines, String filePath) {
+        System.out.println("[Info] Writing lines...\n" + lines);
         try(FileWriter w = new FileWriter(getLocalFile().toPath().resolve(filePath).toFile())) {
             w.write(lines);
         } catch(IOException e) {
