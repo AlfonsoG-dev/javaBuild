@@ -101,7 +101,7 @@ public class CommandUtils {
     }
     public String compileFormatType(String target, int release) {
         StringBuffer compile = new StringBuffer();
-        compile.append("javac --release " + release + " -Werror -Xlint:all -d ." + File.separator);
+        compile.append("javac --release " + release + " -Werror -Xlint:all -Xdiags:verbose -d ." + File.separator);
         if(target.isEmpty()) {
             target = "bin";
         }
