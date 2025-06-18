@@ -89,6 +89,7 @@ public class OperationUtils {
         try {
             String mainDirName = new File(localPath).getCanonicalPath();
             String mainClass   = new File(mainDirName).getName();
+            System.out.println("[Info] Creating files...");
             fileOperation.createIgnoreFile(".gitignore");
             fileOperation.createManifesto(source, author, false);
             fileOperation.createMainClass(source, mainClass + ".java");

@@ -88,8 +88,6 @@ public class ModelUtils {
                 .filter(e -> e.exists() && e.isFile() && e.getName().contains(".jar"))
                 .forEach(e -> { names.add(e.getPath());
             });
-        } else {
-            System.out.println("[Info] No library files found");
         }
         return names;
     }
