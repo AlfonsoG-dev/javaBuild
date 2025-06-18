@@ -1,30 +1,23 @@
 package utils;
 
-import operations.FileOperation;
-import operations.ExecutorOperation;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Path;
 
 import java.util.Optional;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+
+import operations.FileOperation;
 
 public class CommandUtils {
 
     private String localPath;
     private FileUtils fileUtils;
     private FileOperation fileOperation;
-    private ExecutorOperation executor;
 
     public CommandUtils(String localPath) {
         this.localPath = localPath;
         fileOperation = new FileOperation(localPath);
         fileUtils = new FileUtils(localPath);
-        executor = new ExecutorOperation();
     }
     public Path parentFromNesting(Path source) {
         Path p = null;
@@ -57,63 +50,15 @@ public class CommandUtils {
         File classFile = new File(classFilePath);
         return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
     }
-    public Optional<String> getSourceFiles(String source, String target) {
-        String b = null;
-        List<String> names = new ArrayList<>();
-        File srcFile = fileUtils.resolvePaths(localPath, source);
-        File binFile = fileUtils.resolvePaths(localPath, target);
-        if(srcFile.listFiles() == null) {
-            System.out.println("[Info] " + srcFile.getPath() + " is empty");
-            return Optional.ofNullable(b);
-        }
-        if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
-            names.addAll(fileOperation.listSourceDirs(source)
-                .stream()
-                .map(n -> new File(n))
-                .filter(n -> fileUtils.validateContent(n))
-                .map(n -> n.getPath() + File.separator + "*.java ")
-                .toList()
-            );
-       } else if(binFile.exists() && binFile.listFiles() != null || binFile.listFiles().length == 0) {
-            executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(srcFile.toString()))
-                .stream()
-                .map(f -> f.toPath())
-                .filter(p -> recompileFiles(p, srcFile.toPath(), binFile.toPath()))
-                .forEach(e -> {
-                    names.add(e.normalize() + " ");
-                });
-        } 
-        if(names.size() > 0) {
-            b = names
-            .stream()
-            .collect(Collectors.joining());
-        }
-        return Optional.ofNullable(b);
-    }
 
-    public List<String> getLibFiles() {
-        List<String> 
-            names = new ArrayList<>(),
-            libfiles = fileOperation.listLibFiles();
-
-        libfiles
-            .stream()
-            .map(e -> new File(e))
-            .filter(e -> e.exists() && e.isFile() && e.getName().contains(".jar"))
-            .forEach(e -> {
-                names.add(e.getPath());
-            });
-        return names;
-    }
-    public String compileFormatType(String target, int release) {
+    public String compileFormatType(String libFiles, String target, String flags, int release) {
         StringBuffer compile = new StringBuffer();
-        // TODO: get flags from config file
-        compile.append("javac --release " + release + " -Werror -Xlint:all -Xdiags:verbose -d ." + File.separator);
+        compile.append("javac --release " + release + " " + flags + " -d ." + File.separator);
         if(target.isEmpty()) {
             target = "bin";
         }
         compile.append(target + File.separator + " ");
-        if(!getLibFiles().isEmpty()) {
+        if(!libFiles.isEmpty()) {
             compile.append(" -cp ");
         }
         return compile.toString();
@@ -193,18 +138,6 @@ public class CommandUtils {
                 break;
         }
         return build.toString();
-    }
-    protected String manifestoClass() {
-        String name = "";
-        String lines = fileUtils.readFileLines(
-                fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath()
-        );
-        for(String l: lines.split("\n")) {
-            if(l.contains("Main-Class: ")) {
-                name = l.split(":")[1];
-            }
-        }
-        return name;
     }
     public String runClassOption(String className, String source) {
         String name = source + File.separator + fileOperation.getProjectName(source) + ".java";
