@@ -38,6 +38,7 @@
 - [x] use config files for build process
 - [x] use thread like operation to list files, directories, for now only define the thread and invoke itself in the same method, later include logic to use those methods in parallel with other tasks.
 - [x] Add option to create the config file.
+- [x] Add `config` definition to set the `compile` flags
 
 # TODO's
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX* `issue #6`
@@ -47,9 +48,9 @@
 > Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
 - [ ] Evaluate project generation using config file.
 - [ ] when using config file, changing any value will modify subsequently manifesto file.
-- [ ] Add `config` definition to set the `compile`, `run`, `build`, flags like:
->- `javac -Werror -Xlint:all -Xdiags:verbose`
+- [ ] Add `config` definition to set the `run`, `build`, flags like:
 >- `java -d bin App.java` or `java -cp bin App`
+>- `jar -cmf` or `jar -fe`
  
 ------
 

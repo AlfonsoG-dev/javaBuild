@@ -106,7 +106,7 @@ public class CommandBuilder {
             jarFiles.append(target);
             jarFiles.append(";");
             jarFiles.append(libJars
-                    .parallelStream()
+                    .stream()
                     .filter(e -> !e.isEmpty())
                     .map(e -> e + ";")
                     .collect(Collectors.joining())

@@ -53,7 +53,6 @@ public class CompileModel {
 
         if(!srcClases.contains("*.java")) {
             compile = new StringBuffer();
-            // TODO: get flags from config file
             compile.append(format);
             if(!libFiles.isEmpty()) {
                 compile.append(" '");
