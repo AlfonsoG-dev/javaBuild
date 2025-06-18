@@ -33,10 +33,11 @@ public class ConfigBuilder {
         if(!configFile.exists()) {
             String mainClass = fOperation.getProjectName("src");
             String[] dConfig = {
-                "Source-Path: src", "Class-Path: bin", "Main-Class: " + mainClass, "Libraries: "
+                "Source-Path: src", "Class-Path: bin", "Main-Class: " + mainClass, "Libraries: ",
+                 "Compile-Flags: -Werror -Xlint:all -Xdiags:verbose" 
             };
             for(String d: dConfig) {
-                String[] nameValue = d.split(":");
+                String[] nameValue = d.split(":", 2);
                 config.put(nameValue[0].trim(), nameValue[1].trim());
             }
         } else {
