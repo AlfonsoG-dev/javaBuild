@@ -36,15 +36,7 @@ public class FileOperation {
         executor = new ExecutorOperation();
     }
     public List<String> listSourceDirs(String source) {
-        List<String> names = new ArrayList<>();
-        names.addAll(executor.executeConcurrentCallableList(fileUtils.listDirectoryNames(source))
-            .stream()
-            .map(n -> new File(n))
-            .filter(n -> fileUtils.validateContent(n))
-            .map(n -> n.getPath() + File.separator + "*.java ")
-            .toList()
-        );
-        return names;
+        return executor.executeConcurrentCallableList(fileUtils.listDirectoryNames(source));
     }
 
     public List<String> listLibFiles() {
@@ -163,7 +155,12 @@ public class FileOperation {
                 mainClass,
                 source,
                 target,
-                listSourceDirs(source),
+                listSourceDirs(source)
+                    .stream()
+                    .map(n -> new File(n))
+                    .filter(n -> fileUtils.validateContent(n))
+                    .map(n -> n.getPath() + File.separator + "*.java ")
+                    .toList(),
                 listLibFiles().stream().filter(p -> p.contains(".jar")).toList(),
                 extract
             );
