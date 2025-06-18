@@ -60,10 +60,12 @@ public class CompileModel {
                 compile.append(classPath);
                 compile.append(";");
                 compile.append(libFiles);
+                compile.append("' ");
+            } else {
+                compile.append(" -cp '");
+                compile.append(classPath);
+                compile.append("' ");
             }
-            compile.append(" -cp '");
-            compile.append(classPath);
-            compile.append("' ");
             compile.append(srcClases);
         } else {
             compile.append(format);
