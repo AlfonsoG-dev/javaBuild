@@ -135,4 +135,21 @@ public class FileUtils {
         }
         return lines.toString();
     }
+    public Callable<List<String>> listFileLines(String filePath) {
+        return new Callable<List<String>>() {
+            @Override
+            public List<String> call() {
+                List<String> lines = new ArrayList<>();
+                try(BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)))) {
+                    String line;
+                    while((line = reader.readLine()) != null) {
+                        lines.add(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return lines;
+            }
+        };
+    }
 }
