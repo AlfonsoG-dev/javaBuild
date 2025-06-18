@@ -16,6 +16,7 @@ public class ExecutorOperation {
         System.out.println("[Info] Starting computation");
         try(ExecutorService executor = Executors.newCachedThreadPool()) {
             executor.submit(future);
+            // TODO: verify capture exception of future when invoke `get()`
             t = future.get();
             System.out.println("[Info] Waiting to get the results...");
         } catch (InterruptedException | ExecutionException e) {
