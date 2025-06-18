@@ -114,57 +114,54 @@ public class FileOperation {
     public boolean haveManifesto() {
         return fileUtils.fileExists(fileUtils.resolvePaths(localPath, "Manifesto.txt").getPath());
     }
-    public void createFiles(String author, String fileName, String mainClass, String source, String target, boolean extract) {
-        System.out.println("[ Info ]: created " + fileName);
-
-        if(mainClass.isEmpty()) mainClass = getMainClass(source);
-
-        if(fileName.equals(".gitignore")) {
-            String ignoreFiles = "";
-            ignoreFiles = "**bin" + "\n" +
-                "**lib" + "\n" +
-                "**extractionFiles" + "\n" +
-                "**Manifesto.txt" + "\n" +
-                "**Session.vim" + "\n" +
-                "**.jar" + "\n" +
-                "**.exe";
-            fileUtils.writeToFile(ignoreFiles, fileName);
-        } else if(fileName.equals("Manifesto.txt")) {
-            String libJars = "";
-            List<String> jars = listLibFiles().stream().filter(p -> p.contains(".jar")).toList();
-            libJars += jars
-                .parallelStream()
-                .filter(e -> !e.isEmpty())
-                .map(e -> e + ";")
-                .collect(Collectors.joining());
-            scriptBuilder.writeManifesto(libJars, author, mainClass, extract);
-
-        } else if(fileName.equals(mainClass + ".java")) {
-            String mainClassLines = "";
-            mainClassLines = "class " + mainClass + " {\n" +
-                "    public static void main(String[] args) {\n" + 
-                "        System.out.println(\"Hello from " + mainClass + "\");" + "\n" +
-                "    }\n" + 
-                "}";
-            String targetSource = fileUtils.resolvePaths(localPath, source).getPath();
-            fileUtils.writeToFile(mainClassLines, fileUtils.resolvePaths(targetSource, fileName).getPath());
-        } else if(fileName.contains(".ps1") || fileName.contains(".sh")) {
-            // write build script lines
-            scriptBuilder.writeBuildFile(
-                fileName,
-                mainClass,
-                source,
-                target,
-                listSourceDirs(source)
-                    .stream()
-                    .map(n -> new File(n))
-                    .filter(n -> fileUtils.validateContent(n))
-                    .map(n -> n.getPath() + File.separator + "*.java ")
-                    .toList(),
-                listLibFiles().stream().filter(p -> p.contains(".jar")).toList(),
-                extract
-            );
-        }
+    public void createIgnoreFile(String fileName) {
+        String ignoreFiles = "";
+        ignoreFiles = "**bin" + "\n" +
+            "**lib" + "\n" +
+            "**extractionFiles" + "\n" +
+            "**Manifesto.txt" + "\n" +
+            "**Session.vim" + "\n" +
+            "**.jar" + "\n" +
+            "**.exe";
+        fileUtils.writeToFile(ignoreFiles, fileName);
+    }
+    public void createManifesto(String source, String author, boolean extract) {
+        String libJars = "";
+        List<String> jars = listLibFiles().stream().filter(p -> p.contains(".jar")).toList();
+        libJars += jars
+            .parallelStream()
+            .filter(e -> !e.isEmpty())
+            .map(e -> e + ";")
+            .collect(Collectors.joining());
+        scriptBuilder.writeManifesto(libJars, author, getProjectName(source), extract);
+    }
+    public void createMainClass(String source, String fileName) {
+        String mainClassLines = "";
+        String main = getProjectName(source);
+        mainClassLines = "class " + main + " {\n" +
+            "    public static void main(String[] args) {\n" + 
+            "        System.out.println(\"Hello from " + main + "\");" + "\n" +
+            "    }\n" + 
+            "}";
+        String targetSource = fileUtils.resolvePaths(localPath, source).getPath();
+        fileUtils.writeToFile(mainClassLines, fileUtils.resolvePaths(targetSource, fileName).getPath());
+    }
+    public void createScript(String source, String target, String fileName, boolean extract) {
+        // write build script lines
+        scriptBuilder.writeBuildFile(
+            fileName,
+            getProjectName(source),
+            source,
+            target,
+            listSourceDirs(source)
+                .stream()
+                .map(n -> new File(n))
+                .filter(n -> fileUtils.validateContent(n))
+                .map(n -> n.getPath() + File.separator + "*.java ")
+                .toList(),
+            listLibFiles().stream().filter(p -> p.contains(".jar")).toList(),
+            extract
+        );
     }
     public boolean extractionDirContainsPath(String libJarPath) throws IOException {
         boolean containsPath = false;
