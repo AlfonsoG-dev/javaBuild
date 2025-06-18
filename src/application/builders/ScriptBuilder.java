@@ -29,7 +29,7 @@ public class ScriptBuilder {
     private String getJavaScriptCommand(String mainClass) {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            command = "$javaCommand = \"java -jar " + mainClass + "\""  + "\n";
+            command = "$javaCommand = \"java -jar " + mainClass + ".jar\""  + "\n";
         } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
             command = "java -jar " + mainClass + "\n";
         }
@@ -39,6 +39,15 @@ public class ScriptBuilder {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$runCommand = " + "\"$compile\" +" + " \" && \" +" + " \"$createJar\" \n";
+        }
+        return command;
+    }
+    private String getCompileCommand(String target, String libFiles, String flags, int release) {
+        String command = "javac --release " + release + " " + flags + " -d ." + File.separator + target  + File.separator;
+        if(!libFiles.isEmpty()) {
+            command += " -cp '$libFiles' $srcClases";
+        } else {
+            command += " $srcClases";
         }
         return command;
     }
@@ -108,22 +117,16 @@ public class ScriptBuilder {
         CommandBuilder cBuilder = new CommandBuilder(localPath);
 
         StringBuffer sourceFiles = new StringBuffer();
-        File sourceDir = fileUtils.resolvePaths(localPath, source);
-        if(fileUtils.countFiles(sourceDir) > 0) {
-            sourceFiles.append(sourceDir + File.separator + "*.java ");
-        }
-        // TODO: compile flags should ve optional of config file.
-        // additional all flags should come from one place.
         String
             libFiles = "",
-            compile = "javac -Werror -Xlint:all -Xdiags:verbose -d ." + File.separator + target + File.separator,
+            compile = "",
             runJar = "",
             runCommand = "";
 
         sourceFiles.append(
-                dirNames
-                .stream()
-                .collect(Collectors.joining())
+            dirNames
+            .stream()
+            .collect(Collectors.joining())
         );
 
 
@@ -132,11 +135,8 @@ public class ScriptBuilder {
             .map(e -> e + ";")
             .collect(Collectors.joining());
 
-        if(!libFiles.isEmpty()) {
-            compile += " -cp '$libFiles' $srcClases";
-        } else {
-            compile += " $srcClases";
-        }
+        compile = getCompileCommand(target, libFiles, "-Werror -Xlint:all", 23);
+
         if(!mainClass.isEmpty()) {
             runJar = getJavaScriptCommand(mainClass);
             runCommand = getRunScriptCommand();
