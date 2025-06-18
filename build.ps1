@@ -1,4 +1,4 @@
-$srcClases = ".\src\application\*.java src\application\*.java src\application\builders\*.java src\application\operations\*.java src\application\utils\*.java "
+$srcClases = ".\src\application\*.java src\application\*.java src\application\builders\*.java src\application\models\*.java src\application\operations\*.java src\application\utils\*.java "
 $libFiles = ""
 $compile = "javac -Werror -Xlint:all -Xdiags:verbose -d .\bin\ $srcClases"
 $createJar = "jar -cfm JavaBuild.jar Manifesto.txt -C .\bin\ ."
