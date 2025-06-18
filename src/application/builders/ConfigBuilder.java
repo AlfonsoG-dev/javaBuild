@@ -63,7 +63,7 @@ public class ConfigBuilder {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
             String mainClass = fOperation.getProjectName(source);
-            String lines = "Source-Path: " + source + "\nClass-Path: " + target + "\nMain-Class: " + mainClass.trim() + "\nLibraries: " + "Compile-Flags: -Werror";
+            String lines = "Source-Path: " + source + "\nClass-Path: " + target + "\nMain-Class: " + mainClass.trim() + "\nLibraries: " + "\nCompile-Flags: -Werror";
             System.out.println(lines);
             w.write(lines);
         } catch (Exception e) {
