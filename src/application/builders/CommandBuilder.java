@@ -65,7 +65,8 @@ public class CommandBuilder {
 
         if(!srcClases.contains("*.java")) {
             compile = new StringBuffer();
-            compile.append("javac --release " + release + " -Werror -Xlint:all -d .");
+            // TODO: get flags from config file
+            compile.append("javac --release " + release + " -Werror -Xlint:all -Xdiags:verbose -d .");
             compile.append(File.separator);
             compile.append(target);
             compile.append(File.separator);

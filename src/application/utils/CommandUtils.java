@@ -101,6 +101,7 @@ public class CommandUtils {
     }
     public String compileFormatType(String target, int release) {
         StringBuffer compile = new StringBuffer();
+        // TODO: get flags from config file
         compile.append("javac --release " + release + " -Werror -Xlint:all -Xdiags:verbose -d ." + File.separator);
         if(target.isEmpty()) {
             target = "bin";

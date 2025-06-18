@@ -47,6 +47,9 @@
 > Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
 - [ ] Evaluate project generation using config file.
 - [ ] when using config file, changing any value will modify subsequently manifesto file.
+- [ ] Add `config` definition to set the `compile`, `run`, `build`, flags like:
+>- `javac -Werror -Xlint:all -Xdiags:verbose`
+>- `java -d bin App.java` or `java -cp bin App`
  
 ------
 
