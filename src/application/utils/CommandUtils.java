@@ -67,7 +67,13 @@ public class CommandUtils {
             return Optional.ofNullable(b);
         }
         if(binFile.exists() && binFile.listFiles() == null || !binFile.exists()) {
-            names.addAll(fileOperation.listSourceDirs(source));
+            names.addAll(fileOperation.listSourceDirs(source)
+                .stream()
+                .map(n -> new File(n))
+                .filter(n -> fileUtils.validateContent(n))
+                .map(n -> n.getPath() + File.separator + "*.java ")
+                .toList()
+            );
        } else if(binFile.exists() && binFile.listFiles() != null || binFile.listFiles().length == 0) {
             executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(srcFile.toString()))
                 .stream()
