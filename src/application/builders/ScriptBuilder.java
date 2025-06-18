@@ -112,9 +112,11 @@ public class ScriptBuilder {
         if(fileUtils.countFiles(sourceDir) > 0) {
             sourceFiles.append(sourceDir + File.separator + "*.java ");
         }
+        // TODO: compile flags should ve optional of config file.
+        // additional all flags should come from one place.
         String
             libFiles = "",
-            compile = "javac -Werror -Xlint:all -d ." + File.separator + target + File.separator,
+            compile = "javac -Werror -Xlint:all -Xdiags:verbose -d ." + File.separator + target + File.separator,
             runJar = "",
             runCommand = "";
 
