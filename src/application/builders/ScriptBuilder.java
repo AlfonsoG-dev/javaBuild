@@ -155,7 +155,8 @@ public class ScriptBuilder {
 
             File buildFile = fileUtils.resolvePaths(localPath, fileName);
             fileUtils.writeToFile(lines, buildFile.getPath());
-            if(buildFile.setExecutable(true)) {
+            // FIXME: set executable only for `.sh` files or when `OS` is linux
+            if(fileName.contains(".sh") && buildFile.setExecutable(true)) {
                 System.out.println("[Info] change file to executable " + buildFile.getPath());
             }
         } catch(Exception e) {
