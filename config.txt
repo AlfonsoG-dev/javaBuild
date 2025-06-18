@@ -2,3 +2,4 @@ Source-Path: src\application
 Class-Path: bin
 Main-Class: JavaBuild
 Libraries: 
+Compile-Flags: -Werror -Xlint:all -Xdiags:verbose 
