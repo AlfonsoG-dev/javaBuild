@@ -297,14 +297,7 @@ public class Operation {
         String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
         System.out.println("[Info] creating manifesto ...");
 
-        fileOperation.createFiles(
-            Optional.ofNullable(author).orElse(getAuthorName()),
-            "Manifesto.txt",
-            Optional.ofNullable(mainClass).orElse(getConfigData().get("Main-Class")),
-            oSource,
-            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
-            includeExtraction
-        );
+        fileOperation.createManifesto(oSource, Optional.ofNullable(author).orElse(getAuthorName()), includeExtraction);
     }
     /**
      * Performs the add jar dependency operation.
@@ -328,11 +321,12 @@ public class Operation {
      * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
      */
     public void buildScript(boolean includeExtraction, String fileName, String source, String target) {
-        operationUtils.createBuildScript(
-                includeExtraction,
-                fileName,
-                Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
-                Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))
+        System.out.println("[Info] Creating build script...");
+        fileOperation.createScript(
+            Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
+            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
+            operationUtils.getBuildFileName(fileName),
+            includeExtraction
         );
     }
     /**
