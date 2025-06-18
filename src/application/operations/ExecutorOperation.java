@@ -10,18 +10,18 @@ import java.util.concurrent.FutureTask;
 
 public class ExecutorOperation {
     
-    public<T> List<T> executeConcurrentCallableList(Callable<List<T>> task) {
-        List<T> result = new ArrayList<>();
-        FutureTask<List<T>> future = new FutureTask<>(task);
+    public<T> T executeConcurrentCallableList(Callable<T> task) {
+        T t = null;
+        FutureTask<T> future = new FutureTask<>(task);
         System.out.println("[Info] Starting computation");
         try(ExecutorService executor = Executors.newCachedThreadPool()) {
             executor.submit(future);
-            result.addAll(future.get());
+            t = future.get();
             System.out.println("[Info] Waiting to get the results...");
         } catch (InterruptedException | ExecutionException e) {
             Thread.currentThread().interrupt();
             System.err.println("[Error] Execution was interrupted");
         }
-        return result;
+        return t;
     }
 }
