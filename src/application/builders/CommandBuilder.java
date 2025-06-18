@@ -1,10 +1,10 @@
 package builders;
 
-import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import models.CompileModel;
 import operations.ExecutorOperation;
 
 import java.io.File;
@@ -36,56 +36,8 @@ public class CommandBuilder {
      * @param target its the folder/directory to allocate the .class files.
      * @return the compile command
      */
-    public String getCompileCommand(String source, String target, int release) {
-        // create jar files command for compile operation
-        StringBuffer 
-            libFiles = new StringBuffer(),
-            cLibFiles = new StringBuffer(),
-            compile = new StringBuffer();
-
-        List<String> libJars = commandUtils.getLibFiles();
-        // lib files
-        libFiles.append(
-                libJars
-                .parallelStream()
-                .filter(e -> !e.isEmpty())
-                .map(e -> e + ";")
-                .collect(Collectors.joining())
-        );
-        String format = commandUtils.compileFormatType(target, release);
-        String srcClases = "";
-
-        Optional<String> oSource = commandUtils.getSourceFiles(source, target);
-        if(oSource.isEmpty()) {
-            System.out.println("[Info] No modified files to compile");
-            return null;
-        } else {
-            srcClases = oSource.get();
-        }
-
-        if(!srcClases.contains("*.java")) {
-            compile = new StringBuffer();
-            // TODO: get flags from config file
-            compile.append("javac --release " + release + " -Werror -Xlint:all -Xdiags:verbose -d .");
-            compile.append(File.separator);
-            compile.append(target);
-            compile.append(File.separator);
-            compile.append(" -cp '" + target);
-            if(!libFiles.isEmpty()) {
-                compile.append(";" + libFiles);
-            }
-            compile.append("' ");
-            compile.append(srcClases);
-        } else {
-            compile.append(format);
-            if(!libFiles.isEmpty()) {
-                String cb = libFiles.substring(0, libFiles.length()-1);
-                cLibFiles.append("'" + cb + "' ");
-                compile.append(cLibFiles);
-            }
-            compile.append(srcClases);
-        }
-        return compile.toString();
+    public String getCompileCommand(String source, String target, String flags, int release) {
+        return new CompileModel(source, target, flags).getCompileCommand(release);
     }
     /**
      * create a list of jar files to extract for the build process.
