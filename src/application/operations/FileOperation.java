@@ -42,7 +42,6 @@ public class FileOperation {
     public List<String> listLibFiles() {
         List<String> names = new ArrayList<>();
         File lf = fileUtils.resolvePaths(localPath, "lib");
-        if(lf.listFiles() == null) System.out.println("[Info] No dependencies found");;
         if(lf.listFiles() != null) {
             try {
                 Files.newDirectoryStream(lf.toPath())

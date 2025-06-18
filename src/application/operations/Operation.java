@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import java.util.Optional;
 import java.util.List;
@@ -126,7 +123,6 @@ public class Operation {
      *  @throws IOException
      */
     public void createFilesOperation(String author, String source, String target) {
-        File localFile = new File(localPath);
         Optional<String> oAuthor = Optional.ofNullable(author);
         oAuthor.ifPresentOrElse(
                 value -> System.out.println("[Info] Using Author name " + value),
@@ -134,24 +130,7 @@ public class Operation {
         );
         String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
         String oTarget = Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"));
-        System.out.println("[Info] creating files ...");
-        try (DirectoryStream<Path> files = Files.newDirectoryStream(localFile.toPath())) {
-            for(Path p: files) {
-                File f = p.toFile();
-                if(f.getName().equals(oSource)) {
-                    File n = fileUtils.resolvePaths(localPath, oSource);
-                    if(n.listFiles() == null) {
-                        operationUtils.createProjectFiles(
-                                oAuthor.orElse(getAuthorName()),
-                                oSource,
-                                oTarget
-                        );
-                    }
-                }
-            }
-        } catch(IOException err) {
-            err.printStackTrace();
-        }
+        operationUtils.createProjectFiles(oAuthor.orElse(getAuthorName()), oSource, oTarget);
     }
     /**
      * used to list the .java or .jar or .class files in the project.
