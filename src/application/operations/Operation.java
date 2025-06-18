@@ -12,8 +12,11 @@ import java.util.Optional;
 import java.util.List;
 import java.util.HashMap;
 
-import utils.CommandUtils;
+
 import utils.OperationUtils;
+import utils.CommandUtils;
+import utils.ModelUtils;
+
 import utils.FileUtils;
 import builders.CommandBuilder;
 import builders.ConfigBuilder;
@@ -24,27 +27,38 @@ import builders.ConfigBuilder;
 public class Operation {
     private String localPath;
     private OperationUtils operationUtils;
-    private CommandUtils commandUtils;
+    private FileUtils fileUtils;
+
     private CommandBuilder cBuilder;
     private ConfigBuilder configBuilder;
 
-    private FileUtils fileUtils;
+    private ModelUtils modelUtils;
+
     private FileOperation fileOperation;
     private ExecutorOperation executor;
 
     public Operation(String nLocalPath) {
         localPath = nLocalPath;
         fileUtils = new FileUtils(localPath);
-        commandUtils = new CommandUtils(nLocalPath);
         executor = new ExecutorOperation();
 
         fileOperation = new FileOperation(nLocalPath, fileUtils);
-        cBuilder = new CommandBuilder(nLocalPath, commandUtils, fileUtils);
+        cBuilder = new CommandBuilder(nLocalPath, new CommandUtils(nLocalPath), fileUtils);
         operationUtils = new OperationUtils(localPath, fileOperation);
         configBuilder = new ConfigBuilder(localPath, fileUtils, fileOperation);
     }
     private HashMap<String, String> getConfigData() {
         return configBuilder.getConfigValues();
+    }
+    public void startUpCompileModel() {
+        modelUtils = new ModelUtils(
+            getConfigData().get("Source-path"),
+             getConfigData().get("Class-Path"),
+             localPath,
+             fileUtils,
+             fileOperation,
+             executor
+        );
     }
     /**
      * creates the folder or directory structure:
@@ -176,6 +190,7 @@ public class Operation {
         String compileCommand = cBuilder.getCompileCommand(
                 Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
                 Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
+                Optional.ofNullable(target).orElse(getConfigData().get("Compile-Flags")),
                 Integer.parseInt(
                     Optional.ofNullable(release).orElse(System.getProperty("java.specification.version"))
                 )
@@ -211,7 +226,7 @@ public class Operation {
      * @throws IOException
      */
     public void extractJarDependencies() {
-        List<String> jars = commandUtils.getLibFiles();
+        List<String> jars = modelUtils.getLibFiles();
         jars
             .parallelStream()
             .forEach(e -> {
@@ -329,7 +344,7 @@ public class Operation {
     public void runAppOperation(String className, String source, String target) {
 
         String command = cBuilder.getRunCommand(
-                commandUtils.getLibFiles(),
+                modelUtils.getLibFiles(),
                 Optional.ofNullable(className).orElse(" " + getConfigData().get("Main-Class")),
                 Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
                 Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))

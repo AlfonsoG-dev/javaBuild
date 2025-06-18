@@ -5,6 +5,7 @@ class JavaBuild {
     public static void main(String[] args) {
         try {
             Operation op = new Operation("." + File.separator);
+            op.startUpCompileModel();
             boolean haveExtractions = op.haveIncludeExtraction();
             outter: for(int i=0; i<args.length; ++i) {
                 String source = getCliValues(args, i, "-s");
