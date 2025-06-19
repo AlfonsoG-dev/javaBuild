@@ -154,7 +154,7 @@ public class FileOperation {
             .map(e -> e + ";")
             .collect(Collectors.joining())
         );
-        scriptBuilder.writeManifesto(libJars.toString(), author, getProjectName(source), extract);
+        scriptBuilder.writeManifesto(libJars.toString(), author, getMainClass(source), extract);
     }
     /**
      * create the main class inside the source directory

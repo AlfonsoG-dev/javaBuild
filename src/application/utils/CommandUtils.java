@@ -167,7 +167,7 @@ public class CommandUtils {
      * @return
      */
     public String runClassOption(String className, String source) {
-        String name = source + File.separator + fileOperation.getProjectName(source) + ".java";
+        String name = source + File.separator + fileOperation.getMainClass(source) + ".java";
         String mainName = Optional.of(className).orElse(name);
 
         return mainName;
