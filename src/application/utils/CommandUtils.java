@@ -27,7 +27,7 @@ public class CommandUtils {
     public Path parentFromNesting(Path source) {
         Path p = source;
         int n = source.getNameCount();
-        for(int i=n; i > 0; --i) {
+        for(int i=n-2; i > 0; --i) {
             p = p.getParent();
         }
         return p;
@@ -41,20 +41,17 @@ public class CommandUtils {
      * @return true if the file should be re-compile, false otherwise
      */
     public boolean recompileFiles(Path filePath, Path source, Path target) {
-        // TODO: verify nested level on path
         String relative = "";
         String classFilePath = "";
         source = source.normalize();
         if(source.getNameCount() > 2) {
-            if(filePath.toString().contains(fileOperation.getMainClass(source.toString()) + ".java")) {
-                relative = source.relativize(filePath).toString();
-                classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
-            } else {
-                String sourceParent = parentFromNesting(source).toString();
-                relative = filePath.toString().replace(sourceParent, "");
-                classFilePath = target.toString() + relative.replace(".java", ".class");
-            }
+            // only when the source folder structure is: `src\name\name\name\App.java`
+            String sourceParent = parentFromNesting(source).toString();
+            System.out.println(source + " Here strip path till parent " + sourceParent);
+            relative = filePath.toString().replace(sourceParent, "");
+            classFilePath = target.toString() + relative.replace(".java", ".class");
         } else {
+            System.out.println("No");
             relative = source.relativize(filePath).toString();
             classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
         } 
