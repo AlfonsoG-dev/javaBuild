@@ -160,16 +160,4 @@ public class CommandUtils {
         }
         return build.toString();
     }
-    /**
-     * the run option if jar file or .java
-     * @param className
-     * @param source
-     * @return
-     */
-    public String runClassOption(String className, String source) {
-        String name = source + File.separator + fileOperation.getMainClass(source) + ".java";
-        String mainName = Optional.of(className).orElse(name);
-
-        return mainName;
-    }
 }

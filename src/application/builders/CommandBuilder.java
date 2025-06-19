@@ -97,7 +97,10 @@ public class CommandBuilder {
     public String getRunCommand(List<String> libJars, String className, String source, String target) {
         String command  = "";
         StringBuffer jarFiles = new StringBuffer();
-        String runClass = commandUtils.runClassOption(className, source);
+        String runClass = className;
+        if(className.isEmpty()) {
+            return null;
+        }
 
         if(jarFiles.isEmpty()) {
             command = "java -cp " + target + runClass;
