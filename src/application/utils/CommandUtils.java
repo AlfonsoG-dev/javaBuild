@@ -25,10 +25,10 @@ public class CommandUtils {
      * @return the parent of the path
      */
     public Path parentFromNesting(Path source) {
-        Path p = null;
+        Path p = source;
         int n = source.getNameCount();
         for(int i=n; i > 0; --i) {
-            p = source.getParent();
+            p = p.getParent();
         }
         return p;
     }
@@ -41,6 +41,7 @@ public class CommandUtils {
      * @return true if the file should be re-compile, false otherwise
      */
     public boolean recompileFiles(Path filePath, Path source, Path target) {
+        // TODO: verify nested level on path
         String relative = "";
         String classFilePath = "";
         source = source.normalize();
