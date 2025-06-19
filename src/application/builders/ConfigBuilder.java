@@ -31,7 +31,7 @@ public class ConfigBuilder {
         File configFile = fUtils.resolvePaths(localPath, "config.txt"); 
 
         if(!configFile.exists()) {
-            String mainClass = fOperation.getProjectName("src");
+            String mainClass = fOperation.getMainClass("src");
             String[] dConfig = {
                 "Source-Path: src", "Class-Path: bin", "Main-Class: " + mainClass, "Libraries: ",
                  "Compile-Flags: -Werror -Xlint:all -Xdiags:verbose" 
