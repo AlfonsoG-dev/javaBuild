@@ -90,10 +90,10 @@ public class ModelUtils {
         if(libfiles.size() > 0) {
             libfiles
                 .stream()
-                .map(e -> new File(e))
-                .filter(e -> e.exists() && e.isFile() && e.getName().contains(".jar"))
-                .forEach(e -> { names.add(e.getPath());
-            });
+                .filter(e -> e.contains(".jar"))
+                .forEach(e -> {
+                     names.add(e);
+                });
         }
         return names;
     }
@@ -106,7 +106,6 @@ public class ModelUtils {
         if(libFiles.size() > 0) {
             b = libFiles
                 .stream()
-                .filter(e -> !e.isEmpty())
                 .map(e -> e + ";")
                 .collect(Collectors.joining());
         } 
