@@ -47,11 +47,9 @@ public class CommandUtils {
         if(source.getNameCount() > 2) {
             // only when the source folder structure is: `src\name\name\name\App.java`
             String sourceParent = parentFromNesting(source).toString();
-            System.out.println(source + " Here strip path till parent " + sourceParent);
             relative = filePath.toString().replace(sourceParent, "");
             classFilePath = target.toString() + relative.replace(".java", ".class");
         } else {
-            System.out.println("No");
             relative = source.relativize(filePath).toString();
             classFilePath = target.resolve(relative.replace(".java", ".class")).toString();
         } 
