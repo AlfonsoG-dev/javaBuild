@@ -123,8 +123,8 @@ public class OperationUtils {
      */
     public void createExtractionFiles(List<String> jars) {
         File extraction = new File(localPath + File.separator + "extractionFiles");
-        if(extraction.exists() == false) {
-            extraction.mkdir();
+        if(extraction.exists() == false && extraction.mkdir()) {
+            System.out.println("[Info] Creating extractions files...");
         }
         jars
             .parallelStream()
@@ -143,7 +143,7 @@ public class OperationUtils {
         boolean isAdded = false;
         File jarFile = new File(jarFilePath);
         if(!jarFile.exists()) {
-            throw new Exception("[Error] jar file not found");
+            throw new Exception("[Error] Jar file not found");
         }
         if(jarFile.isFile()) {
             sourceFilePath = jarFile.getParent();
@@ -154,8 +154,8 @@ public class OperationUtils {
         File libFile = new File(localPath + File.separator + "lib" + File.separator+ externalJarName);
         if(libFile.exists() == false) {
             fileOperation.copyFilesfromSourceToTarget(
-                    sourceFilePath,
-                    new File(localPath + File.separator + "lib").getPath()
+                sourceFilePath,
+                new File(localPath + File.separator + "lib").getPath()
             );
             isAdded = true;
         } else {
