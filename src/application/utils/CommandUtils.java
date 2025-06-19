@@ -19,6 +19,11 @@ public class CommandUtils {
         fileOperation = new FileOperation(localPath);
         fileUtils = new FileUtils(localPath);
     }
+    /**
+     * extract parent from a nested path
+     * @param source the path to extract the parent
+     * @return the parent of the path
+     */
     public Path parentFromNesting(Path source) {
         Path p = null;
         int n = source.getNameCount();
@@ -28,6 +33,13 @@ public class CommandUtils {
         return p;
     }
 
+    /**
+     * validate if the file should be re-compile or not
+     * @param filePath the file to evaluate
+     * @param source the source path where the .java files are
+     * @param target the path where the .class files are stored
+     * @return true if the file should be re-compile, false otherwise
+     */
     public boolean recompileFiles(Path filePath, Path source, Path target) {
         String relative = "";
         String classFilePath = "";
@@ -51,6 +63,14 @@ public class CommandUtils {
         return !classFile.exists() || javaFile.lastModified() > classFile.lastModified();
     }
 
+    /**
+     * evaluate the type of format to set the compile, -d if you don't have lib files, -cp if you have lib files
+     * @param libFiles the project .jar dependencies
+     * @param target where the .class files are stored
+     * @param flags the compile flags
+     * @param release the java jdk version
+     * @return the format -d or -cp in the javac command
+     */
     public String compileFormatType(String libFiles, String target, String flags, int release) {
         StringBuffer compile = new StringBuffer();
         compile.append("javac --release " + release + " " + flags + " -d ." + File.separator);
@@ -63,6 +83,11 @@ public class CommandUtils {
         }
         return compile.toString();
     }
+    /**
+     * evaluate the type of format to set the jar file creation, -c with -fm, -f, -fe,
+     * @param jarFileName the project jar file name
+     * @return the jar file command format
+     */
     private String jarTypeFormat(String jarFileName) {
         StringBuffer jarFormat = new StringBuffer();
         jarFormat.append("jar -c");
@@ -139,6 +164,12 @@ public class CommandUtils {
         }
         return build.toString();
     }
+    /**
+     * the run option if jar file or .java
+     * @param className
+     * @param source
+     * @return
+     */
     public String runClassOption(String className, String source) {
         String name = source + File.separator + fileOperation.getProjectName(source) + ".java";
         String mainName = Optional.of(className).orElse(name);

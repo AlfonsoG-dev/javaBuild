@@ -46,7 +46,10 @@ public class ModelUtils {
         this.fOperation = fOperation;
         this.executor = executor;
     }
-
+    /**
+     * Collect the source files inside an Optional
+     * @return optional of source files
+     */
     public Optional<String> getSourceFiles() {
         String b = null;
         List<String> names = new ArrayList<>();
@@ -79,6 +82,9 @@ public class ModelUtils {
         }
         return Optional.ofNullable(b);
     }
+    /**
+     * list of lib files
+     */
     public List<String> getLibFiles() { 
         List<String> names = new ArrayList<>(), libfiles = fOperation.listLibFiles();
         if(libfiles.size() > 0) {
@@ -91,6 +97,9 @@ public class ModelUtils {
         }
         return names;
     }
+    /**
+     * list of .jar files
+     */
     public String getJarDependencies() {
         String b = "";
         List<String> libFiles = getLibFiles();

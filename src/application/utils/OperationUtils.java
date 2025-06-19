@@ -19,6 +19,12 @@ public class OperationUtils {
         this.fileOperation = fileOperation;
         localPath = nLocalPath;
     }
+    /**
+     * helper function to allow command line process execution 
+     * </br> pwsh for windows.
+     * </br> /bin/sh for linux.
+     * @param command the command to execute
+     */
     public void executeCommand(String command) {
         Process p = null;
         try {
@@ -57,6 +63,10 @@ public class OperationUtils {
             }
         }
     }
+    /**
+     * helper function to show the error when the process execution fails.
+     * @param miCmdStream the stream of the process execution
+     */
     public void CommandOutputError(InputStream miCmdStream) {
         try (BufferedReader miReader = new BufferedReader(new InputStreamReader(miCmdStream))) {
             String line = "";
@@ -71,6 +81,10 @@ public class OperationUtils {
             e.printStackTrace();
         }
     }
+    /**
+     * helper function to show the result of the execution when the process is successful
+     * @param miCmdStream the stream of the process execution
+     */
     public void CommandOutput(InputStream miCmdStream) {
         try (BufferedReader miReader = new BufferedReader(new InputStreamReader(miCmdStream))) {
             String line = "";
@@ -85,6 +99,12 @@ public class OperationUtils {
             e.printStackTrace();
         }
     }
+    /**
+     * create the project files like manifesto or gitignore
+     * @param author the name of the project author
+     * @param source where the .java files are
+     * @param target where to store the .class files
+     */
     public void createProjectFiles(String author, String source, String target)  {
         try {
             String mainDirName = new File(localPath).getCanonicalPath();
@@ -97,6 +117,10 @@ public class OperationUtils {
             e.printStackTrace();
         }
     }
+    /**
+     * list the .jar files to extract its content
+     * @param jars
+     */
     public void createExtractionFiles(List<String> jars) {
         File extraction = new File(localPath + File.separator + "extractionFiles");
         if(extraction.exists() == false) {
@@ -108,6 +132,11 @@ public class OperationUtils {
                 fileOperation.copyFilesfromSourceToTarget(e, extraction.getPath());
             });
     }
+    /**
+     * helper function to copy the content of a directory and add it as a project dependency
+     * @param jarFilePath the .jar file to add as dependency
+     * @return true if the .jar file is added, false otherwise
+     */
     public boolean addJarDependency(String jarFilePath) throws Exception {
         System.out.println("[Info] adding jar dependency in process ...");
         String sourceFilePath = "";
@@ -134,6 +163,11 @@ public class OperationUtils {
         }
         return isAdded;
     }
+    /**
+     * helper function to allow the program to decide witch name to give the build script depending of the OS
+     * @param fileName the name provided by the user, if its empty `build` is used.
+     * @return the script name.
+     */
     public String getBuildFileName(String fileName) {
         String name = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {

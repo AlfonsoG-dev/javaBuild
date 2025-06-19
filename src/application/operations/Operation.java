@@ -77,6 +77,11 @@ public class Operation {
             }
         }
     }
+    /**
+     * create the config file operation
+     * @param source where the .java files are
+     * @param target where to store the .class files
+     */
     public void createConfigFile(String source, String target) {
         Optional<String> oSource = Optional.ofNullable(source);
         Optional<String> oTarget = Optional.ofNullable(target);
