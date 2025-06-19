@@ -161,7 +161,7 @@ public class Operation {
         String compileCommand = cBuilder.getCompileCommand(
             Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
             Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
-            Optional.ofNullable(target).orElse(getConfigData().get("Compile-Flags")),
+            Optional.of(getConfigData().get("Compile-Flags")).get(),
             Integer.parseInt(Optional.ofNullable(release).orElse(javaVersion))
         );
         System.out.println("[Info] compile ...");

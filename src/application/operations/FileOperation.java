@@ -76,8 +76,9 @@ public class FileOperation {
             outter: for(File f: miFile.listFiles()) {
                     if(f.isFile() && f.getName().contains(".java")) {
                         miBufferedReader = new BufferedReader(new FileReader(f));
-                        while(miBufferedReader.read() != -1) {
-                            if(miBufferedReader.readLine().contains("public static void main(String[] args)")) {
+                        String line;
+                        while((line = miBufferedReader.readLine()) != null) {
+                            if(line.contains("public static void main(String[] args)")) {
                                 mainName = f.getName().replace(".java", "");
                                 break outter;
                             }
