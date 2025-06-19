@@ -1,7 +1,6 @@
 package builders;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import models.CompileModel;
@@ -46,23 +45,22 @@ public class CommandBuilder {
      * <br/>pre The extraction jars are the .jar files in the lib folder.
      * @return the list of jar files to extract.
      */
-    public List<String> getExtractionsCommand() throws IOException {
+    public List<String> getExtractionsCommand() {
         File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
-        List<String> commands = new ArrayList<>();
-
-        executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(extractionFile.getPath()))
+    
+        return executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(extractionFile.getPath()))
             .stream()
-            .filter(e -> e.getName().contains(".jar"))
-            .forEach(e -> {
-                String 
-                    jarFileName = e.getName(),
-                    jarParent   = e.getParent(),
-                    extractJAR   = "jar -xf " + jarFileName,
-                    deleteJAR   = "rm -r " + jarFileName + "\n";
-                commands.add("cd " + jarParent + " && " + extractJAR + " && " + deleteJAR);
-            });
-        return commands;
+            .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
+            .map(file -> {
+                String jarFileName = file.getName();
+                String jarParent   = file.getParent();
+                String extractJAR  = "jar -xf " + jarFileName;
+                String deleteJAR   = "rm -r " + jarFileName;
+                return "cd " + jarParent + " && " + extractJAR + " && " + deleteJAR;
+            })
+            .toList();
     }
+
     /**
      * create the jar command for the build process.
      * <br/><b>pre: </b> use the Manifesto, main class files to create the java cli command for the jar file.
@@ -109,7 +107,6 @@ public class CommandBuilder {
             jarFiles.append(";");
             jarFiles.append(libJars
                     .stream()
-                    .filter(e -> !e.isEmpty())
                     .map(e -> e + ";")
                     .collect(Collectors.joining())
             );
