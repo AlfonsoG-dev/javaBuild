@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,13 +51,10 @@ public class FileOperation {
         File lf = fileUtils.resolvePaths(localPath, "lib");
         if(lf.listFiles() != null) {
             try {
-                Files.newDirectoryStream(lf.toPath())
-                    .forEach(e -> {
-                        File f = e.toFile();
-                        for(File mf: f.listFiles()) {
-                            names.add(mf.getPath());
-                        }
-                });
+                names = Files.walk(lf.toPath(), 2, FileVisitOption.FOLLOW_LINKS)
+                .filter(Files::isRegularFile)
+                .map(p -> p.toFile().getPath())
+                .toList();
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -147,14 +143,17 @@ public class FileOperation {
      * @param extract if to include or not the .jar dependencies of lib
      */
     public void createManifesto(String source, String author, boolean extract) {
-        String libJars = "";
-        List<String> jars = listLibFiles().stream().filter(p -> p.contains(".jar")).toList();
-        libJars += jars
-            .parallelStream()
-            .filter(e -> !e.isEmpty())
+        StringBuffer libJars = new StringBuffer();
+        List<String> jars = listLibFiles()
+            .stream()
+            .filter(p -> p.contains(".jar"))
+            .toList();
+        libJars.append( jars
+            .stream()
             .map(e -> e + ";")
-            .collect(Collectors.joining());
-        scriptBuilder.writeManifesto(libJars, author, getProjectName(source), extract);
+            .collect(Collectors.joining())
+        );
+        scriptBuilder.writeManifesto(libJars.toString(), author, getProjectName(source), extract);
     }
     /**
      * create the main class inside the source directory
@@ -192,7 +191,10 @@ public class FileOperation {
                 .filter(n -> fileUtils.validateContent(n))
                 .map(n -> n.getPath() + File.separator + "*.java ")
                 .toList(),
-            listLibFiles().stream().filter(p -> p.contains(".jar")).toList(),
+            listLibFiles()
+                .stream()
+                .filter(p -> p.contains(".jar"))
+                .toList(),
             extract
         );
     }
@@ -200,7 +202,7 @@ public class FileOperation {
      * verify if a extractFiles directory exists
      * @return true if exists, false otherwise
      */
-    public boolean extractionDirContainsPath(String libJarPath) throws IOException {
+    public boolean extractionDirContainsPath(String libJarPath) {
         boolean containsPath = false;
         File extractionFile = fileUtils.resolvePaths(localPath, "extractionFiles");
         File myFile = new File(libJarPath);
@@ -208,7 +210,7 @@ public class FileOperation {
             String jarLibParent = myFile.getParent();
             String jarNameParent = new File(jarLibParent).getName();
             for(File f: extractionFile.listFiles()) {
-                String extractionDirName = new File(f.getCanonicalPath()).getName();
+                String extractionDirName = new File(f.getPath()).getName();
                 if(extractionDirName.equals(jarNameParent)) {
                     containsPath = true;
                 }
