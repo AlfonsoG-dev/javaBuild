@@ -97,13 +97,12 @@ public class CommandBuilder {
     public String getRunCommand(List<String> libJars, String className, String source, String target) {
         String command  = "";
         StringBuffer jarFiles = new StringBuffer();
-        String runClass = className;
-        if(className.isEmpty()) {
+        if(className.equals(" ")) {
             return null;
         }
 
         if(jarFiles.isEmpty()) {
-            command = "java -cp " + target + runClass;
+            command = "java -cp " + target + className;
         } else {
             jarFiles.append("'");
             jarFiles.append(target);
@@ -114,7 +113,7 @@ public class CommandBuilder {
                     .collect(Collectors.joining())
             );
             String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
-            command = "java -cp " + cleanLibs + runClass;
+            command = "java -cp " + cleanLibs + className;
         }
         return command;
     }
