@@ -119,7 +119,10 @@ public class FileUtils {
         return new Callable<List<File>>() {
             @Override
             public List<File> call() {
-                return listFiles(filePath).stream().map(p -> p.toFile()).toList();
+                return listFiles(filePath)
+                .stream()
+                .map(Path::toFile)
+                .toList();
             }
         };
     }
@@ -132,7 +135,7 @@ public class FileUtils {
         List<File> names = new ArrayList<>();
         try {
             names = Files.walk(Paths.get(dirPath), FileVisitOption.FOLLOW_LINKS)
-                .map(p -> p.toFile())
+                .map(Path::toFile)
                 .filter(p -> p.isDirectory() && countFiles(p) > 0)
                 .toList();
         } catch(Exception e) {
@@ -149,7 +152,10 @@ public class FileUtils {
         return new Callable<List<String>>() {
             @Override
             public List<String> call() {
-                return getDirectoryNames(filePath).stream().map(p -> p.getPath()).toList();
+                return getDirectoryNames(filePath)
+                .stream()
+                .map(File::getPath)
+                .toList();
             }
         };
     }
@@ -191,11 +197,12 @@ public class FileUtils {
     public String readFileLines(String path) {
         StringBuffer lines = new StringBuffer();
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
-            while(reader.ready()) {
-                lines.append(reader.readLine());
+            String l;
+            while((l = reader.readLine()) != null) {
+                lines.append(l);
                 lines.append("\n");
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return lines.toString();
