@@ -82,28 +82,21 @@ public class ScriptBuilder {
      * @param runCommand the union of commands
      * @return the script lines.
      */
-    public String getScriptLines(String srcClases, String libFiles,
-            String compile, String extractJar, String runJar, String runCommand) {
+    public String getScriptLines(String srcClases, String libFiles, String compile, String extractJar, String runJar, String runCommand) {
         
         StringBuffer sb = new StringBuffer();
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-            sb.append(
-                "$srcClases = \"" + srcClases + "\"\n" +
-                "$libFiles = \"" + libFiles + "\"\n" +
-                "$compile = \"" + compile + "\"\n" + 
-                "$createJar = " + "\"" + extractJar + "\"" + "\n" + 
-                runJar + 
-                runCommand +
-                "Invoke-Expression $runCommand \n"
-            );
+            sb.append( "$srcClases = \"" + srcClases + "\"\n");
+            sb.append("$libFiles = \"" + libFiles + "\"\n");
+            sb.append("$compile = \"" + compile + "\"\n");
+            sb.append("$createJar = " + "\"" + extractJar + "\"" + "\n");
+            sb.append(runJar + runCommand + "Invoke-Expression $runCommand \n");
         } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-            sb.append(
-                "srcClases=" + "\"" + srcClases + "\"\n" + 
-                "libFiles=" + "\"" + libFiles + "\"\n" + 
-                compile + "\n" + 
-                extractJar + "\n" + 
-                runJar
-            );
+            sb.append("srcClases=" + "\"" + srcClases + "\"\n");
+            sb.append("libFiles=" + "\"" + libFiles + "\"\n");
+            sb.append(compile + "\n");
+            sb.append(extractJar + "\n");
+            sb.append(runJar);
         }
         return sb.toString();
     }
@@ -154,8 +147,8 @@ public class ScriptBuilder {
         CommandBuilder cBuilder = new CommandBuilder(localPath);
 
         StringBuffer sourceFiles = new StringBuffer();
+        StringBuffer libFiles = new StringBuffer();
         String
-            libFiles = "",
             compile = "",
             runJar = "",
             runCommand = "";
@@ -167,12 +160,13 @@ public class ScriptBuilder {
         );
 
 
-        libFiles += libNames
+        libFiles.append(libNames
             .stream()
             .map(e -> e + ";")
-            .collect(Collectors.joining());
+            .collect(Collectors.joining())
+        );
 
-        compile = getCompileCommand(target, libFiles, "-Werror -Xlint:all", 23);
+        compile = getCompileCommand(target, libFiles.toString(), "-Werror -Xlint:all", 23);
 
         if(!mainClass.isEmpty()) {
             runJar = getJavaScriptCommand(mainClass);
@@ -182,12 +176,12 @@ public class ScriptBuilder {
         }
         try {
             String lines = getScriptLines(
-                    sourceFiles.toString(),
-                    libFiles,
-                    compile,
-                    cBuilder.getJarFileCommand(extract, target, source),
-                    runJar,
-                    runCommand
+                sourceFiles.toString(),
+                libFiles.toString(),
+                compile,
+                cBuilder.getJarFileCommand(extract, target, source),
+                runJar,
+                runCommand
             );
 
             File buildFile = fileUtils.resolvePaths(localPath, fileName);
