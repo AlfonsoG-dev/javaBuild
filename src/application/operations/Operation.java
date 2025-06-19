@@ -86,16 +86,6 @@ public class Operation {
         Optional<String> oSource = Optional.ofNullable(source);
         Optional<String> oTarget = Optional.ofNullable(target);
 
-        oSource.ifPresentOrElse(
-            value -> System.out.println("[Info] Using source path " + value),
-            () -> System.out.println("[Warning] No source path provided, now using default value src")
-        );
-
-        oTarget.ifPresentOrElse(
-            value -> System.out.println("[Info] Using class path " + value),
-            () -> System.out.println("[Warning] No class path provided, now using default value bin")
-        );
-
         configBuilder.writeConfigFile(oSource.orElse("src"), oTarget.orElse("bin"));
     }
 
@@ -144,10 +134,6 @@ public class Operation {
      */
     public void listProjectFiles(String source) {
         Optional<String> oSource = Optional.ofNullable(source);
-        oSource.ifPresentOrElse(
-                value -> System.out.println("[Info] Printing files of " + value),
-                () -> System.out.println("[Info] No source provided, using default value")
-        );
         File read = fileUtils.resolvePaths(localPath, oSource.orElse(getConfigData().get("Source-Path")));
         if(read.isFile()) {
             System.out.println("[Info] Only directory types are allow but here you have it°!");
@@ -170,14 +156,13 @@ public class Operation {
      * @throws Exception when the compile command gets an error.
      */
     public void compileProjectOperation(String source, String target, String release) {
+        String javaVersion = System.getProperty("java.specification.version");
 
         String compileCommand = cBuilder.getCompileCommand(
-                Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
-                Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
-                Optional.ofNullable(target).orElse(getConfigData().get("Compile-Flags")),
-                Integer.parseInt(
-                    Optional.ofNullable(release).orElse(System.getProperty("java.specification.version"))
-                )
+            Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
+            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
+            Optional.ofNullable(target).orElse(getConfigData().get("Compile-Flags")),
+            Integer.parseInt(Optional.ofNullable(release).orElse(javaVersion))
         );
         System.out.println("[Info] compile ...");
         operationUtils.executeCommand(compileCommand);
@@ -194,16 +179,15 @@ public class Operation {
      * @param extractFile the file to extract.
      * @throws IOException the file doesn't exists
      */
-    public void executeExtractionCommand(String extractFile) throws IOException {
-        cBuilder.getExtractionsCommand()
-            .parallelStream()
-            .forEach(p -> {
-                if(!extractFile.isEmpty()) {
-                    operationUtils.executeCommand(p);
-                } else {
-                    System.out.println("[Info] NO EXTRACTION FILES");
-                }
-            });
+    public void executeExtractionCommand() {
+        List<String> extractions = cBuilder.getExtractionsCommand();
+        if(!extractions.isEmpty()) {
+            for(String e: extractions) {
+                operationUtils.executeCommand(e);
+            }
+        } else {
+            System.out.println("[Info] NO EXTRACTION FILES");
+        }
     }
     /**
      * helper function to get the lib folder/directory dependency or .jar files
@@ -211,36 +195,29 @@ public class Operation {
      */
     public void extractJarDependencies() {
         List<String> jars = modelUtils.getLibFiles();
-        jars
-            .parallelStream()
-            .forEach(e -> {
-                try {
-                    boolean libAlreadyExists = fileOperation.extractionDirContainsPath(e);
-                    if(libAlreadyExists == false) {
-                        System.out.println("[Info] extracting jar dependencies ...");
-                        operationUtils.createExtractionFiles(jars);
-                        // the extraction files can be more than 1
-                        executeExtractionCommand(e);
-                    } else {
-                        System.out.println("[Info] THERE IS NO DEPENDENCIES TO EXTRACT");
-                    }
-                } catch(IOException err) {
-                    err.printStackTrace();
-                }
-            });
+        for(String j: jars) {
+            if(!fileOperation.extractionDirContainsPath(j)) {
+                System.out.println("[Info] extracting jar dependencies ...");
+                operationUtils.createExtractionFiles(jars);
+                // the extraction files can be more than 1
+                executeExtractionCommand();
+            } else {
+                System.out.println("[Info] THERE IS NO DEPENDENCIES TO EXTRACT");
+            }
+        }
     }
     /**
      * Performs create jar operation using the command.
-     * @param includeExtraction boolean value that indicates if you add or not to the build the lib file.
+     * @param extract boolean value that indicates if you add or not to the build the lib file.
      * @param source the folder to include in the build.
      * @throws Exception when creating a jar file gets an error.
      */
-    public void createJarOperation(boolean includeExtraction, String source, String target) {
+    public void createJarOperation(boolean extract, String source, String target) {
         try {
             String command = cBuilder.getJarFileCommand(
-                    includeExtraction,
-                    Optional.ofNullable(source).orElse(getConfigData().get("Class-Path")),
-                    Optional.ofNullable(target).orElse(getConfigData().get("Source-Path"))
+                extract,
+                Optional.ofNullable(source).orElse(getConfigData().get("Class-Path")),
+                Optional.ofNullable(target).orElse(getConfigData().get("Source-Path"))
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
@@ -260,39 +237,35 @@ public class Operation {
             System.err.println("[Error] Manifesto doesn't exists");
             return false;
         }
-        try (BufferedReader myReader = new BufferedReader(new FileReader(f))) {
-            while(myReader.ready()) {
-                String lines = myReader.readLine();
-                if(lines.contains("Class-Path:")) {
-                    haveInclude = false;
-                }
+        String[] lines = fileUtils.readFileLines(f.getPath()).split("\n");
+        for(String l: lines) {
+            if(l.contains("Class-Path:")) {
+                haveInclude = false;
+                break;
             }
-        } catch(IOException e) {
-            e.printStackTrace();
         }
         return haveInclude;
     }
     /**
      * Helper function that writes in the manifesto the lib .jar dependencies.
-     * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
+     * @param extract boolean value that indicates if you include or not the jar dependencies in the build.
      * @param author name of the author of the project.
      */
-    public void createIncludeExtractions(boolean includeExtraction, String author, String mainClass, String source, String target) {
+    public void createIncludeExtractions(boolean extract, String author, String mainClass, String source, String target) {
         String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
         System.out.println("[Info] creating manifesto ...");
 
-        fileOperation.createManifesto(oSource, Optional.ofNullable(author).orElse(getAuthorName()), includeExtraction);
+        fileOperation.createManifesto(oSource, Optional.ofNullable(author).orElse(getAuthorName()), extract);
     }
     /**
      * Performs the add jar dependency operation.
      * This takes the .jar or the folder and copies it in the lib folder.
-     * @param jarFilePath the path to the jar file, it can be the .jar or the folder.
+     * @param filePath the path to the jar file, it can be the .jar or the folder.
      * @throws Exception while trying to copy the jar dependency.
      */
-    public void createAddJarFileOperation(String jarFilePath) {
+    public void createAddJarFileOperation(String filePath) {
         try {
-            boolean command = operationUtils.addJarDependency(jarFilePath);
-            if(command == true) {
+            if(operationUtils.addJarDependency(filePath)) {
                 System.out.println("[Info] jar dependency has been added to lib folder");
             }
         } catch(Exception e) {
@@ -302,15 +275,15 @@ public class Operation {
     /**
      * Performs the create build script operation.
      * <br><b>Post: </b> If the OS is windows creates a *.ps1* script, otherwise creates a *.sh* script.
-     * @param includeExtraction boolean value that indicates if you include or not the jar dependencies in the build.
+     * @param extract boolean value that indicates if you include or not the jar dependencies in the build.
      */
-    public void buildScript(boolean includeExtraction, String fileName, String source, String target) {
+    public void buildScript(boolean extract, String fileName, String source, String target) {
         System.out.println("[Info] Creating build script...");
         fileOperation.createScript(
             Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
             Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
             operationUtils.getBuildFileName(fileName),
-            includeExtraction
+            extract
         );
     }
     /**
@@ -322,10 +295,10 @@ public class Operation {
     public void runAppOperation(String className, String source, String target) {
 
         String command = cBuilder.getRunCommand(
-                modelUtils.getLibFiles(),
-                Optional.ofNullable(className).orElse(" " + getConfigData().get("Main-Class")),
-                Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
-                Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))
+            modelUtils.getLibFiles(),
+            Optional.ofNullable(className).orElse(" " + getConfigData().get("Main-Class")),
+            Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
+            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))
         );
         System.out.println("[Info] running ... ");
         operationUtils.executeCommand(command);
