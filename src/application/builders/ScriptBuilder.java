@@ -18,6 +18,10 @@ public class ScriptBuilder {
         fileUtils = new FileUtils(nLocalPath);
     }
 
+    /**
+     * run command for script file
+     * @return the command
+     */
     private String getRunScriptCommand() {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -26,6 +30,11 @@ public class ScriptBuilder {
         }
         return command;
     }
+    /**
+     * java jar command for script file
+     * @param mainClass the class to name the jar file
+     * @return the command
+     */
     private String getJavaScriptCommand(String mainClass) {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -35,6 +44,10 @@ public class ScriptBuilder {
         }
         return command;
     }
+    /**
+     * union of command to build the project
+     * @return the command
+     */
     private String getBuildScriptCommand() {
         String command = "";
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -42,6 +55,14 @@ public class ScriptBuilder {
         }
         return command;
     }
+    /**
+     * the compile command
+     * @param target where to put the .class files
+     * @param libFiles if your project has .jar dependencies
+     * @param flags the compile flags
+     * @param release the java jdk version
+     * @return the command
+     */
     private String getCompileCommand(String target, String libFiles, String flags, int release) {
         String command = "javac --release " + release + " " + flags + " -d ." + File.separator + target  + File.separator;
         if(!libFiles.isEmpty()) {
@@ -51,7 +72,16 @@ public class ScriptBuilder {
         }
         return command;
     }
-
+    /**
+     * union of the command for the script file build.
+     * @param srcClases the .java files
+     * @param libFiles the .jar files
+     * @param compile the compile command
+     * @param extractJar the extraction command
+     * @param runJar the run jar command
+     * @param runCommand the union of commands
+     * @return the script lines.
+     */
     public String getScriptLines(String srcClases, String libFiles,
             String compile, String extractJar, String runJar, String runCommand) {
         
@@ -78,6 +108,13 @@ public class ScriptBuilder {
         return sb.toString();
     }
 
+    /**
+     * create manifesto
+     * @param libFiles the .jar files
+     * @param authorName the name of the person who is the author of the project
+     * @param mainClass the name of the main class
+     * @param extract if you include or nor the .jar files inside the build process.
+     */
     public void writeManifesto(String libFiles, String authorName, String mainClass, boolean extract) {
         String author = authorName.trim();
 

@@ -32,8 +32,10 @@ public class CommandBuilder {
     }
 
     /**
-     * create the compile command using lib files and src files to build.
-     * @param target its the folder/directory to allocate the .class files.
+     * get the compile command from the compile model
+     * @param source where the .java files are.
+     * @param target where to store the .class files 
+     * @param flags the compile flags from config file
      * @return the compile command
      */
     public String getCompileCommand(String source, String target, String flags, int release) {
@@ -41,7 +43,7 @@ public class CommandBuilder {
     }
     /**
      * create a list of jar files to extract for the build process.
-     * <br/><b>pre: </b> The extraction jars are the .jar files in the lib folder.
+     * <br/>pre The extraction jars are the .jar files in the lib folder.
      * @return the list of jar files to extract.
      */
     public List<String> getExtractionsCommand() throws IOException {

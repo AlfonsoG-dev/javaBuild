@@ -30,6 +30,13 @@ public class CompileModel {
         CompileModel.verify(sourcePath, classPath);
     }
 
+    /**
+     * Create the compile command, it has two version.
+     * </br> When you create from `--scratch` you don't need individual files; you need each directory in the project that has at least one .java file. 
+     * </br> when you create from `--compile` or `--build` you only want the files that were modified later in the build process; for that you need each individual file to re-compile it.
+     * @param release the java jdk version
+     * @return the compile command
+     */
    public String getCompileCommand(int release) {
         // create jar files command for compile operation
         StringBuffer 
@@ -85,8 +92,13 @@ public class CompileModel {
 
 
     // ----------------------------\\
-    // Verify non-null values\\
+    //   Verify non-null values    \\
 
+    /**
+     * verify that for this class you don't provide empty paths.
+     * @param sourcePath where the .java files are.
+     * @param classPath where to store .class files
+     */
     public static void verify(String sourcePath, String classPath) {
         try {
             if(sourcePath.isEmpty() || classPath.isEmpty()) {

@@ -10,6 +10,13 @@ import java.util.concurrent.RejectedExecutionException;
 
 public class ExecutorOperation {
     
+    /**
+     * Helper to execute a callable task with virtual threads.
+     * @param task the Callable task to execute 
+     * @throws InterruptedException if the executor service can't start
+     * @throws CancellationException if the future of the task was cancelled.
+     * @return the result of the execution of the generic type T
+     */
     public<T> T executeConcurrentCallableList(Callable<T> task) {
         T t = null;
         FutureTask<T> future = new FutureTask<>(task);

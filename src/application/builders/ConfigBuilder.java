@@ -5,8 +5,7 @@ import utils.FileUtils;
 
 import java.io.File;
 import java.io.FileWriter;
-
-
+import java.io.IOException;
 import java.util.HashMap;
 
 public class ConfigBuilder {
@@ -21,9 +20,10 @@ public class ConfigBuilder {
         this.fOperation = fOperation;
     }
     /**
-     * get from config file the project values.
-     * <br> pre: Source-Path, Class-Path, Main-Class, Libraries. 
-     * @return a table with the key-value of the config file
+     * get the project configuration from a file.
+     * <br> pre Source-Path, Class-Path, Main-Class, Libraries, Compile-Flags. 
+     * <br> post if the config file doesn't exists you have some default values. Otherwise return the file values
+     * @return a table with the key-value of the config file.
      */
     public HashMap<String, String> getConfigValues() {
         HashMap<String, String> config = new HashMap<>();
@@ -59,6 +59,12 @@ public class ConfigBuilder {
 
         return config;
     }
+    /**
+     * create the config
+     * @param source where to search for .java files
+     * @param target where to store the .class files
+     * @throws IOException when something when the writer process went wrong
+     */
     public void writeConfigFile(String source, String target) {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
@@ -66,7 +72,7 @@ public class ConfigBuilder {
             String lines = "Source-Path: " + source + "\nClass-Path: " + target + "\nMain-Class: " + mainClass.trim() + "\nLibraries: " + "\nCompile-Flags: -Werror";
             System.out.println(lines);
             w.write(lines);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -63,7 +63,7 @@ public class CommandUtils {
         }
         return compile.toString();
     }
-    private String jarTypeFormat(String jarFileName, String directory) {
+    private String jarTypeFormat(String jarFileName) {
         StringBuffer jarFormat = new StringBuffer();
         jarFormat.append("jar -c");
         boolean presentManifesto = fileOperation.haveManifesto();
@@ -87,7 +87,7 @@ public class CommandUtils {
 
         String jarFileName      = fileOperation.getProjectName(target) + ".jar";
         String localParent   = new File(localPath).getCanonicalPath();
-        String jarFormat     = jarTypeFormat(jarFileName, directory);
+        String jarFormat     = jarTypeFormat(jarFileName);
         String mainClassName = fileOperation.getProjectName(target);
 
         source = fileUtils.resolvePaths(localPath, source).getPath() + File.separator + " .";
