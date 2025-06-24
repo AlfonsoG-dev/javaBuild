@@ -34,6 +34,10 @@ public class Operation {
     private FileOperation fileOperation;
     private ExecutorOperation executor;
 
+    private String oSourcePath;
+    private String oClassPath;
+    private String oCommandFlags;
+
     public Operation(String nLocalPath) {
         localPath = nLocalPath;
         fileUtils = new FileUtils(localPath);
@@ -48,13 +52,17 @@ public class Operation {
         return configBuilder.getConfigValues();
     }
     public void startUpCompileModel() {
+        oSourcePath = Optional.ofNullable(getConfigData().get("Source-Path")).orElse("src");
+        oClassPath = Optional.ofNullable(getConfigData().get("Class-Path")).orElse("bin");
+        oCommandFlags = Optional.ofNullable(getConfigData().get("Compile-Flags")).orElse("-Werror");
+
         modelUtils = new ModelUtils(
-            getConfigData().get("Source-path"),
-             getConfigData().get("Class-Path"),
-             localPath,
-             fileUtils,
-             fileOperation,
-             executor
+            oSourcePath,
+            oClassPath,
+            localPath,
+            fileUtils,
+            fileOperation,
+            executor
         );
     }
     /**
@@ -63,9 +71,9 @@ public class Operation {
      */
     public void createProjectOperation() {
         String[] names = {
-            getConfigData().get("Class-Path"),
+            oSourcePath,
             "lib",
-            getConfigData().get("Source-Path"),
+            oClassPath,
             "docs",
             "extractionFiles"
         };
@@ -86,7 +94,7 @@ public class Operation {
         Optional<String> oSource = Optional.ofNullable(source);
         Optional<String> oTarget = Optional.ofNullable(target);
 
-        configBuilder.writeConfigFile(oSource.orElse("src"), oTarget.orElse("bin"));
+        configBuilder.writeConfigFile(oSource.orElse(oSourcePath), oTarget.orElse(oClassPath));
     }
 
     /**
@@ -123,9 +131,7 @@ public class Operation {
                 value -> System.out.println("[Info] Using Author name " + value),
                 () -> System.out.println("[Info] No author provided, now using " + getAuthorName())
         );
-        String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
-        String oTarget = Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"));
-        operationUtils.createProjectFiles(oAuthor.orElse(getAuthorName()), oSource, oTarget);
+        operationUtils.createProjectFiles(oAuthor.orElse(getAuthorName()), oSourcePath, oClassPath);
     }
     /**
      * used to list the .java or .jar or .class files in the project.
@@ -134,7 +140,7 @@ public class Operation {
      */
     public void listProjectFiles(String source) {
         Optional<String> oSource = Optional.ofNullable(source);
-        File read = fileUtils.resolvePaths(localPath, oSource.orElse(getConfigData().get("Source-Path")));
+        File read = fileUtils.resolvePaths(localPath, oSource.orElse(oSourcePath));
         if(read.isFile()) {
             System.out.println("[Info] Only directory types are allow but here you have it°!");
             System.out.println(read.getPath());
@@ -159,9 +165,9 @@ public class Operation {
         String javaVersion = System.getProperty("java.specification.version");
 
         String compileCommand = cBuilder.getCompileCommand(
-            Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
-            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
-            Optional.ofNullable(getConfigData().get("Compile-Flags")).orElse("-Werror"),
+            Optional.ofNullable(source).orElse(oSourcePath),
+            Optional.ofNullable(target).orElse(oClassPath),
+            oCommandFlags,
             Integer.parseInt(Optional.ofNullable(release).orElse(javaVersion))
         );
         System.out.println("[Info] compile ...");
@@ -170,7 +176,7 @@ public class Operation {
     public void deleteDirectory(String dirPath) {
         System.out.println("[Info] deleting directory...");
         operationUtils.executeCommand(
-            "rm -r " + Optional.ofNullable(dirPath).orElse(getConfigData().get("Class-Path"))
+            "rm -r " + Optional.ofNullable(dirPath).orElse(oClassPath)
         );
     }
     /**
@@ -216,8 +222,8 @@ public class Operation {
         try {
             String command = cBuilder.getJarFileCommand(
                 extract,
-                Optional.ofNullable(source).orElse(getConfigData().get("Class-Path")),
-                Optional.ofNullable(target).orElse(getConfigData().get("Source-Path"))
+                Optional.ofNullable(source).orElse(oClassPath),
+                Optional.ofNullable(target).orElse(oSourcePath)
             );
             System.out.println("[Info] creating jar file ...");
             operationUtils.executeCommand(command);
@@ -252,7 +258,7 @@ public class Operation {
      * @param author name of the author of the project.
      */
     public void createIncludeExtractions(boolean extract, String author, String mainClass, String source, String target) {
-        String oSource = Optional.ofNullable(source).orElse(getConfigData().get("Source-Path"));
+        String oSource = Optional.ofNullable(source).orElse(oSourcePath);
         System.out.println("[Info] creating manifesto ...");
 
         fileOperation.createManifesto(oSource, Optional.ofNullable(author).orElse(getAuthorName()), extract);
@@ -275,13 +281,13 @@ public class Operation {
     /**
      * Performs the create build script operation.
      * <br><b>Post: </b> If the OS is windows creates a *.ps1* script, otherwise creates a *.sh* script.
-     * @param extract boolean value that indicates if you include or not the jar dependencies in the build.
+     * @param extract Boolean value that indicates if you include or not the jar dependencies in the build.
      */
     public void buildScript(boolean extract, String fileName, String source, String target) {
         System.out.println("[Info] Creating build script...");
         fileOperation.createScript(
-            Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
-            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path")),
+            Optional.ofNullable(source).orElse(oSourcePath),
+            Optional.ofNullable(target).orElse(oClassPath),
             operationUtils.getBuildFileName(fileName),
             extract
         );
@@ -297,8 +303,8 @@ public class Operation {
         String command = cBuilder.getRunCommand(
             modelUtils.getLibFiles(),
             Optional.ofNullable(className).orElse(" " + getConfigData().get("Main-Class")),
-            Optional.ofNullable(source).orElse(getConfigData().get("Source-Path")),
-            Optional.ofNullable(target).orElse(getConfigData().get("Class-Path"))
+            Optional.ofNullable(source).orElse(oSourcePath),
+            Optional.ofNullable(target).orElse(oClassPath)
         );
         System.out.println("[Info] running ... ");
         operationUtils.executeCommand(command);
