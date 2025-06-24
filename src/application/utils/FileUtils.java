@@ -183,10 +183,11 @@ public class FileUtils {
             int fileLength = new File(nFileName).toPath().getNameCount();
             if(mio.exists() == false && fileLength > 1) {
                 mio.mkdirs();
+                System.out.println("[Info] created " + mio.getPath());
             } else if(mio.exists() == false && fileLength <= 1) {
                 mio.mkdir();
+                System.out.println("[Info] created " + mio.getPath());
             }
-            System.out.println("[Info] created " + mio.getPath());
         }
     }
     /**

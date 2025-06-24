@@ -51,6 +51,7 @@
 - [ ] Add `config` definition to set the `run`, `build`, flags like:
 >- `java -d bin App.java` or `java -cp bin App`
 >- `jar -cmf` or `jar -fe`
+- [ ] When adding dependency use `--i` or `--e` to include or exclude the `.jar` file from the build process by placing it inside the `manifesto`
  
 ------
 

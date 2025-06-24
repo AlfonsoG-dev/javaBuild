@@ -4,16 +4,20 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import builders.ScriptBuilder;
+
 import utils.FileUtils;
+
 public class FileOperation {
 
     private FileUtils fileUtils;
@@ -225,57 +229,42 @@ public class FileOperation {
      * @param targetFilePath where to put the copied files
      */
     public void copyFilesfromSourceToTarget(String sourceFilePath, String targetFilePath) {
-        try {
-            File sf = new File(sourceFilePath);
-            if(sf.isFile()) {
-                String sourceFileName = sf.getName();
-                String sourceParent = sf.getParent();
-                String sourceParentName = new File(sourceParent).getName();
-                File tf = new File(
-                        targetFilePath + File.separator +
-                        sourceParentName + File.separator +
-                        sourceFileName
-                );
-                fileUtils.createParentFile(
-                        tf.getPath(),
-                        tf.getParent()
-                );
+        File sf = new File(sourceFilePath);
+        if(sf.isFile()) {
+            String sourceFileName = sf.getName();
+            String sourceParent = sf.getParent();
+            String sourceParentName = new File(sourceParent).getName();
+            File tf = new File(targetFilePath + File.separator + sourceParentName + File.separator + sourceFileName);
+            fileUtils.createParentFile(tf.getPath(), tf.getParent());
+            try {
                 System.out.println(
-                        Files.copy(
-                            sf.toPath(),
-                            tf.toPath(),
-                            StandardCopyOption.COPY_ATTRIBUTES
-                        )
+                    Files.copy(sf.toPath(), tf.toPath(), StandardCopyOption.COPY_ATTRIBUTES)
                 );
-            } else if(sf.isDirectory()) {
-                executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(sourceFilePath))
-                    .stream()
-                    .forEach(e -> {
-                        try {
-                            String n = fileUtils.createTargetFromParentPath(
-                                    sourceFilePath,
-                                    e.getCanonicalPath()
-                            );
-                            if(n.contains("git") == false) {
-                                File targetFile = new File(targetFilePath + File.separator + n);
-                                fileUtils.createParentFile(targetFilePath, targetFile.getParent());
-                                Path sourcePath = e.toPath();
-                                Path targetPath = targetFile.toPath();
-                                System.out.println(
-                                        Files.copy(
-                                            sourcePath,
-                                            targetPath,
-                                            StandardCopyOption.COPY_ATTRIBUTES
-                                        )
-                                );
-                            }
-                        } catch(IOException err) {
-                            err.printStackTrace();
-                        }
-                    });
+            } catch(IOException er) {
+                er.printStackTrace();
             }
-        } catch(IOException e) {
-            e.printStackTrace();
+        }
+        if(sf.isDirectory()) {
+            List<File> copiedFiles = executor.executeConcurrentCallableList(fileUtils.listFilesFromPath(sourceFilePath))
+                .stream()
+                .filter(e -> !e.getPath().contains("git"))
+                .toList();
+            if(copiedFiles.size() > 0) {
+                for(File e: copiedFiles) {
+                    try {
+                        String n = fileUtils.createTargetFromParentPath(sourceFilePath, e.getCanonicalPath());
+                        File targetFile = new File(targetFilePath + File.separator + n);
+                        fileUtils.createParentFile(targetFilePath, targetFile.getParent());
+                        System.out.println(
+                            Files.copy(
+                                e.toPath(), targetFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES
+                            )
+                        );
+                    } catch(IOException err) {
+                        err.printStackTrace();
+                    }
+                }
+            }
         }
     }
 }
