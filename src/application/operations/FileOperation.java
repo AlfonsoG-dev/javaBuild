@@ -250,20 +250,22 @@ public class FileOperation {
                 .filter(e -> !e.getPath().contains("git"))
                 .toList();
             if(copiedFiles.size() > 0) {
-                for(File e: copiedFiles) {
-                    try {
-                        String n = fileUtils.createTargetFromParentPath(sourceFilePath, e.getCanonicalPath());
-                        File targetFile = new File(targetFilePath + File.separator + n);
-                        fileUtils.createParentFile(targetFilePath, targetFile.getParent());
-                        System.out.println(
+                copiedFiles
+                    .parallelStream()
+                    .forEach( e -> {
+                        try {
+                            String n = fileUtils.createTargetFromParentPath(sourceFilePath, e.getCanonicalPath());
+                            File targetFile = new File(targetFilePath + File.separator + n);
+                            fileUtils.createParentFile(targetFilePath, targetFile.getParent());
+                            System.out.println(
                             Files.copy(
-                                e.toPath(), targetFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES
-                            )
-                        );
-                    } catch(IOException err) {
-                        err.printStackTrace();
-                    }
-                }
+                                    e.toPath(), targetFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES
+                                )
+                            );
+                        } catch(IOException err) {
+                            err.printStackTrace();
+                        }
+                    });
             }
         }
     }
