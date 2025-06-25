@@ -269,10 +269,15 @@ public class Operation {
      * @param filePath the path to the jar file, it can be the .jar or the folder.
      * @throws Exception while trying to copy the jar dependency.
      */
-    public void createAddJarFileOperation(String filePath) {
+    public void createAddJarFileOperation(String filePath, String author, boolean extract) {
         try {
             if(operationUtils.addJarDependency(filePath)) {
                 System.out.println("[Info] jar dependency has been added to lib folder");
+                if(extract == false) {
+                    fileOperation.createManifesto(
+                        oSourcePath, Optional.ofNullable(author).orElse(getAuthorName()), extract
+                    );
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();

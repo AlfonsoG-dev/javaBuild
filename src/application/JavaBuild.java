@@ -11,6 +11,7 @@ class JavaBuild {
                 String source = getCliValues(args, i, "-s");
                 String target = getCliValues(args, i, "-t");
                 String release = getCliValues(args, i, "-r");
+                String author = getCliValues(args, i, "-a");
                 switch(args[i]) {
                     case "-ls":
                         if((i+1) < args.length) {
@@ -20,13 +21,8 @@ class JavaBuild {
                         }
                         break;
                     case "-cb":
-                        if((i+1) < args.length) {
-                            op.createProjectOperation();
-                            op.createFilesOperation(args[i+1], source, target);
-                        } else {
-                            op.createProjectOperation();
-                            op.createFilesOperation(null, source, target);
-                        }
+                        op.createProjectOperation();
+                        op.createFilesOperation(author, source, target);
                         break;
                     case "--compile":
                         op.compileProjectOperation(source, target, release);
@@ -54,7 +50,6 @@ class JavaBuild {
                         }
                         break;
                     case "--i":
-                        String author = getCliValues(args, i, "-a");
                         String runClass = getCliValues(args, i, "--class");
                         if((i+1) < args.length && args[i+1].equals("n")) {
                             op.createIncludeExtractions(false, author, runClass, source, target);
@@ -87,10 +82,9 @@ class JavaBuild {
                         }
                         break;
                     case "--add":
+                        String include = getCliValues(args, i, "--include");
                         if((i+1) < args.length) {
-                            op.createAddJarFileOperation(args[i+1]);
-                        } else {
-                            System.out.println("[Info] the path to the jar file is needed");
+                            op.createAddJarFileOperation(args[i+1], author, include == null ? false:true);
                         }
                         break;
                     case "--run":

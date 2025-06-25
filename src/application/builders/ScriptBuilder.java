@@ -126,7 +126,8 @@ public class ScriptBuilder {
             m.append(mainClass);
             m.append("\n");
         }
-        if(!libFiles.isEmpty() && !extract) {
+        if(!libFiles.isEmpty() && extract == false) {
+            System.out.println("[Warning] Adding `.jar` dependency to the manifesto excluding its content of the build process.");
             m.append("Class-Path: ");
             m.append(libFiles);
             m.append("\n");
