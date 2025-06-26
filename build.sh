@@ -2,4 +2,4 @@ srcClases="src/application/*.java src/application/operations/*.java src/applicat
 libFiles=""
 javac --release 23 -Werror -Xlint:all -d ./bin/ $srcClases
 jar -cfm JavaBuild.jar Manifesto.txt -C ./bin/ .
-java -jar JavaBuild
+java -jar JavaBuild.jar
