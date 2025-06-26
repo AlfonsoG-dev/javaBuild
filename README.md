@@ -56,7 +56,6 @@
 ------
 
 # How to
-
 - Use the `.ps1` script to build the project.
 ```shell
 build.ps1
@@ -78,14 +77,18 @@ javabuild --h
 ```console
 java -jar JavaBuild.jar --h
 ```
-## Config file
+
+---
+
+## Configure files
 - When using the project the folder structure is `src`, `bin`, etc.
-> Use config file to change those fields.
+> Use configuration file to change those fields.
 ```txt
 Source-Path: source/directory/name
 Class-Path: class/directory/name
 Main-Class: MainClassName
 Libraries: 
+Command-Flags: -Werror
 ```
 - For now the `Libraries` field isn't useful.
 ## Manifesto usage
@@ -104,26 +107,35 @@ the extraction files of the lib dependency.
 > If you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
 includes the extraction files of the lib dependency as part of the project *.jar* creation.
 <h1 style="text-align:center">
-If you modify `Main-Class` in config you also need to change it in the Manifesto, otherwise it will load a wrong class when creating the project `.jar` file.
+If you modify `Main-Class` in the configuration file you also need to change it in the Manifesto, otherwise it will load a wrong class when creating the project `.jar` file.
 </h1>
 
-## list project files
+---
 
+# Commands
+The following are the list of commands to build a simple `Java` project
+- List the `.java` or `.class` files of the project.
+- You can compile.
+- Create `.jar` files.
+- Run the program.
+- Include additional `.jar` files as dependencies.
+
+## list project files
 - Use this to list the java `.class` or `.java` files inside the giving directory.
 ```shell
 javaBuild -ls .\directory\
 ```
 
 ## Create a project
-
 - Use this to create the structure for the project.
 - You need to provide the author
 ```shell
 javaBuild -cb
 ```
 > You can provide the author name
+>- Also you can provide source and target.
 ```shell
-javaBuild -cb Author-Name
+javaBuild -cb Author-Name -s source -t target
 ```
 > Remember that the name of the directory where you are is the Name of the main class.
 >- If the parent directory is `.\basic\` the main class file will be: `basic.java` and the main class declaration.
@@ -139,7 +151,6 @@ javaBuild --i
 - This will add the main class value to the manifesto.
 
 ## Compile
-
 - To compile the project.
 > `javaBuild --compile`.
 >- It compiles the .java clases from `src` into `bin`, using the **Java version 23**, by default.
@@ -151,7 +162,6 @@ javabuild --compile -s .\other\source -t .\other\target -r 17
 >- Also you can use them individually.
 
 ## Create a jar file of the project
-
 - To create a jar file is necessary to include or verify dependencies or libraries in the project.
 > In order to create the jar file we need to extract the content of all the jar files inside lib into: `extractionFiles`.
 >- Use the extracted files to include the library files in the build process of the project *.jar* file.
@@ -159,21 +169,20 @@ javabuild --compile -s .\other\source -t .\other\target -r 17
 
 - Now to create the project jar file.
 - `javaBuild --jar`.
-> It also can be created using source folder as parameter.
->- If you don't provide an argument it takes default value of `bin`
+> It also can be created using source and target folders as parameter.
+> If you don't provide an argument it takes default value of `bin`
+>- the source folder is where the `.class` files are and the target folder is where you have the main class which targets to the `.jar` file.
 ```pwsh
-javabuild --jar -s .\testing\
+javabuild --jar -s .\bin\ -t .\src\
 ```
 - Remember that the manifesto determines the behavior for the build process.
 
 ## Create the build script
-
 - Use this to create the build script for **powershell** in windows and **bash** for linux.
 - Creates the script whit all the command to build the project, except the extraction operation.
 - It uses the same commands and writes them in a file.
 > It takes the `script_name` and `directory of java files` and `directory of class files`.
 >- You can change those by providing:
-
 ```shell
 javaBuild --script script_name -s .\source\ -t .\target\
 ```
@@ -187,7 +196,6 @@ javaBuild --script script_name -s .\source\ -t .\target\
 
 
 ## Build the project
-
 - All can be done with only 1 command
 - It combines the commands: *compile* & *create jar* to build the project.
 - The extraction of the jar dependency need to execute manually with: `--extract` and only one time per jar dependency.
@@ -207,7 +215,6 @@ javaBuild --scratch
 > You can provide the same arguments as in the build command.
 
 ## Run or execute the project
-
 - Uses the class files and the main class to execute and run the application.
 > it compiles to *.\bin\* folder and executes the project using the .class files.
 >- you can specify the java class that you want to execute: 
@@ -230,9 +237,12 @@ javabuild --run --h
 ```
 
 ## Add an external jar dependency
-
 - Used to add a framework or library file type *.jar*.
-> `javabuild --add dependency.jar`
+> Now when you add a dependency it automatically sets itself inside the manifesto, if you wish to include the `.jar` dependency in the project `.jar` file you have to provide: `--include` flag, when you perform this operation.
+```sh
+javabuild --ad dependency.jar --include
+```
+> or you can just add by using: `javabuild --add dependency.jar` and this will modify the manifesto file to ignore the `.jar` dependency when you build the project `.jar` file.
 >- Add an external jar file to the lib folder of the project
 >- Or you can use the directory name
 >- `javabuild --add ./folderName`
@@ -241,7 +251,6 @@ javabuild --run --h
 ------
 
 # Additional info
-
 This project use [javaBuild_tool](https://github.com/AlfonsoG-dev/javaBuild) to build itself.
 - This app uses **powershell** to execute the commands on *WINDOWS*.
 - This app uses **bash** to execute commands on *LINUX*.
