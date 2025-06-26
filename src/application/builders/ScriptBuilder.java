@@ -40,7 +40,7 @@ public class ScriptBuilder {
         if(System.getProperty("os.name").toLowerCase().contains("windows")) {
             command = "$javaCommand = \"java -jar " + mainClass + ".jar\""  + "\n";
         } else if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-            command = "java -jar " + mainClass + "\n";
+            command = "java -jar " + mainClass + ".jar\n";
         }
         return command;
     }
