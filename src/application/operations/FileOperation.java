@@ -57,7 +57,7 @@ public class FileOperation {
             try {
                 names = Files.walk(lf.toPath(), 2, FileVisitOption.FOLLOW_LINKS)
                 .filter(Files::isRegularFile)
-                .map(p -> p.toFile().getPath())
+                .map(Path::toString)
                 .toList();
             } catch(IOException e) {
                 e.printStackTrace();
@@ -153,7 +153,7 @@ public class FileOperation {
             .stream()
             .filter(p -> p.contains(".jar"))
             .toList();
-        libJars.append( jars
+        libJars.append(jars
             .stream()
             .map(e -> e + ";")
             .collect(Collectors.joining())
