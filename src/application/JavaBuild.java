@@ -1,4 +1,4 @@
-import java.io.File;
+umport java.io.File;
 
 import operations.Operation;
 class JavaBuild {
@@ -165,6 +165,7 @@ class JavaBuild {
                         System.out.println("");
 
                         System.out.println("use --run to run the project without building it");
+                        System.out.println("use --run App.java to run a different main class");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
                         System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");

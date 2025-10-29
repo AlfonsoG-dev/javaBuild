@@ -43,6 +43,7 @@
 - [x] Evaluate project generation using config file.
 
 # TODO's
+- [ ] add test run option to the build tool.
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX* `issue #6`
 - [ ] implement the module aggregation like `C#` `LINQ` for unify in a single process (compile, run, create-jar)
 - [ ] when *powershell* isn't installed use the default **cmd** option.
