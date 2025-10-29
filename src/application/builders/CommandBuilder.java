@@ -102,7 +102,7 @@ public class CommandBuilder {
         }
 
         if(jarFiles.isEmpty()) {
-            command = "java -cp " + target + className;
+            command = "java -cp " + target + " " + className;
         } else {
             jarFiles.append("'");
             jarFiles.append(target);
@@ -112,7 +112,7 @@ public class CommandBuilder {
                     .map(e -> e + ";")
                     .collect(Collectors.joining())
             );
-            String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "'";
+            String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "' ";
             command = "java -cp " + cleanLibs + className;
         }
         return command;
