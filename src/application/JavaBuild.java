@@ -175,9 +175,14 @@ class JavaBuild {
                         System.out.println("use --run App.java to run a different main class");
                         System.out.println("\t use -s ./source/ to tell to the compiler where the .java files are");
                         System.out.println("\t use -t ./target/ to tell to the compiler where the .class files are");
-                        System.out.println("\t use -r 23 to tell to the compiler the version of java you want to use for the release");
                         System.out.println("\t\t the run command also accepts the execution of internal commands");
                         System.out.println("\t\t --run -ls ./src/");
+                        System.out.println("");
+
+                        System.out.println("use --test to run the tests of the project");
+                        System.out.println("use --test Test.AppTest to run a different test class");
+                        System.out.println("\t use -s ./source/ to tell to the compiler where the test classes are");
+                        System.out.println("\t use -t ./target/ to tell to the compiler where .class files are");
                         System.out.println("");
                         break;
                     default: 
