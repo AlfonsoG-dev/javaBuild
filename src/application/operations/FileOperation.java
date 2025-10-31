@@ -126,6 +126,16 @@ public class FileOperation {
         }
         return name;
     }
+    public String getTestClass(String source, String root) {
+        List<Path> files = fileUtils.listFiles(source);
+        String l = "";
+        for(int i=0; i<files.size(); ++i) {
+            if(files.get(i).toFile().getName().equals("TestLauncher.java")) {
+                l += files.get(i).toString().replace(root + File.separator, "").replace(File.separator, ".");
+            }
+        }
+        return l.replace(".java", "");
+    }
     /**
      * to verify if the manifesto is present in the project
      * @return true if exists, false otherwise
