@@ -94,7 +94,9 @@ java -jar JavaBuild.jar --h
 Source-Path: source/directory/name
 Class-Path: class/directory/name
 Main-Class: MainClassName
-Libraries: 
+Test-Path: source/Test
+Test-Class: Test.App
+Libraries: lib/directory/app.jar;lib/directory2/app2.jar
 Command-Flags: -Werror
 ```
 - For now the `Libraries` field isn't useful.
@@ -113,7 +115,7 @@ the extraction files of the lib dependency.
 
 > If you don't declare the Class-Path the build operation when trying to create the project *.jar* file, now 
 includes the extraction files of the lib dependency as part of the project *.jar* creation.
-<h1 style="text-align:center">
+<h1 style="text-align:center;color:red">
 If you modify `Main-Class` in the configuration file you also need to change it in the Manifesto, otherwise it will load a wrong class when creating the project `.jar` file.
 </h1>
 
@@ -130,7 +132,7 @@ The following are the list of commands to build a simple `Java` project
 ## list project files
 - Use this to list the java `.class` or `.java` files inside the giving directory.
 ```shell
-javaBuild -ls .\directory\
+javaBuild -ls directory
 ```
 
 ## Create a project
@@ -145,7 +147,7 @@ javaBuild -cb
 javaBuild -cb Author-Name -s source -t target
 ```
 > Remember that the name of the directory where you are is the Name of the main class.
->- If the parent directory is `.\basic\` the main class file will be: `basic.java` and the main class declaration.
+>- If the parent directory is `basic\` the main class file will be: `basic.java` and the main class declaration.
 ```java
 public class basic {
     ...
@@ -163,7 +165,7 @@ javaBuild --i
 >- It compiles the .java clases from `src` into `bin`, using the **Java version 23**, by default.
 >- You can change those by providing:
 ```pwsh
-javabuild --compile -s .\other\source -t .\other\target -r 17
+javabuild --compile -s other\source -t other\target -r 17
 ```
 > You can use the source, target or release options; or not it doesn't matter.
 >- Also you can use them individually.
@@ -180,7 +182,7 @@ javabuild --compile -s .\other\source -t .\other\target -r 17
 > If you don't provide an argument it takes default value of `bin`
 >- the source folder is where the `.class` files are and the target folder is where you have the main class which targets to the `.jar` file.
 ```pwsh
-javabuild --jar -s .\bin\ -t .\src\
+javabuild --jar -s bin\ -t src\
 ```
 - Remember that the manifesto determines the behavior for the build process.
 
@@ -191,7 +193,7 @@ javabuild --jar -s .\bin\ -t .\src\
 > It takes the `script_name` and `directory of java files` and `directory of class files`.
 >- You can change those by providing:
 ```shell
-javaBuild --script script_name -s .\source\ -t .\target\
+javaBuild --script script_name -s source -t target
 ```
 >- Also you can use them individually.
 
@@ -210,7 +212,7 @@ javaBuild --script script_name -s .\source\ -t .\target\
 > It takes the `src` and `bin` directories as source and target by default, using **Java version 23**.
 >- You can change those by providing.
 ```shell
-javaBuild --build -s .\source\ -t .\target\ -r 17
+javaBuild --build -s source -t target -r 17
 ```
 > You can use the source, target or release options; or not, it doesn't matter.
 >- Also you can use them individually.
@@ -223,17 +225,17 @@ javaBuild --scratch
 
 ## Run or execute the project
 - Uses the class files and the main class to execute and run the application.
-> it compiles to *.\bin\* folder and executes the project using the .class files.
+> it compiles to **bin** folder and executes the project using the *.class* files.
 >- you can specify the java class that you want to execute: 
 ```pwsh
-javabuild --run .\src\App.java
+javabuild --run src\App.java
 ```
-- You can give also the source and target or release version at any time.
+- You can give also the source and target at any time.
 > The main class executed can be change by giving the `.java` file.
 >- If you don't give the class to execute the project main class is selected.
 >- You can change those by providing:
 ```pwsh
-javabuild --run .\src\App.java -s .\source\ -t .\target\ -r 17
+javabuild --run src\App.java -s source -t target
 ```
 > You can use the source, target or release options; or not it doesn't matter.
 >- Also you can use them individually.
@@ -247,12 +249,12 @@ javabuild --run --h
 - Used to add a framework or library file type *.jar*.
 > Now when you add a dependency it automatically sets itself inside the manifesto, if you wish to include the `.jar` dependency in the project `.jar` file you have to provide: `--include` flag, when you perform this operation.
 ```sh
-javabuild --ad dependency.jar --include
+javabuild --ad E:/dependency/dependency.jar --include
 ```
 > or you can just add by using: `javabuild --add dependency.jar` and this will modify the manifesto file to ignore the `.jar` dependency when you build the project `.jar` file.
 >- Add an external jar file to the lib folder of the project
 >- Or you can use the directory name
->- `javabuild --add ./folderName`
+>- `javabuild --add folderName`
 >- Only works when the lib file don't contain modules.
 
 ------
