@@ -43,11 +43,12 @@
 - [x] Evaluate project generation using config file.
 - [x] add test run option to the build tool.
 - [x] the manifesto should have a main class to execute in the .jar file, if that class is inside a folder like `./Test/Test.java`, it should have the following syntax: `Test.Test` like `folder.file`, no extension, no file separator.
+- [x] add an option to **include/exclude** the test files in the build process.
+>- When creating the config you can include/exclude the test by simply changing the source path to obfuscate the test folder. 
 
 # TODO's
 - [ ] test functions and make sure the latest changes regarding *test execution* didn't break anything.
 - [ ] when creating a command use ";" on **windows**, ":" for other operating systems
-- [ ] add an option to **include/exclude** the test files in the build process.
 - [ ] when creating the config/manifesto those file should have almost the same syntax.
 - [ ] add to the *--add* CLI command the aggregation of modules like the ones of *JavaFX* `issue #6`
 - [ ] implement the module aggregation like `C#` `LINQ` for unify in a single process (compile, run, create-jar)

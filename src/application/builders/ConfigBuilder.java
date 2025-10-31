@@ -75,6 +75,22 @@ public class ConfigBuilder {
         return config;
     }
     /**
+     * If the source path doesn't contain Test folder in the first nest level return false.
+     */
+    private boolean existTest(String source) {
+        boolean e = false;
+        File f = new File(source);
+        if(f.listFiles() != null && f.listFiles().length > 0) {
+            for(File mf: f.listFiles()) {
+                if(mf.isDirectory() && mf.getName().equals("Test")) {
+                    e = true;
+                    break;
+                }
+            }
+        }
+        return e;
+    }
+    /**
      * create the config
      * @param source where to search for .java files
      * @param target where to store the .class files
@@ -84,13 +100,14 @@ public class ConfigBuilder {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
             String mainClass = fOperation.getProjectName(source);
-            String testPath = source + File.separator + "Test";
+            String testPath = existTest(source) ? source + File.separator + "Test" : " ";
+            String testClass = existTest(source) ? fOperation.getTestClass(testPath, source) : " ";
             String[][] headers = {
                 {"Source-Path: ", source},
                 {"\nClass-Path: ", target},
                 {"\nMain-Class: ", mainClass.trim()},
                 {"\nTest-Path: ", testPath},
-                {"\nTest-Class: ", fOperation.getTestClass(testPath, source)},
+                {"\nTest-Class: ", testClass},
                 {"\nLibraries: ", ""},
                 {"\nCompile-Flags: ",  "-Werror -Xlint:all -Xdiags:verbose"}
             };
