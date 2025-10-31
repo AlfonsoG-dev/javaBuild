@@ -20,7 +20,7 @@ public class ExecutorOperation {
     public <T> T executeConcurrentCallableList(Callable<T> task) {
         T result = null;
         ExecutorService executor = Executors.newCachedThreadPool();
-        System.out.println("[Info] Starting computation");
+        System.out.println("[Info] Starting computation of task [" + task.getClass().getName() + "]");
         try {
             Future<T> future = executor.submit(task);
             System.out.println("[Info] Waiting to get the results...");
