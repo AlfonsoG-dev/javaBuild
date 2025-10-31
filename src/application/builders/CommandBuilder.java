@@ -95,26 +95,22 @@ public class CommandBuilder {
      * @return the run or execute command.
      */
     public String getRunCommand(List<String> libJars, String className, String source, String target) {
-        String command  = "";
-        StringBuffer jarFiles = new StringBuffer();
-        if(className.equals(" ")) {
-            return null;
-        }
+        String command  = "java -cp '" + target;
 
-        if(jarFiles.isEmpty()) {
-            command = "java -cp " + target + " " + className;
-        } else {
-            jarFiles.append("'");
-            jarFiles.append(target);
+        StringBuffer jarFiles = new StringBuffer();
+        if(className.equals(" ")) return null;
+
+        if(libJars.size() > 0) {
             jarFiles.append(";");
             jarFiles.append(libJars
                     .stream()
                     .map(e -> e + ";")
                     .collect(Collectors.joining())
             );
-            String cleanLibs = jarFiles.substring(0, jarFiles.length()-1) + "' ";
-            command = "java -cp " + cleanLibs + className;
+            String cleanLibs = jarFiles.substring(0, jarFiles.length()-1);
+            command += cleanLibs;
         }
+        command += "' " + className;
         return command;
     }
 
