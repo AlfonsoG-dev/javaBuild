@@ -97,7 +97,7 @@ public class FileUtils {
      * @param filePath the directory where the files are.
      * @return a list with the files inside the directory in a recursively manner
      */
-    private List<Path> listFiles(String filePath) {
+    public List<Path> listFiles(String filePath) {
         List<Path> result = new ArrayList<>();
         try {
             result = Files.walk(Paths.get(filePath), FileVisitOption.FOLLOW_LINKS)
