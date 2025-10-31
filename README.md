@@ -45,6 +45,7 @@
 - [x] the manifesto should have a main class to execute in the .jar file, if that class is inside a folder like `./Test/Test.java`, it should have the following syntax: `Test.Test` like `folder.file`, no extension, no file separator.
 
 # TODO's
+- [ ] test functions and make sure the latest changes regarding *test execution* didn't break anything.
 - [ ] when creating a command use ";" on **windows**, ":" for other operating systems
 - [ ] add an option to **include/exclude** the test files in the build process.
 - [ ] when creating the config/manifesto those file should have almost the same syntax.
