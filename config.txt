@@ -1,7 +1,7 @@
-Source-Path: src
+Source-Path: src\application
 Class-Path: bin
 Main-Class: JavaBuild
-Test-Path: src\Test
-Test-Class: Test.TestLauncher
+Test-Path:  
+Test-Class:  
 Libraries: 
 Compile-Flags: -Werror -Xlint:all -Xdiags:verbose
