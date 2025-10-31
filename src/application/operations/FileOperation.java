@@ -102,6 +102,9 @@ public class FileOperation {
                 miBufferedReader = null;
             }
         }
+        if(mainName.contains(File.separator)) {
+            mainName.replace(File.separator, "");
+        }
         return mainName;
     }
     /**
