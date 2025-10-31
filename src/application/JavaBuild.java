@@ -102,6 +102,13 @@ class JavaBuild {
                             op.runAppOperation(null, source, target);
                         }
                         break;
+                    case "--test":
+                        if((i+1) < args.length) {
+                            op.runTestOperation(args[i+1], source, target);
+                        } else {
+                            op.runTestOperation(null, source, target);
+                        }
+                        break;
                     case "--h":
                         System.out.println("use -ls to list java | jar | class files in the given path with the option -s ./source/");
                         System.out.println("");
