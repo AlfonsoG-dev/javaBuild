@@ -72,34 +72,31 @@ public class FileOperation {
      * @return main class file name or empty
      */
     public String getMainClass(String source) {
-        File miFile = fileUtils.resolvePaths(localPath, source);
-        BufferedReader miBufferedReader = null;
+        BufferedReader br = null;
         String mainName = "";
         try {
-            if(miFile.listFiles() != null) {
-            outter: for(File f: miFile.listFiles()) {
-                    if(f.isFile() && f.getName().contains(".java")) {
-                        miBufferedReader = new BufferedReader(new FileReader(f));
-                        String line;
-                        while((line = miBufferedReader.readLine()) != null) {
-                            if(line.contains("public static void main(String[] args)")) {
-                                mainName = f.getName().replace(".java", "");
-                                break outter;
-                            }
+            List<File> files = executor.executeConcurrentCallableList(fileUtils.listLimitNestedFilesFromPath(source, 2));
+            outter:for(File f: files) {
+                if(f.isFile() && !f.getName().equals("TestLauncher.java")) {
+                    br = new BufferedReader(new FileReader(f));
+                    while(br.ready()) {
+                        if(br.readLine().contains("public static void main")) {
+                            mainName = f.getName().replace(".java", "");
+                            break outter;
                         }
                     }
                 }
             }
-        } catch(IOException e) {
+        } catch(Exception e) {
             e.printStackTrace();
         } finally {
-            if(miBufferedReader != null) {
+            if(br != null) {
                 try {
-                    miBufferedReader.close();
+                    br.close();
                 } catch(IOException e) {
                     e.printStackTrace();
                 }
-                miBufferedReader = null;
+                br = null;
             }
         }
         if(mainName.contains(File.separator)) {
