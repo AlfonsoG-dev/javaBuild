@@ -313,6 +313,21 @@ public class Operation {
         );
         System.out.println("[Info] running ... ");
         operationUtils.executeCommand(command);
-
+    }
+    /**
+     * Same as run operation only the className changes.
+     * @param className
+     * @param source
+     * @param target
+     */
+    public void runTestOperation(String className, String source, String target) {
+        String command = cBuilder.getRunCommand(
+            modelUtils.getLibFiles(),
+            Optional.ofNullable(className).orElse(getConfigData().get("Test-Class")),
+            Optional.ofNullable(source).orElse(getConfigData().get("Test-Path")),
+            Optional.ofNullable(target).orElse(oClassPath)
+        );
+        System.out.println("[Info] Executing test ... ");
+        operationUtils.executeCommand(command);
     }
 }
