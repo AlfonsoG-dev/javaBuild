@@ -19,6 +19,15 @@ public class ConfigBuilder {
         this.fUtils = fUtils;
         this.fOperation = fOperation;
     }
+    private String buildConfigLines(String[][] configuration) {
+        String lines="";
+        for(int i=0; i<configuration.length; ++i) {
+            for(int j=0; j<configuration[i].length; ++j) {
+                lines += configuration[i][j];
+            }
+        }
+        return lines;
+    }
     /**
      * get the project configuration from a file.
      * <br> pre Source-Path, Class-Path, Main-Class, Libraries, Compile-Flags. 
@@ -32,13 +41,17 @@ public class ConfigBuilder {
 
         if(!configFile.exists()) {
             String mainClass = fOperation.getMainClass("src");
-            String[] dConfig = {
-                "Source-Path: src", "Class-Path: bin", "Main-Class: " + mainClass, "Libraries: ",
-                 "Compile-Flags: -Werror -Xlint:all -Xdiags:verbose" 
+            String[][] headers = {
+                {"Source-Path: ", "src"},
+                {"Class-Path: ", "bin"},
+                {"Main-Class: ", mainClass},
+                {"Libraries: ", ""},
+                {"Compile-Flags: ", "-Werror -Xlint:all -Xdiags:verbose"}
             };
-            for(String d: dConfig) {
-                String[] nameValue = d.split(":", 2);
-                config.put(nameValue[0].trim(), nameValue[1].trim());
+            for(int i=0; i<headers.length; ++i) {
+                for(int j=0; j<headers[i].length; ++j) {
+                    config.put(headers[i][0].trim().replace(":", ""), headers[i][j]);
+                }
             }
         } else {
             String[] lines = fUtils.readFileLines(configFile.getPath()).split("\n");
@@ -69,7 +82,14 @@ public class ConfigBuilder {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
             String mainClass = fOperation.getProjectName(source);
-            String lines = "Source-Path: " + source + "\nClass-Path: " + target + "\nMain-Class: " + mainClass.trim() + "\nLibraries: " + "\nCompile-Flags: -Werror";
+            String[][] headers = {
+                {"Source-Path: ", source},
+                {"\nClass-Path: ", target},
+                {"\nMain-Class: ", mainClass.trim()},
+                {"\nLibraries: ", ""},
+                {"\nCompile-Flags: ",  "-Werror -Xlint:all -Xdiags:verbose"}
+            };
+            String lines = buildConfigLines(headers);
             System.out.println(lines);
             w.write(lines);
         } catch (IOException e) {
