@@ -108,6 +108,18 @@ public class FileUtils {
             e.printStackTrace();
         }
         return result;
+    }
+    private List<Path> listLimitNestedFiles(String filePath, int level) {
+        List<Path> result = new ArrayList<>();
+        try {
+            result = Files.walk(Paths.get(filePath), level, FileVisitOption.FOLLOW_LINKS)
+                .filter(Files::isRegularFile)
+                .toList();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return result;
 
     }
     /**
@@ -120,6 +132,17 @@ public class FileUtils {
             @Override
             public List<File> call() {
                 return listFiles(filePath)
+                .stream()
+                .map(Path::toFile)
+                .toList();
+            }
+        };
+    }
+    public Callable<List<File>> listLimitNestedFilesFromPath(String filePath, int level) {
+        return new Callable<List<File>>() {
+            @Override
+            public List<File> call() {
+                return listLimitNestedFiles(filePath, level)
                 .stream()
                 .map(Path::toFile)
                 .toList();
