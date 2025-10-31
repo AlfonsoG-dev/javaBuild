@@ -45,6 +45,8 @@ public class ConfigBuilder {
                 {"Source-Path: ", "src"},
                 {"Class-Path: ", "bin"},
                 {"Main-Class: ", mainClass},
+                {"Test-Path: ", "src" + File.separator + "Test"},
+                {"Test-Class: ", "Test.TestLauncher"},
                 {"Libraries: ", ""},
                 {"Compile-Flags: ", "-Werror -Xlint:all -Xdiags:verbose"}
             };
@@ -82,10 +84,13 @@ public class ConfigBuilder {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
             String mainClass = fOperation.getProjectName(source);
+            String testPath = source + File.separator + "Test";
             String[][] headers = {
                 {"Source-Path: ", source},
                 {"\nClass-Path: ", target},
                 {"\nMain-Class: ", mainClass.trim()},
+                {"\nTest-Path: ", testPath},
+                {"\nTest-Class: ", fOperation.getTestClass(testPath, source)},
                 {"\nLibraries: ", ""},
                 {"\nCompile-Flags: ",  "-Werror -Xlint:all -Xdiags:verbose"}
             };
