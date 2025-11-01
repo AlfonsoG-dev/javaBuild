@@ -1,5 +1,5 @@
 Root-Path: src
-Source-Path: src\application
+Source-Path: src\Application
 Class-Path: bin
 Main-Class: JavaBuild
 Test-Path: src\Test
