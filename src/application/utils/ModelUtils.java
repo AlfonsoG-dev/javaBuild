@@ -59,15 +59,15 @@ public class ModelUtils {
             System.out.println("[Info] " + sourceFile.getPath() + " is empty");
             return Optional.ofNullable(b);
         }
-        if(classFile.exists() && classFile.listFiles() == null || !classFile.exists()) {
+        if((classFile.exists() && classFile.listFiles() == null) || !classFile.exists()) {
             names.addAll(fOperation.listSourceDirs(sourcePath)
-                .stream()
-                .map(n -> new File(n))
-                .filter(n -> fUtils.validateContent(n))
-                .map(n -> n.getPath() + File.separator + "*.java ")
-                .toList()
+            .stream()
+            .map(n -> new File(n))
+            .filter(n -> fUtils.validateContent(n))
+            .map(n -> n.getPath() + File.separator + "*.java ")
+            .toList()
             );
-       } else if(classFile.exists() && classFile.listFiles() != null || classFile.listFiles().length == 0) {
+        } else if((classFile.exists() && classFile.listFiles() != null) || classFile.listFiles().length > 0) {
             executor.executeConcurrentCallableList(fUtils.listFilesFromPath(sourceFile.toString()))
                 .stream()
                 .map(f -> f.toPath())
