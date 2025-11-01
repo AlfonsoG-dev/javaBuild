@@ -72,7 +72,6 @@ public class CompileModel {
                 compile.append(classPath);
                 compile.append("' ");
             }
-            compile.append(srcClases);
         } else {
             compile.append(format);
             if(!libFiles.isEmpty()) {
@@ -84,8 +83,8 @@ public class CompileModel {
 
                 compile.append(cLibFiles);
             }
-            compile.append(srcClases);
         }
+        compile.append(srcClases);
         return compile.toString();
     }
 
