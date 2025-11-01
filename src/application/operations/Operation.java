@@ -22,6 +22,7 @@ import builders.ConfigBuilder;
  * Its the perform class of the java command
  */
 public class Operation {
+    private final String javaVersion = System.getProperty("java.specification.version");
     private String localPath;
     private OperationUtils operationUtils;
     private FileUtils fileUtils;
@@ -323,6 +324,16 @@ public class Operation {
             Optional.ofNullable(target).orElse(oClassPath)
         );
         System.out.println("[Info] running ... ");
+        operationUtils.executeCommand(command);
+    }
+    public void compileTest(String source, String target, String release) {
+        String command = cBuilder.getCompileCommand(
+            Optional.ofNullable(source).orElse(getConfigData().get("Test-Path")),
+            Optional.ofNullable(target).orElse(oClassPath),
+            oCommandFlags,
+            Integer.parseInt(Optional.ofNullable(release).orElse(javaVersion))
+        );
+        System.out.println("[Info] Compiling test");
         operationUtils.executeCommand(command);
     }
     /**
