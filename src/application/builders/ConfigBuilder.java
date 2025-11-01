@@ -97,10 +97,10 @@ public class ConfigBuilder {
      * @param target where to store the .class files
      * @throws IOException when something when the writer process went wrong
      */
-    public void writeConfigFile(String root, String source, String target) {
+    public void writeConfigFile(String root, String source, String target, String mainClassName) {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
-            String mainClass = fOperation.getProjectName(source);
+            String mainClass =  mainClassName == null ? fOperation.getProjectName(source) : mainClassName;
             String testPath = existTest(root) ? root + File.separator + "Test" : " ";
             String testClass = existTest(root) ? fOperation.getTestClass(testPath, root) : " ";
             String[][] headers = {

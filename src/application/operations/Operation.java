@@ -87,20 +87,6 @@ public class Operation {
             }
         }
     }
-    /**
-     * create the config file operation
-     * @param source where the .java files are
-     * @param target where to store the .class files
-     */
-    public void createConfigFile(String rootPath, String source, String target) {
-        Optional<String> oRoot = Optional.ofNullable(rootPath);
-        Optional<String> oSource = Optional.ofNullable(source);
-        Optional<String> oTarget = Optional.ofNullable(target);
-
-        configBuilder.writeConfigFile(
-            oRoot.orElse(oRootPath),oSource.orElse(oSourcePath), oTarget.orElse(oClassPath)
-        );
-    }
 
     /**
      * Helper function that allow to get the author name of the manifesto file.
@@ -123,6 +109,26 @@ public class Operation {
             }
         }
         return Optional.ofNullable(author).orElse("System-Owner");
+    }
+
+    /**
+     * create the config file operation
+     * @param source where the .java files are
+     * @param target where to store the .class files
+     */
+    public void createConfigFile(String rootPath, String source, String target, String mainClass) {
+        Optional<String> oRoot = Optional.ofNullable(rootPath);
+        Optional<String> oSource = Optional.ofNullable(source);
+        Optional<String> oTarget = Optional.ofNullable(target);
+
+        System.out.println("[Info] Writing to manifesto...");
+        fileOperation.createManifesto(
+            oSource.orElse(oSourcePath), getAuthorName(), false
+        );
+        System.out.println("[Info] Writing config file...");
+        configBuilder.writeConfigFile(
+            oRoot.orElse(oRootPath),oSource.orElse(oSourcePath), oTarget.orElse(oClassPath), mainClass
+        );
     }
     /**
      * creates the initial files needed in at the start:
