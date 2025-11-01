@@ -45,6 +45,9 @@
 - [x] the manifesto should have a main class to execute in the .jar file, if that class is inside a folder like `./Test/Test.java`, it should have the following syntax: `Test.Test` like `folder.file`, no extension, no file separator.
 - [x] add an option to **include/exclude** the test files in the build process.
 >- When creating the config you can include/exclude the test by simply changing the source path to obfuscate the test folder. 
+- [x] Add `config` definition to set the `run`, `build`, flags like:
+>- `java -d bin App.java` or `java -cp bin App`
+>- `jar -cmf` or `jar -fe`
 
 # TODO's
 - [ ] test functions and make sure the latest changes regarding *test execution* didn't break anything.
@@ -56,9 +59,6 @@
 - [ ] add a mode to allow the user the `--watch` option, this option will serve as the live reload option of the compile process.
 > Use `WatchService` to create a mode to compile at the same time that you change or modify the `.java` files
 - [ ] when using config file, changing any value will modify subsequently manifesto file.
-- [ ] Add `config` definition to set the `run`, `build`, flags like:
->- `java -d bin App.java` or `java -cp bin App`
->- `jar -cmf` or `jar -fe`
  
 ------
 
@@ -91,8 +91,9 @@ java -jar JavaBuild.jar --h
 - When using the project the folder structure is `src`, `bin`, etc.
 > Use configuration file to change those fields.
 ```txt
-Source-Path: source/directory/name
-Class-Path: class/directory/name
+Root-Path: source
+Source-Path: source/directory
+Class-Path: directory
 Main-Class: MainClassName
 Test-Path: source/Test
 Test-Class: Test.App
@@ -249,13 +250,26 @@ javabuild --run --h
 - Used to add a framework or library file type *.jar*.
 > Now when you add a dependency it automatically sets itself inside the manifesto, if you wish to include the `.jar` dependency in the project `.jar` file you have to provide: `--include` flag, when you perform this operation.
 ```sh
-javabuild --ad E:/dependency/dependency.jar --include
+javabuild --add E:/dependency/dependency.jar --include
 ```
 > or you can just add by using: `javabuild --add dependency.jar` and this will modify the manifesto file to ignore the `.jar` dependency when you build the project `.jar` file.
 >- Add an external jar file to the lib folder of the project
 >- Or you can use the directory name
 >- `javabuild --add folderName`
 >- Only works when the lib file don't contain modules.
+
+## Run tests
+- Uses the class files and a specific java file name: `TestLauncher.java`
+> You have to create the `TestLauncher.java` in order to execute tests.
+>- To include/exclude the build/compile of tests classess use the `-s` flag to change the source to allow the tool
+to include the test.
+```sh
+javaBuild --build -s src
+```
+> If you don't want to include the tests in the build process simply just give don't specify the `-s` flag and use the configuration values.
+```sh
+javaBuild --build
+```
 
 ------
 
