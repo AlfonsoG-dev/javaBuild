@@ -204,6 +204,13 @@ javaBuild --script script_name -s source -t target
 > To change the author of the `Manifesto`: `javabuild --i -a Author-Name`
 > To change the main class: `javabuild --i --class App`
 
+## Create or modify configuration file
+- The configuration file, is not necessary to build the project but it makes things much easier, and allows you to change the default build configuration values.
+```sh
+javaBuild --config
+```
+> If you want to change the mainClass that executes the project: `javaBuild --config src\App.java`
+> If you want to change the configuration values you can use the command line or change it directly from the file itself.
 
 ## Build the project
 - All can be done with only 1 command
@@ -246,18 +253,6 @@ javabuild --run src\App.java -s source -t target
 javabuild --run --h
 ```
 
-## Add an external jar dependency
-- Used to add a framework or library file type *.jar*.
-> Now when you add a dependency it automatically sets itself inside the manifesto, if you wish to include the `.jar` dependency in the project `.jar` file you have to provide: `--include` flag, when you perform this operation.
-```sh
-javabuild --add E:/dependency/dependency.jar --include
-```
-> or you can just add by using: `javabuild --add dependency.jar` and this will modify the manifesto file to ignore the `.jar` dependency when you build the project `.jar` file.
->- Add an external jar file to the lib folder of the project
->- Or you can use the directory name
->- `javabuild --add folderName`
->- Only works when the lib file don't contain modules.
-
 ## Run tests
 - Uses the class files and a specific java file name: `TestLauncher.java`
 > You have to create the `TestLauncher.java` in order to execute tests.
@@ -270,6 +265,18 @@ javaBuild --build -s src
 ```sh
 javaBuild --build
 ```
+
+## Add an external jar dependency
+- Used to add a framework or library file type *.jar*.
+> Now when you add a dependency it automatically sets itself inside the manifesto, if you wish to include the `.jar` dependency in the project `.jar` file you have to provide: `--include` flag, when you perform this operation.
+```sh
+javabuild --add E:/dependency/dependency.jar --include
+```
+> or you can just add by using: `javabuild --add dependency.jar` and this will modify the manifesto file to ignore the `.jar` dependency when you build the project `.jar` file.
+>- Add an external jar file to the lib folder of the project
+>- Or you can use the directory name
+>- `javabuild --add folderName`
+>- Only works when the lib file don't contain modules.
 
 ------
 
