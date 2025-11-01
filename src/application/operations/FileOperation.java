@@ -123,15 +123,18 @@ public class FileOperation {
         }
         return name;
     }
-    public String getTestClass(String source, String root) {
-        List<Path> files = fileUtils.listFiles(source);
+    public String getTestClass(String source) {
         String l = "";
-        for(int i=0; i<files.size(); ++i) {
-            if(files.get(i).toFile().getName().equals("TestLauncher.java")) {
-                l += files.get(i).toString().replace(root + File.separator, "").replace(File.separator, ".");
+        File f = new File(source);
+        if(f.listFiles() != null) {
+            for(File mf: f.listFiles()) {
+                if(mf.isFile() && mf.getName().equals("TestLauncher.java")) {
+                    l = mf.getName().replace(".java", "");
+                    break;
+                }
             }
         }
-        return l.replace(".java", "");
+        return l;
     }
     /**
      * to verify if the manifesto is present in the project

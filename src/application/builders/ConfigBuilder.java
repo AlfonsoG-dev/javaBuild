@@ -47,7 +47,7 @@ public class ConfigBuilder {
                 {"Class-Path: ", "bin"},
                 {"Main-Class: ", mainClass},
                 {"Test-Path: ", "src" + File.separator + "Test"},
-                {"Test-Class: ", "Test.TestLauncher"},
+                {"Test-Class: ", "TestLauncher"},
                 {"Libraries: ", ""},
                 {"Compile-Flags: ", "-Werror -Xlint:all -Xdiags:verbose"}
             };
@@ -102,7 +102,7 @@ public class ConfigBuilder {
         try (FileWriter w = new FileWriter(f)) {
             String mainClass =  mainClassName == null ? fOperation.getProjectName(source) : mainClassName;
             String testPath = existTest(root) ? root + File.separator + "Test" : " ";
-            String testClass = existTest(root) ? fOperation.getTestClass(testPath, root) : " ";
+            String testClass = fOperation.getTestClass(testPath);
             String[][] headers = {
                 {"Root-Path: ", root},
                 {"\nSource-Path: ", source},

@@ -3,6 +3,6 @@ Source-Path: src\application
 Class-Path: bin
 Main-Class: JavaBuild
 Test-Path: src\Test
-Test-Class: Test.TestLauncher
+Test-Class: TestLauncher
 Libraries: 
 Compile-Flags: -Werror -Xlint:all -Xdiags:verbose
