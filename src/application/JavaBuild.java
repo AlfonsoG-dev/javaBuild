@@ -59,7 +59,11 @@ class JavaBuild {
                         }
                         break;
                     case "--config":
-                        op.createConfigFile(root,source, target);
+                        if((i+1) < args.length) {
+                            op.createConfigFile(root, source, target, args[i+1]);
+                        } else {
+                            op.createConfigFile(root, source, target, null);
+                        }
                         break;
                     case "--build":
                         if(haveExtractions) {
@@ -149,9 +153,10 @@ class JavaBuild {
                         System.out.println("");
 
                         System.out.println("use --config to create the project config file");
+                        System.out.println("use --config src/app.java to change the project main class");
                         System.out.println("\t use --root to provide the root path of the project files");
                         System.out.println("\t use -s to provide the source path to the config");
-                        System.out.println("\t\t You can later modify directly from your text editor");
+                        System.out.println("\t\t You can later modify the values, directly from your text editor");
                         System.out.println("");
 
                         System.out.println("use --build to build the project");
