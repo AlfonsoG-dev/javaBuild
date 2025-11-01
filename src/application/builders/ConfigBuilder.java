@@ -42,6 +42,7 @@ public class ConfigBuilder {
         if(!configFile.exists()) {
             String mainClass = fOperation.getMainClass("src");
             String[][] headers = {
+                {"Root-Path", "src"},
                 {"Source-Path: ", "src"},
                 {"Class-Path: ", "bin"},
                 {"Main-Class: ", mainClass},
@@ -96,14 +97,15 @@ public class ConfigBuilder {
      * @param target where to store the .class files
      * @throws IOException when something when the writer process went wrong
      */
-    public void writeConfigFile(String source, String target) {
+    public void writeConfigFile(String root, String source, String target) {
         File f = fUtils.resolvePaths(localPath, "config.txt");
         try (FileWriter w = new FileWriter(f)) {
             String mainClass = fOperation.getProjectName(source);
-            String testPath = existTest(source) ? source + File.separator + "Test" : " ";
-            String testClass = existTest(source) ? fOperation.getTestClass(testPath, source) : " ";
+            String testPath = existTest(root) ? root + File.separator + "Test" : " ";
+            String testClass = existTest(root) ? fOperation.getTestClass(testPath, root) : " ";
             String[][] headers = {
-                {"Source-Path: ", source},
+                {"Root-Path: ", root},
+                {"\nSource-Path: ", source},
                 {"\nClass-Path: ", target},
                 {"\nMain-Class: ", mainClass.trim()},
                 {"\nTest-Path: ", testPath},

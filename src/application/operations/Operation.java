@@ -34,6 +34,7 @@ public class Operation {
     private FileOperation fileOperation;
     private ExecutorOperation executor;
 
+    private String oRootPath;
     private String oSourcePath;
     private String oClassPath;
     private String oCommandFlags;
@@ -52,6 +53,7 @@ public class Operation {
         return configBuilder.getConfigValues();
     }
     public void startUpCompileModel() {
+        oRootPath = Optional.ofNullable(getConfigData().get("Root-Path")).orElse("src");
         oSourcePath = Optional.ofNullable(getConfigData().get("Source-Path")).orElse("src");
         oClassPath = Optional.ofNullable(getConfigData().get("Class-Path")).orElse("bin");
         oCommandFlags = Optional.ofNullable(getConfigData().get("Compile-Flags")).orElse("-Werror");
@@ -90,11 +92,14 @@ public class Operation {
      * @param source where the .java files are
      * @param target where to store the .class files
      */
-    public void createConfigFile(String source, String target) {
+    public void createConfigFile(String rootPath, String source, String target) {
+        Optional<String> oRoot = Optional.ofNullable(rootPath);
         Optional<String> oSource = Optional.ofNullable(source);
         Optional<String> oTarget = Optional.ofNullable(target);
 
-        configBuilder.writeConfigFile(oSource.orElse(oSourcePath), oTarget.orElse(oClassPath));
+        configBuilder.writeConfigFile(
+            oRoot.orElse(oRootPath),oSource.orElse(oSourcePath), oTarget.orElse(oClassPath)
+        );
     }
 
     /**

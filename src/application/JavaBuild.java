@@ -8,6 +8,7 @@ class JavaBuild {
             op.startUpCompileModel();
             boolean haveExtractions = op.haveIncludeExtraction();
             outter: for(int i=0; i<args.length; ++i) {
+                String root = getCliValues(args, i, "--root");
                 String source = getCliValues(args, i, "-s");
                 String target = getCliValues(args, i, "-t");
                 String release = getCliValues(args, i, "-r");
@@ -58,7 +59,7 @@ class JavaBuild {
                         }
                         break;
                     case "--config":
-                        op.createConfigFile(source, target);
+                        op.createConfigFile(root,source, target);
                         break;
                     case "--build":
                         if(haveExtractions) {
@@ -148,6 +149,7 @@ class JavaBuild {
                         System.out.println("");
 
                         System.out.println("use --config to create the project config file");
+                        System.out.println("\t use --root to provide the root path of the project files");
                         System.out.println("\t use -s to provide the source path to the config");
                         System.out.println("\t\t You can later modify directly from your text editor");
                         System.out.println("");
