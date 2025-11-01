@@ -60,7 +60,12 @@ class JavaBuild {
                         break;
                     case "--config":
                         if((i+1) < args.length) {
-                            op.createConfigFile(root, source, target, args[i+1]);
+                            boolean isFlag = args[i+1].contains("-");
+                            if(!isFlag) {
+                                op.createConfigFile(root, source, target, args[i+1]);
+                            } else {
+                                op.createConfigFile(root, source, target, null);
+                            }
                         } else {
                             op.createConfigFile(root, source, target, null);
                         }
