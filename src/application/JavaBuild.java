@@ -108,6 +108,8 @@ class JavaBuild {
                         }
                         break;
                     case "--test":
+                        // compile only the test.
+                        op.compileTest(source, target, release);
                         if((i+1) < args.length) {
                             op.runTestOperation(args[i+1], source, target);
                         } else {
